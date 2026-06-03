@@ -18,3 +18,16 @@ jobs:
         run: python -m pip install -e . pytest
       - name: Run tests
         run: python -m pytest -q
+      - name: Smoke policy simulation CLI
+        run: |
+          python -m open_ep_framework.cli --mode policy-simulation --example examples/policy_simulation_profile.json --audit policy_simulation_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path('policy_simulation_audit.json').read_text())
+          assert audit['run_id'] == 'policy-sim-source-intake-run-001'
+          assert audit['scenario'] == 'redistribution-transfer-release-synthetic'
+          assert audit['outputs']['summary']['runtime_dependency'] is False
+          assert audit['outputs']['summary']['release_ratio'] == 0.6
+          PY
