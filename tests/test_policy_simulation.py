@@ -1,9 +1,20 @@
+import copy
 import json
 from pathlib import Path
 
+import pytest
+
 from open_ep_framework.cli import main as cli_main
-from open_ep_framework.policy_simulation import run_policy_simulation_profile
+from open_ep_framework.policy_simulation import (
+    PolicySimulationProfileError,
+    run_policy_simulation_profile,
+    validate_policy_simulation_profile_semantics,
+)
 from open_ep_framework.validation import validate_json_file
+
+
+def _fixture() -> dict:
+    return json.loads(Path("examples/policy_simulation_profile.json").read_text())
 
 
 def test_policy_simulation_profile_fixture_validates():
@@ -56,3 +67,31 @@ def test_policy_simulation_cli_writes_audit_pack(tmp_path, monkeypatch):
     assert audit["scenario"] == "redistribution-transfer-release-synthetic"
     assert audit["outputs"]["summary"]["runtime_dependency"] is False
     assert audit["outputs"]["summary"]["release_ratio"] == 0.6
+
+
+def test_policy_simulation_semantic_gate_rejects_runtime_dependency():
+    profile = _fixture()
+    profile["donor_corpus"]["runtime_dependency"] = True
+    with pytest.raises(PolicySimulationProfileError):
+        validate_policy_simulation_profile_semantics(profile)
+
+
+def test_policy_simulation_semantic_gate_rejects_release_authority():
+    profile = _fixture()
+    profile["reward_functionals"][0]["release_authority"] = "automatic_release"
+    with pytest.raises(PolicySimulationProfileError):
+        validate_policy_simulation_profile_semantics(profile)
+
+
+def test_policy_simulation_semantic_gate_rejects_triparty_ordering():
+    profile = _fixture()
+    profile["triparty_faces"][0]["lambda_release"] = 0.9
+    with pytest.raises(PolicySimulationProfileError):
+        validate_policy_simulation_profile_semantics(profile)
+
+
+def test_policy_simulation_semantic_gate_rejects_residual_mismatch():
+    profile = copy.deepcopy(_fixture())
+    profile["triparty_faces"][0]["residual"] = 0.1
+    with pytest.raises(PolicySimulationProfileError):
+        validate_policy_simulation_profile_semantics(profile)
