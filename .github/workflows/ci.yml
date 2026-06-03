@@ -31,3 +31,9 @@ jobs:
           assert audit['outputs']['summary']['runtime_dependency'] is False
           assert audit['outputs']['summary']['release_ratio'] == 0.6
           PY
+      - name: Upload policy simulation audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-simulation-audit
+          path: policy_simulation_audit.json
+          if-no-files-found: error
