@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Policy Simulation Profile",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "donor_corpus",
+    "simulation_boundary",
+    "scenario",
+    "actors",
+    "planner",
+    "components",
+    "reward_functionals",
+    "triparty_faces",
+    "audit_receipt"
+  ],
+  "properties": {
+    "profile_id": {"type": "string"},
+    "donor_corpus": {
+      "type": "object",
+      "required": ["name", "repository", "license", "assimilation_mode"],
+      "properties": {
+        "name": {"type": "string"},
+        "repository": {"type": "string"},
+        "license": {"type": "string"},
+        "assimilation_mode": {"type": "string"},
+        "attribution_required": {"type": "boolean"},
+        "runtime_dependency": {"type": "boolean"}
+      }
+    },
+    "simulation_boundary": {
+      "type": "object",
+      "required": ["scope", "dependency_policy", "release_policy"],
+      "properties": {
+        "scope": {"type": "string"},
+        "dependency_policy": {"type": "string"},
+        "release_policy": {"type": "string"},
+        "non_goals": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["scenario_id", "description", "cadence", "economic_object_mapping"],
+      "properties": {
+        "scenario_id": {"type": "string"},
+        "description": {"type": "string"},
+        "cadence": {"type": "string"},
+        "economic_object_mapping": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["actor_id", "actor_type", "economic_role"],
+        "properties": {
+          "actor_id": {"type": "string"},
+          "actor_type": {"type": "string"},
+          "economic_role": {"type": "string"},
+          "relationship_ref": {"type": "string"}
+        }
+      }
+    },
+    "planner": {
+      "type": "object",
+      "required": ["planner_id", "authority_surface", "allowed_actions"],
+      "properties": {
+        "planner_id": {"type": "string"},
+        "authority_surface": {"type": "string"},
+        "allowed_actions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["component_id", "component_type", "economic_measurement"],
+        "properties": {
+          "component_id": {"type": "string"},
+          "component_type": {"type": "string"},
+          "economic_measurement": {"type": "string"},
+          "parameters": {"type": "object"}
+        }
+      }
+    },
+    "reward_functionals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["functional_id", "objective", "release_authority"],
+        "properties": {
+          "functional_id": {"type": "string"},
+          "objective": {"type": "string"},
+          "release_authority": {"type": "string"},
+          "weight": {"type": "number"}
+        }
+      }
+    },
+    "triparty_faces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["face_id", "parties", "state", "lambda_evid", "lambda_admit", "lambda_release", "residual"],
+        "properties": {
+          "face_id": {"type": "string"},
+          "parties": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "string"}},
+          "state": {"type": "string"},
+          "lambda_evid": {"type": "number"},
+          "lambda_admit": {"type": "number"},
+          "lambda_release": {"type": "number"},
+          "residual": {"type": "number"},
+          "proof_artifact_id": {"type": "string"}
+        }
+      }
+    },
+    "audit_receipt": {
+      "type": "object",
+      "required": ["run_id", "framework_version", "input_hash", "output_hash", "replay_available"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "framework_version": {"type": "string"},
+        "input_hash": {"type": "string"},
+        "output_hash": {"type": "string"},
+        "replay_available": {"type": "boolean"},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}
