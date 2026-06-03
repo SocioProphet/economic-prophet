@@ -6,6 +6,60 @@ from pathlib import Path
 from .validation import validate_json_file
 
 
+class PolicySimulationProfileError(ValueError):
+    pass
+
+
+def _require_nonnegative(value: float, path: str) -> None:
+    if value < 0.0:
+        raise PolicySimulationProfileError(f"{path} must be nonnegative")
+
+
+def validate_policy_simulation_profile_semantics(data: dict) -> bool:
+    """Apply Economic Prophet semantic gates for policy simulation profiles.
+
+    JSON schema validation proves the shape. These gates prove the v0.1
+    source-intake posture: donor runtimes stay out, reward scores remain
+    advisory, and triparty quantities preserve gross/admit/release/residual
+    ordering.
+    """
+    donor = data.get("donor_corpus", {})
+    if donor.get("runtime_dependency") is not False:
+        raise PolicySimulationProfileError("donor_corpus.runtime_dependency must be false")
+
+    for idx, functional in enumerate(data.get("reward_functionals", [])):
+        if functional.get("release_authority") != "advisory_only":
+            raise PolicySimulationProfileError(
+                f"reward_functionals[{idx}].release_authority must be advisory_only"
+            )
+
+    for idx, face in enumerate(data.get("triparty_faces", [])):
+        lambda_evid = float(face.get("lambda_evid", 0.0))
+        lambda_admit = float(face.get("lambda_admit", 0.0))
+        lambda_release = float(face.get("lambda_release", 0.0))
+        residual = float(face.get("residual", 0.0))
+
+        _require_nonnegative(lambda_evid, f"triparty_faces[{idx}].lambda_evid")
+        _require_nonnegative(lambda_admit, f"triparty_faces[{idx}].lambda_admit")
+        _require_nonnegative(lambda_release, f"triparty_faces[{idx}].lambda_release")
+        _require_nonnegative(residual, f"triparty_faces[{idx}].residual")
+
+        if lambda_admit > lambda_evid:
+            raise PolicySimulationProfileError(
+                f"triparty_faces[{idx}].lambda_admit cannot exceed lambda_evid"
+            )
+        if lambda_release > lambda_admit:
+            raise PolicySimulationProfileError(
+                f"triparty_faces[{idx}].lambda_release cannot exceed lambda_admit"
+            )
+        if abs((lambda_evid - lambda_release) - residual) > 1e-9:
+            raise PolicySimulationProfileError(
+                f"triparty_faces[{idx}].residual must equal lambda_evid - lambda_release"
+            )
+
+    return True
+
+
 def load_policy_simulation_profile(path: str) -> dict:
     """Load and validate a policy simulation profile.
 
@@ -14,7 +68,9 @@ def load_policy_simulation_profile(path: str) -> dict:
     or authorize live policy actions.
     """
     validate_json_file(path, "schemas/policy_simulation_profile.schema.json")
-    return json.loads(Path(path).read_text())
+    data = json.loads(Path(path).read_text())
+    validate_policy_simulation_profile_semantics(data)
+    return data
 
 
 def _safe_ratio(numerator: float, denominator: float) -> float:
