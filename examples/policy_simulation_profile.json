@@ -1,0 +1,109 @@
+{
+  "profile_id": "policy-sim-source-intake-001",
+  "donor_corpus": {
+    "name": "foundation-economic-simulation-reference",
+    "repository": "SocioProphet/ai-economist",
+    "license": "BSD-3-Clause",
+    "assimilation_mode": "conceptual-patterns-only",
+    "attribution_required": true,
+    "runtime_dependency": false
+  },
+  "simulation_boundary": {
+    "scope": "schema-first synthetic profile for economic-policy simulation patterns",
+    "dependency_policy": "no donor runtime import and no training dependency in v0.1",
+    "release_policy": "simulation score is advisory; triparty face controls release state",
+    "non_goals": [
+      "live policy automation",
+      "external settlement",
+      "production reinforcement learning",
+      "normative policy claim"
+    ]
+  },
+  "scenario": {
+    "scenario_id": "redistribution-transfer-release-synthetic",
+    "description": "Synthetic profile mapping modular economic simulation patterns into Economic Prophet measurement objects.",
+    "cadence": "synthetic",
+    "economic_object_mapping": [
+      "relationship",
+      "instrument",
+      "transaction_event",
+      "collateral_set",
+      "funding_source"
+    ]
+  },
+  "actors": [
+    {
+      "actor_id": "participant-a",
+      "actor_type": "participant",
+      "economic_role": "resource producer",
+      "relationship_ref": "rel-synthetic-001"
+    },
+    {
+      "actor_id": "participant-b",
+      "actor_type": "participant",
+      "economic_role": "resource consumer",
+      "relationship_ref": "rel-synthetic-002"
+    }
+  ],
+  "planner": {
+    "planner_id": "governance-planner",
+    "authority_surface": "triparty-release-policy-v0",
+    "allowed_actions": [
+      "adjust_subsidy",
+      "adjust_transfer_price",
+      "block_release",
+      "request_review"
+    ]
+  },
+  "components": [
+    {
+      "component_id": "transfer-pricing-component",
+      "component_type": "pricing",
+      "economic_measurement": "transfer_price",
+      "parameters": {
+        "cost_floor": 1.0,
+        "risk_charge": 0.2
+      }
+    },
+    {
+      "component_id": "redistribution-component",
+      "component_type": "allocation",
+      "economic_measurement": "subsidy_or_transfer",
+      "parameters": {
+        "max_transfer": 0.5
+      }
+    }
+  ],
+  "reward_functionals": [
+    {
+      "functional_id": "ep-plus-release-quality",
+      "objective": "economic profit delta plus release correctness under residual discipline",
+      "release_authority": "advisory_only",
+      "weight": 1.0
+    }
+  ],
+  "triparty_faces": [
+    {
+      "face_id": "participant-planner-clearing-face",
+      "parties": [
+        "participant-a",
+        "governance-planner",
+        "clearing-agent"
+      ],
+      "state": "ReviewRequired",
+      "lambda_evid": 1.0,
+      "lambda_admit": 0.8,
+      "lambda_release": 0.6,
+      "residual": 0.4,
+      "proof_artifact_id": "synthetic-proof-policy-sim-001"
+    }
+  ],
+  "audit_receipt": {
+    "run_id": "policy-sim-source-intake-run-001",
+    "framework_version": "0.1.0",
+    "input_hash": "sha256:synthetic-input",
+    "output_hash": "sha256:synthetic-output",
+    "replay_available": true,
+    "notes": "Synthetic fixture for schema and summary validation only."
+  }
+}
