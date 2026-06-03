@@ -10,6 +10,7 @@ from .expected_loss import expected_loss_amount
 from .ftp import ftp_rate
 from .heller_mesh import run_heller_mesh
 from .object_graph import ObjectGraph, lineage_aware_output
+from .policy_simulation import run_policy_simulation_profile
 from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
@@ -124,9 +125,20 @@ def run_instrument_context(args) -> dict:
     }
 
 
+def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
+    if not isinstance(inputs, dict):
+        return args.object_id, "base"
+    if "audit_receipt" in inputs:
+        receipt = inputs.get("audit_receipt", {})
+        return receipt.get("run_id", args.object_id), inputs.get("scenario", {}).get("scenario_id", "base")
+    run_id = inputs.get("run_id") or inputs.get("relationship_id") or args.object_id
+    scenario = inputs.get("scenario", "base")
+    return run_id, scenario
+
+
 def main():
     p = argparse.ArgumentParser(prog="oepf")
-    p.add_argument("--mode", choices=["instrument", "instrument-context", "relationship", "relationship-context", "object-graph", "object-context", "heller-mesh"], default="instrument")
+    p.add_argument("--mode", choices=["instrument", "instrument-context", "relationship", "relationship-context", "object-graph", "object-context", "heller-mesh", "policy-simulation"], default="instrument")
     p.add_argument("--example", default="examples/synthetic_run.json")
     p.add_argument("--audit", default="audit.json")
     p.add_argument("--object-id", default="instrument-loan-001")
@@ -177,13 +189,14 @@ def main():
     elif args.mode == "heller-mesh":
         outputs = run_heller_mesh(args.example)
         inputs = outputs["measurement"]
+    elif args.mode == "policy-simulation":
+        outputs = run_policy_simulation_profile(args.example)
+        inputs = outputs["profile"]
     else:
         outputs = run_example(args.example)
         inputs = json.loads(Path(args.example).read_text())
 
-    run_id = inputs.get("run_id") if isinstance(inputs, dict) else None
-    run_id = run_id or (inputs.get("relationship_id") if isinstance(inputs, dict) else None) or args.object_id
-    scenario = inputs.get("scenario", "base") if isinstance(inputs, dict) else "base"
+    run_id, scenario = _derive_audit_identity(inputs, args)
     write_audit_pack(args.audit, run_id, scenario, "0.1.0", {"input": inputs}, outputs)
     print(json.dumps(outputs, indent=2, sort_keys=True))
 
