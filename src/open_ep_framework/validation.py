@@ -13,9 +13,11 @@ def _check_type(value, expected, path):
         raise ValidationError(f"{path} must be array")
     if expected == "string" and not isinstance(value, str):
         raise ValidationError(f"{path} must be string")
-    if expected == "number" and not isinstance(value, (int, float)):
+    if expected == "boolean" and not isinstance(value, bool):
+        raise ValidationError(f"{path} must be boolean")
+    if expected == "number" and (isinstance(value, bool) or not isinstance(value, (int, float))):
         raise ValidationError(f"{path} must be number")
-    if expected == "integer" and not isinstance(value, int):
+    if expected == "integer" and (isinstance(value, bool) or not isinstance(value, int)):
         raise ValidationError(f"{path} must be integer")
 
 
@@ -43,7 +45,7 @@ def validate_instance(instance, schema, path="$"):
         if "maxItems" in schema and len(instance) > schema["maxItems"]:
             raise ValidationError(f"{path} above maxItems")
 
-    if isinstance(instance, (int, float)):
+    if isinstance(instance, (int, float)) and not isinstance(instance, bool):
         if "minimum" in schema and instance < schema["minimum"]:
             raise ValidationError(f"{path} below minimum")
         if "maximum" in schema and instance > schema["maximum"]:
