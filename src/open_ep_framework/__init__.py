@@ -9,4 +9,5 @@ __all__ = [
     "audit",
     "heller_mesh",
     "policy_simulation",
+    "policy_simulation_uvmc",
 ]
