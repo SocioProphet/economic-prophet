@@ -199,7 +199,7 @@ def main():
         inputs = outputs["profile"]
     elif args.mode == "policy-simulation-uvmc":
         outputs = run_policy_simulation_measured_entity(args.example)
-        inputs = outputs["measured_entity"]
+        inputs = outputs["profile"]
     else:
         outputs = run_example(args.example)
         inputs = json.loads(Path(args.example).read_text())
