@@ -1,0 +1,47 @@
+{
+  "measured_entity_id": "policy-simulation-measured:policy-sim-source-intake-001",
+  "profile_id": "policy-sim-source-intake-001",
+  "advisory_status": "advisory_evidence_only",
+  "source_ref": "SocioProphet/ai-economist",
+  "measurement_context": {
+    "domain": "policy_simulation",
+    "scenario_ref": "redistribution-transfer-release-synthetic",
+    "cadence": "synthetic",
+    "formula_version": "policy-simulation-uvmc-v0.1"
+  },
+  "governance_control": {
+    "runtime_dependency": false,
+    "release_authority": "advisory_only",
+    "live_policy_automation": false,
+    "value_release_authorized": false
+  },
+  "triparty_measurement": {
+    "lambda_evid": 1.0,
+    "lambda_admit": 0.8,
+    "lambda_release": 0.6,
+    "residual": 0.4,
+    "release_ratio": 0.6,
+    "residual_ratio": 0.4,
+    "state": "ReviewRequired"
+  },
+  "calculation_receipt": {
+    "run_id": "policy-sim-source-intake-run-001",
+    "framework_version": "0.1.0",
+    "input_hash": "sha256:synthetic-input",
+    "output_hash": "sha256:synthetic-output",
+    "replay_available": true
+  },
+  "authority_refs": {
+    "measurement_contract": "SocioProphet/economic-prophet:schemas/policy_simulation_profile.schema.json",
+    "adoption_registry": "SocioProphet/sociosphere:registry/resource-intake-adoption.yaml#ai-economist-policy-simulation-intake",
+    "learning_receipt": "SocioProphet/systems-learning-loops:kb/receipts/ai-economist-policy-simulation-intake.receipt.yaml",
+    "platform_evidence_contract": "SocioProphet/prophet-platform:docs/POLICY_SIMULATION_EVIDENCE_CONTRACT.md"
+  },
+  "non_claims": [
+    "This measured entity is advisory evidence only.",
+    "This measured entity is not Economic Profit.",
+    "This measured entity does not authorize live policy automation.",
+    "This measured entity does not release economic value.",
+    "This measured entity does not claim fairness, legality, production readiness, or policy correctness."
+  ]
+}
