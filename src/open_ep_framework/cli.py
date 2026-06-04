@@ -11,6 +11,7 @@ from .ftp import ftp_rate
 from .heller_mesh import run_heller_mesh
 from .object_graph import ObjectGraph, lineage_aware_output
 from .policy_simulation import run_policy_simulation_profile
+from .policy_simulation_uvmc import run_policy_simulation_measured_entity
 from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
@@ -131,6 +132,10 @@ def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
     if "audit_receipt" in inputs:
         receipt = inputs.get("audit_receipt", {})
         return receipt.get("run_id", args.object_id), inputs.get("scenario", {}).get("scenario_id", "base")
+    if "calculation_receipt" in inputs:
+        receipt = inputs.get("calculation_receipt", {})
+        context = inputs.get("measurement_context", {})
+        return receipt.get("run_id", args.object_id), context.get("scenario_ref", "base")
     run_id = inputs.get("run_id") or inputs.get("relationship_id") or args.object_id
     scenario = inputs.get("scenario", "base")
     return run_id, scenario
@@ -138,7 +143,7 @@ def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
 
 def main():
     p = argparse.ArgumentParser(prog="oepf")
-    p.add_argument("--mode", choices=["instrument", "instrument-context", "relationship", "relationship-context", "object-graph", "object-context", "heller-mesh", "policy-simulation"], default="instrument")
+    p.add_argument("--mode", choices=["instrument", "instrument-context", "relationship", "relationship-context", "object-graph", "object-context", "heller-mesh", "policy-simulation", "policy-simulation-uvmc"], default="instrument")
     p.add_argument("--example", default="examples/synthetic_run.json")
     p.add_argument("--audit", default="audit.json")
     p.add_argument("--object-id", default="instrument-loan-001")
@@ -192,6 +197,9 @@ def main():
     elif args.mode == "policy-simulation":
         outputs = run_policy_simulation_profile(args.example)
         inputs = outputs["profile"]
+    elif args.mode == "policy-simulation-uvmc":
+        outputs = run_policy_simulation_measured_entity(args.example)
+        inputs = outputs["measured_entity"]
     else:
         outputs = run_example(args.example)
         inputs = json.loads(Path(args.example).read_text())
