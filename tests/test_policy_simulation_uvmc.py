@@ -1,7 +1,10 @@
 import copy
+import json
+from pathlib import Path
 
 import pytest
 
+from open_ep_framework.cli import main as cli_main
 from open_ep_framework.policy_simulation import load_policy_simulation_profile
 from open_ep_framework.policy_simulation_uvmc import (
     PolicySimulationMeasuredEntityError,
@@ -33,6 +36,33 @@ def test_policy_simulation_profile_projects_to_uvmc_advisory_entity():
     assert entity["governance_control"]["value_release_authorized"] is False
     assert entity["triparty_measurement"]["release_ratio"] == 0.6
     assert entity["triparty_measurement"]["residual_ratio"] == 0.4
+    assert "economic_profit" not in entity
+
+
+def test_policy_simulation_uvmc_cli_writes_audit_pack(tmp_path, monkeypatch):
+    audit_path = tmp_path / "policy_simulation_uvmc_audit.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "oepf",
+            "--mode",
+            "policy-simulation-uvmc",
+            "--example",
+            "examples/policy_simulation_profile.json",
+            "--audit",
+            str(audit_path),
+        ],
+    )
+
+    cli_main()
+
+    audit = json.loads(Path(audit_path).read_text())
+    assert audit["run_id"] == "policy-sim-source-intake-run-001"
+    assert audit["scenario"] == "redistribution-transfer-release-synthetic"
+    entity = audit["outputs"]["measured_entity"]
+    assert entity["advisory_status"] == "advisory_evidence_only"
+    assert entity["governance_control"]["runtime_dependency"] is False
+    assert entity["governance_control"]["value_release_authorized"] is False
     assert "economic_profit" not in entity
 
 
