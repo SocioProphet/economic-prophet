@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Policy Simulation Measured Entity",
+  "type": "object",
+  "required": [
+    "measured_entity_id",
+    "profile_id",
+    "advisory_status",
+    "source_ref",
+    "measurement_context",
+    "governance_control",
+    "triparty_measurement",
+    "calculation_receipt",
+    "authority_refs",
+    "non_claims"
+  ],
+  "properties": {
+    "measured_entity_id": {"type": "string"},
+    "profile_id": {"type": "string"},
+    "advisory_status": {"type": "string"},
+    "source_ref": {"type": "string"},
+    "measurement_context": {
+      "type": "object",
+      "required": ["domain", "scenario_ref", "cadence", "formula_version"],
+      "properties": {
+        "domain": {"type": "string"},
+        "scenario_ref": {"type": "string"},
+        "cadence": {"type": "string"},
+        "formula_version": {"type": "string"}
+      }
+    },
+    "governance_control": {
+      "type": "object",
+      "required": ["runtime_dependency", "release_authority", "live_policy_automation", "value_release_authorized"],
+      "properties": {
+        "runtime_dependency": {"type": "boolean"},
+        "release_authority": {"type": "string"},
+        "live_policy_automation": {"type": "boolean"},
+        "value_release_authorized": {"type": "boolean"}
+      }
+    },
+    "triparty_measurement": {
+      "type": "object",
+      "required": ["lambda_evid", "lambda_admit", "lambda_release", "residual", "release_ratio", "residual_ratio", "state"],
+      "properties": {
+        "lambda_evid": {"type": "number", "minimum": 0},
+        "lambda_admit": {"type": "number", "minimum": 0},
+        "lambda_release": {"type": "number", "minimum": 0},
+        "residual": {"type": "number", "minimum": 0},
+        "release_ratio": {"type": "number", "minimum": 0},
+        "residual_ratio": {"type": "number", "minimum": 0},
+        "state": {"type": "string"}
+      }
+    },
+    "calculation_receipt": {
+      "type": "object",
+      "required": ["run_id", "framework_version", "input_hash", "output_hash", "replay_available"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "framework_version": {"type": "string"},
+        "input_hash": {"type": "string"},
+        "output_hash": {"type": "string"},
+        "replay_available": {"type": "boolean"}
+      }
+    },
+    "authority_refs": {
+      "type": "object",
+      "required": ["measurement_contract", "adoption_registry", "learning_receipt", "platform_evidence_contract"],
+      "properties": {
+        "measurement_contract": {"type": "string"},
+        "adoption_registry": {"type": "string"},
+        "learning_receipt": {"type": "string"},
+        "platform_evidence_contract": {"type": "string"}
+      }
+    },
+    "non_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    }
+  }
+}
