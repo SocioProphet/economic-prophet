@@ -59,6 +59,9 @@ def test_policy_simulation_uvmc_cli_writes_audit_pack(tmp_path, monkeypatch):
     audit = json.loads(Path(audit_path).read_text())
     assert audit["run_id"] == "policy-sim-source-intake-run-001"
     assert audit["scenario"] == "redistribution-transfer-release-synthetic"
+    assert audit["inputs"]["input"]["profile_id"] == "policy-sim-source-intake-001"
+    assert "measured_entity_id" not in audit["inputs"]["input"]
+    assert audit["outputs"]["profile"]["profile_id"] == "policy-sim-source-intake-001"
     entity = audit["outputs"]["measured_entity"]
     assert entity["advisory_status"] == "advisory_evidence_only"
     assert entity["governance_control"]["runtime_dependency"] is False
