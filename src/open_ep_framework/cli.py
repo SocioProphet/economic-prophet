@@ -2,6 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .associated_surplus import run_associated_surplus
 from .audit import write_audit_pack
 from .breakeven import economic_profit_for_rate, solve_break_even_rate
 from .capital import capital_charge
@@ -143,7 +144,22 @@ def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
 
 def main():
     p = argparse.ArgumentParser(prog="oepf")
-    p.add_argument("--mode", choices=["instrument", "instrument-context", "relationship", "relationship-context", "object-graph", "object-context", "heller-mesh", "policy-simulation", "policy-simulation-uvmc"], default="instrument")
+    p.add_argument(
+        "--mode",
+        choices=[
+            "instrument",
+            "instrument-context",
+            "relationship",
+            "relationship-context",
+            "object-graph",
+            "object-context",
+            "heller-mesh",
+            "associated-surplus",
+            "policy-simulation",
+            "policy-simulation-uvmc",
+        ],
+        default="instrument",
+    )
     p.add_argument("--example", default="examples/synthetic_run.json")
     p.add_argument("--audit", default="audit.json")
     p.add_argument("--object-id", default="instrument-loan-001")
@@ -193,6 +209,9 @@ def main():
         }
     elif args.mode == "heller-mesh":
         outputs = run_heller_mesh(args.example)
+        inputs = outputs["measurement"]
+    elif args.mode == "associated-surplus":
+        outputs = run_associated_surplus(args.example)
         inputs = outputs["measurement"]
     elif args.mode == "policy-simulation":
         outputs = run_policy_simulation_profile(args.example)
