@@ -51,6 +51,7 @@ python -m open_ep_framework.cli --mode relationship-context --example examples/s
 python -m open_ep_framework.cli --mode object-graph --example examples/object_graph.json --object-id instrument-loan-001 --audit object_graph_audit.json
 python -m open_ep_framework.cli --mode object-context --object-id instrument-loan-001 --audit object_context_audit.json
 python -m open_ep_framework.cli --mode heller-mesh --example examples/heller_mesh_measurement.json --audit heller_mesh_audit.json
+python -m open_ep_framework.cli --mode associated-surplus --example examples/associated_surplus_measurement.json --audit associated_surplus_audit.json
 ```
 
 The instrument CLI emits:
@@ -82,6 +83,8 @@ The object-context CLI emits a joined runtime context for a selected instrument,
 
 The Heller mesh CLI emits a validated internal measurement run for the Heller flywheel mechanics: sphere states, transfer-pricing edges, triparty faces, Micro/Credit/Reserve supply, reserve adequacy, credit utilization, gross-to-net compression, and auditable run hashes.
 
+The associated-surplus CLI emits a validated doctrine/measurement/simulation/audit run for SocioProfit associated surplus: component scores, deductions, computed knowledge quality, gross and net associated surplus, triparty admission/release ratios, and non-goal boundary checks.
+
 ## Context output schemas
 
 The repository includes formal schemas for context-aware runtime outputs:
@@ -106,6 +109,10 @@ This mode treats Economic Prophet as the measurement engine, Heller as the inter
 
 The repository now includes the SocioProfit associated-surplus doctrine:
 - `docs/associated_surplus.md`
+- `schemas/associated_surplus.schema.json`
+- `examples/associated_surplus_measurement.json`
+- `src/open_ep_framework/associated_surplus.py`
+- `tests/test_associated_surplus.py`
 
 This doctrine frames SocioProfit as profit from association, not extraction. It extends Economic Prophet from conventional economic-profit measurement toward auditable measurement of trained attention, knowledge quality, governance legitimacy, evidence reliability, coordination bandwidth, automation leverage, network surplus, extraction leakage, capture risk, uncertainty penalties, and coordination friction.
 
