@@ -1,0 +1,93 @@
+component: economic-prophet
+kind: platform_service
+version: 0.1.0
+
+purpose: >
+  Economic Prophet is an open, auditable economic-profit and associated-surplus
+  measurement service. It exposes deterministic measurement runtimes, schemas,
+  fixtures, CLI-compatible outputs, and audit packs for platform and application
+  consumption.
+
+service_boundary:
+  owns:
+    - economic_profit_measurement
+    - relationship_profitability_measurement
+    - object_graph_lineage_measurement
+    - heller_mesh_measurement
+    - associated_surplus_measurement
+    - schema_validation
+    - synthetic_fixtures
+    - audit_pack_generation
+  does_not_own:
+    - human_identity_roots
+    - consent_grants
+    - access_policy_authority
+    - legal_release_decisions
+    - external_payment_state
+    - token_supply
+    - exchange_state
+    - redemption_rights
+    - public_chain_settlement
+    - application_user_experience
+
+can_read:
+  - measurement_fixtures
+  - scenario_inputs
+  - object_graphs
+  - product_object_inputs
+  - schemas
+  - policy_simulation_profiles
+
+can_write:
+  - local_measurement_outputs
+  - audit_packs
+  - deterministic_summary_outputs
+
+cannot_write:
+  - identity_roots
+  - consent_grants
+  - external_payment_state
+  - token_supply
+  - exchange_state
+  - redemption_state
+  - public_chain_state
+  - application_ranking_state
+  - hidden_reputation_scores
+
+side_effects:
+  - writes_audit_pack_to_requested_local_path
+  - prints_json_summary_to_stdout
+
+requires_policy_admission: true
+
+non_goals:
+  - live_money_movement
+  - external_token_issuance
+  - public_chain_settlement
+  - exchange_trading
+  - redemption_rights
+  - consumer_financial_products
+  - securities_issuance
+  - deposit_taking
+  - payment_processing
+
+projection_requirements:
+  applications_must_preserve:
+    - source_run_id
+    - source_scenario
+    - source_framework_version
+    - source_input_hash
+    - source_output_hash
+    - source_schema_ref
+    - source_audit_ref
+    - projection_policy_ref
+
+application_consumption_rule: >
+  Applications consume Economic Prophet by contract. They may render dashboards,
+  decision cards, governance reviews, or reports, but they must not become
+  sovereign sources of measurement truth and must not drop provenance.
+
+anti_extraction_rule: >
+  Associated-surplus outputs must not be converted into hidden reputation scores,
+  behavioral targeting metrics, engagement-optimization primitives, or extractive
+  ranking systems.
