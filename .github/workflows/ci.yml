@@ -3,6 +3,7 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -31,9 +32,28 @@ jobs:
           assert audit['outputs']['summary']['runtime_dependency'] is False
           assert audit['outputs']['summary']['release_ratio'] == 0.6
           PY
+      - name: Smoke associated surplus CLI
+        run: |
+          python -m open_ep_framework.cli --mode associated-surplus --example examples/associated_surplus_measurement.json --audit associated_surplus_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path('associated_surplus_audit.json').read_text())
+          assert audit['run_id'] == 'associated-surplus-synthetic-001'
+          assert audit['scenario'] == 'education-community-governance-loop'
+          assert audit['outputs']['summary']['missing_required_non_goals'] == []
+          assert audit['outputs']['summary']['measurement_boundary_mode'] == 'doctrine_measurement_simulation_audit_only'
+          PY
       - name: Upload policy simulation audit artifact
         uses: actions/upload-artifact@v4
         with:
           name: policy-simulation-audit
           path: policy_simulation_audit.json
+          if-no-files-found: error
+      - name: Upload associated surplus audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: associated-surplus-audit
+          path: associated_surplus_audit.json
           if-no-files-found: error
