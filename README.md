@@ -17,6 +17,7 @@ This repository layers the work from the economic-profit white paper into:
 - `docs/product_spec.md`
 - `docs/architecture.md`
 - `docs/integrations.md`
+- `docs/associated_surplus.md`
 - `schemas/`
 
 ### Phase 2 — framework as first-class modeling and simulation platform
@@ -35,6 +36,7 @@ This repository layers the work from the economic-profit white paper into:
 - lineage-aware EP outputs
 - context output schemas
 - Heller mesh measurement runtime
+- associated-surplus measurement runtime
 - audit pack generation
 
 ## Quick start
@@ -99,6 +101,15 @@ The repository now includes a schema-first measurement boundary for the Heller f
 - `tests/test_heller_mesh.py`
 
 This mode treats Economic Prophet as the measurement engine, Heller as the internal economic mechanics, and governed triparty netting as the release constitution. It does **not** implement live money movement, external token issuance, redemption rights, public-chain settlement, or exchange trading.
+
+## Associated surplus doctrine
+
+The repository now includes the SocioProfit associated-surplus doctrine:
+- `docs/associated_surplus.md`
+
+This doctrine frames SocioProfit as profit from association, not extraction. It extends Economic Prophet from conventional economic-profit measurement toward auditable measurement of trained attention, knowledge quality, governance legitimacy, evidence reliability, coordination bandwidth, automation leverage, network surplus, extraction leakage, capture risk, uncertainty penalties, and coordination friction.
+
+The associated-surplus boundary is doctrine, measurement, simulation, and audit only. It does **not** define live money movement, external token issuance, public-chain settlement, exchange trading, redemption rights, securities issuance, deposit-taking, or payment processing.
 
 ## Canonical object model
 
