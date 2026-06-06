@@ -15,7 +15,7 @@ This repository layers the work from the economic-profit white paper into:
 ### Phase 1 — framework as documentation
 - `docs/whitepaper.md`
 - `docs/product_spec.md`
-- `docs/architecture.md`
+- `docs/platform_service_boundary.md`
 - `docs/integrations.md`
 - `docs/associated_surplus.md`
 - `schemas/`
@@ -84,6 +84,12 @@ The object-context CLI emits a joined runtime context for a selected instrument,
 The Heller mesh CLI emits a validated internal measurement run for the Heller flywheel mechanics: sphere states, transfer-pricing edges, triparty faces, Micro/Credit/Reserve supply, reserve adequacy, credit utilization, gross-to-net compression, and auditable run hashes.
 
 The associated-surplus CLI emits a validated doctrine/measurement/simulation/audit run for SocioProfit associated surplus: component scores, deductions, computed knowledge quality, gross and net associated surplus, triparty admission/release ratios, and non-goal boundary checks.
+
+## Platform service boundary
+
+Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.
+
+See `docs/platform_service_boundary.md`.
 
 ## Context output schemas
 
