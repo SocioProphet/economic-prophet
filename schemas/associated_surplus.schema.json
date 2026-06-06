@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Associated Surplus Measurement",
+  "type": "object",
+  "required": ["run_id", "scenario", "as_of", "framework_version", "measurement_boundary", "component_scores", "deductions", "gross_associated_surplus", "net_associated_surplus", "triparty_release", "evidence_refs", "input_hash", "output_hash", "assumptions", "limitations", "replay_plan_ref"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "scenario": {"type": "string"},
+    "as_of": {"type": "string"},
+    "framework_version": {"type": "string"},
+    "measurement_boundary": {
+      "type": "object",
+      "required": ["mode", "non_goals"],
+      "properties": {
+        "mode": {"type": "string"},
+        "non_goals": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "sphere_refs": {"type": "array", "items": {"type": "string"}},
+    "community_refs": {"type": "array", "items": {"type": "string"}},
+    "knowledge_refs": {"type": "array", "items": {"type": "string"}},
+    "governance_refs": {"type": "array", "items": {"type": "string"}},
+    "automation_refs": {"type": "array", "items": {"type": "string"}},
+    "component_scores": {
+      "type": "object",
+      "required": ["attention_quality", "knowledge_quality", "governance_legitimacy", "evidence_reliability", "coordination_bandwidth", "automation_leverage", "network_surplus"],
+      "properties": {
+        "attention_quality": {"type": "number", "minimum": 0, "maximum": 1},
+        "knowledge_quality": {"type": "number", "minimum": 0, "maximum": 1},
+        "governance_legitimacy": {"type": "number", "minimum": 0, "maximum": 1},
+        "evidence_reliability": {"type": "number", "minimum": 0, "maximum": 1},
+        "coordination_bandwidth": {"type": "number", "minimum": 0, "maximum": 1},
+        "automation_leverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "network_surplus": {"type": "number"}
+      }
+    },
+    "deductions": {
+      "type": "object",
+      "required": ["extraction_leakage", "capture_risk", "epistemic_uncertainty_penalty", "coordination_friction"],
+      "properties": {
+        "extraction_leakage": {"type": "number", "minimum": 0},
+        "capture_risk": {"type": "number", "minimum": 0},
+        "epistemic_uncertainty_penalty": {"type": "number", "minimum": 0},
+        "coordination_friction": {"type": "number", "minimum": 0}
+      }
+    },
+    "gross_associated_surplus": {"type": "number"},
+    "net_associated_surplus": {"type": "number"},
+    "knowledge_functional": {
+      "type": "object",
+      "required": ["completeness", "quality", "stability", "provenance_strength", "knowledge_quality"],
+      "properties": {
+        "completeness": {"type": "number", "minimum": 0, "maximum": 1},
+        "quality": {"type": "number", "minimum": 0, "maximum": 1},
+        "stability": {"type": "number", "minimum": 0, "maximum": 1},
+        "provenance_strength": {"type": "number", "minimum": 0, "maximum": 1},
+        "knowledge_quality": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "triparty_release": {
+      "type": "object",
+      "required": ["lambda_evid", "lambda_admit", "lambda_release", "residual", "state"],
+      "properties": {
+        "lambda_evid": {"type": "number"},
+        "lambda_admit": {"type": "number"},
+        "lambda_release": {"type": "number"},
+        "residual": {"type": "number"},
+        "state": {"type": "string"}
+      }
+    },
+    "epistemic_status": {
+      "type": "object",
+      "required": ["level", "confidence", "review_status"],
+      "properties": {
+        "level": {"type": "string"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "review_status": {"type": "string"}
+      }
+    },
+    "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "input_hash": {"type": "string"},
+    "output_hash": {"type": "string"},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "replay_plan_ref": {"type": "string"}
+  }
+}
