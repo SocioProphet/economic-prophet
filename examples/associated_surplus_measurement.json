@@ -1,0 +1,96 @@
+{
+  "run_id": "associated-surplus-synthetic-001",
+  "scenario": "education-community-governance-loop",
+  "as_of": "2026-06-06T00:00:00Z",
+  "framework_version": "0.1.0",
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "external_token_issuance",
+      "public_chain_settlement",
+      "exchange_trading",
+      "redemption_rights",
+      "consumer_financial_products",
+      "securities_issuance",
+      "deposit_taking",
+      "payment_processing"
+    ]
+  },
+  "sphere_refs": [
+    "sphere:community",
+    "sphere:education",
+    "sphere:governance",
+    "sphere:attestation",
+    "sphere:developer_platform"
+  ],
+  "community_refs": [
+    "community:socioprophet-demo"
+  ],
+  "knowledge_refs": [
+    "knowledge:associated-surplus-doctrine",
+    "knowledge:heller-mesh-measurement"
+  ],
+  "governance_refs": [
+    "policy:triparty-release-v0.1",
+    "policy:measurement-boundary-v0.1"
+  ],
+  "automation_refs": [
+    "automation:synthetic-measurement-runner"
+  ],
+  "component_scores": {
+    "attention_quality": 0.82,
+    "knowledge_quality": 0.684,
+    "governance_legitimacy": 0.78,
+    "evidence_reliability": 0.88,
+    "coordination_bandwidth": 0.71,
+    "automation_leverage": 0.64,
+    "network_surplus": 0.42
+  },
+  "deductions": {
+    "extraction_leakage": 0.04,
+    "capture_risk": 0.08,
+    "epistemic_uncertainty_penalty": 0.09,
+    "coordination_friction": 0.11
+  },
+  "gross_associated_surplus": 0.579383427072,
+  "net_associated_surplus": 0.259383427072,
+  "knowledge_functional": {
+    "completeness": 0.9,
+    "quality": 0.8,
+    "stability": 0.95,
+    "provenance_strength": 1.0,
+    "knowledge_quality": 0.684
+  },
+  "triparty_release": {
+    "lambda_evid": 1.0,
+    "lambda_admit": 0.82,
+    "lambda_release": 0.74,
+    "residual": 0.26,
+    "state": "Released"
+  },
+  "epistemic_status": {
+    "level": "synthetic",
+    "confidence": 0.74,
+    "review_status": "machine_checked"
+  },
+  "evidence_refs": [
+    "docs/associated_surplus.md",
+    "docs/heller_mesh_measurement.md",
+    "schemas/associated_surplus.schema.json"
+  ],
+  "input_hash": "hash://synthetic/input-associated-surplus-001",
+  "output_hash": "hash://synthetic/output-associated-surplus-001",
+  "assumptions": [
+    "All component scores are bounded synthetic demo inputs.",
+    "Knowledge quality is computed as completeness * quality * stability * provenance_strength.",
+    "Gross associated surplus is component product plus network surplus.",
+    "Net associated surplus subtracts extraction leakage, capture risk, epistemic uncertainty penalty, and coordination friction."
+  ],
+  "limitations": [
+    "Synthetic fixture only; not calibrated to production data.",
+    "No live money movement or external token issuance is represented.",
+    "No legal, securities, banking, payment, custody, or tax conclusion is implied."
+  ],
+  "replay_plan_ref": "replay://associated-surplus/synthetic-001"
+}
