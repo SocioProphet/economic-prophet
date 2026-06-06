@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from open_ep_framework.validation import validate_instance
@@ -15,7 +16,7 @@ REQUIRED_NON_GOALS = {
 
 def test_trust_surface_contract_validates():
     trust_surface = parse_yaml_lite(Path("TRUST_SURFACE.yaml").read_text())
-    schema = __import__("json").loads(Path("schemas/trust_surface.schema.json").read_text())
+    schema = json.loads(Path("schemas/trust_surface.schema.json").read_text())
 
     assert validate_instance(trust_surface, schema)
     assert trust_surface["component"] == "economic-prophet"
