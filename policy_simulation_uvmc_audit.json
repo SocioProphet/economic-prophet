@@ -1,0 +1,217 @@
+{
+  "framework_version": "0.1.0",
+  "input_hash": "1d03472b434630c15e2b99f5b1da4fed100f5147ec302ad84f1f84596009d434",
+  "inputs": {
+    "input": {
+      "advisory_status": "advisory_evidence_only",
+      "authority_refs": {
+        "adoption_registry": "SocioProphet/sociosphere:registry/resource-intake-adoption.yaml#ai-economist-policy-simulation-intake",
+        "learning_receipt": "SocioProphet/systems-learning-loops:kb/receipts/ai-economist-policy-simulation-intake.receipt.yaml",
+        "measurement_contract": "SocioProphet/economic-prophet:schemas/policy_simulation_profile.schema.json",
+        "platform_evidence_contract": "SocioProphet/prophet-platform:docs/POLICY_SIMULATION_EVIDENCE_CONTRACT.md"
+      },
+      "calculation_receipt": {
+        "framework_version": "0.1.0",
+        "input_hash": "sha256:synthetic-input",
+        "output_hash": "sha256:synthetic-output",
+        "replay_available": true,
+        "run_id": "policy-sim-source-intake-run-001"
+      },
+      "governance_control": {
+        "live_policy_automation": false,
+        "release_authority": "advisory_only",
+        "runtime_dependency": false,
+        "value_release_authorized": false
+      },
+      "measured_entity_id": "policy-simulation-measured:policy-sim-source-intake-001",
+      "measurement_context": {
+        "cadence": "synthetic",
+        "domain": "policy_simulation",
+        "formula_version": "policy-simulation-uvmc-v0.1",
+        "scenario_ref": "redistribution-transfer-release-synthetic"
+      },
+      "non_claims": [
+        "This measured entity is advisory evidence only.",
+        "This measured entity is not Economic Profit.",
+        "This measured entity does not authorize live policy automation.",
+        "This measured entity does not release economic value.",
+        "This measured entity does not claim fairness, legality, production readiness, or policy correctness."
+      ],
+      "profile_id": "policy-sim-source-intake-001",
+      "source_ref": "SocioProphet/ai-economist",
+      "triparty_measurement": {
+        "lambda_admit": 0.8,
+        "lambda_evid": 1.0,
+        "lambda_release": 0.6,
+        "release_ratio": 0.6,
+        "residual": 0.4,
+        "residual_ratio": 0.4,
+        "state": "ReviewRequired"
+      }
+    }
+  },
+  "output_hash": "7c36ec3dc701c86f1ffebd549d01bbb43d4793a2a08966568b3255ccf0b3a4ec",
+  "outputs": {
+    "measured_entity": {
+      "advisory_status": "advisory_evidence_only",
+      "authority_refs": {
+        "adoption_registry": "SocioProphet/sociosphere:registry/resource-intake-adoption.yaml#ai-economist-policy-simulation-intake",
+        "learning_receipt": "SocioProphet/systems-learning-loops:kb/receipts/ai-economist-policy-simulation-intake.receipt.yaml",
+        "measurement_contract": "SocioProphet/economic-prophet:schemas/policy_simulation_profile.schema.json",
+        "platform_evidence_contract": "SocioProphet/prophet-platform:docs/POLICY_SIMULATION_EVIDENCE_CONTRACT.md"
+      },
+      "calculation_receipt": {
+        "framework_version": "0.1.0",
+        "input_hash": "sha256:synthetic-input",
+        "output_hash": "sha256:synthetic-output",
+        "replay_available": true,
+        "run_id": "policy-sim-source-intake-run-001"
+      },
+      "governance_control": {
+        "live_policy_automation": false,
+        "release_authority": "advisory_only",
+        "runtime_dependency": false,
+        "value_release_authorized": false
+      },
+      "measured_entity_id": "policy-simulation-measured:policy-sim-source-intake-001",
+      "measurement_context": {
+        "cadence": "synthetic",
+        "domain": "policy_simulation",
+        "formula_version": "policy-simulation-uvmc-v0.1",
+        "scenario_ref": "redistribution-transfer-release-synthetic"
+      },
+      "non_claims": [
+        "This measured entity is advisory evidence only.",
+        "This measured entity is not Economic Profit.",
+        "This measured entity does not authorize live policy automation.",
+        "This measured entity does not release economic value.",
+        "This measured entity does not claim fairness, legality, production readiness, or policy correctness."
+      ],
+      "profile_id": "policy-sim-source-intake-001",
+      "source_ref": "SocioProphet/ai-economist",
+      "triparty_measurement": {
+        "lambda_admit": 0.8,
+        "lambda_evid": 1.0,
+        "lambda_release": 0.6,
+        "release_ratio": 0.6,
+        "residual": 0.4,
+        "residual_ratio": 0.4,
+        "state": "ReviewRequired"
+      }
+    },
+    "profile": {
+      "actors": [
+        {
+          "actor_id": "participant-a",
+          "actor_type": "participant",
+          "economic_role": "resource producer",
+          "relationship_ref": "rel-synthetic-001"
+        },
+        {
+          "actor_id": "participant-b",
+          "actor_type": "participant",
+          "economic_role": "resource consumer",
+          "relationship_ref": "rel-synthetic-002"
+        }
+      ],
+      "audit_receipt": {
+        "framework_version": "0.1.0",
+        "input_hash": "sha256:synthetic-input",
+        "notes": "Synthetic fixture for schema and summary validation only.",
+        "output_hash": "sha256:synthetic-output",
+        "replay_available": true,
+        "run_id": "policy-sim-source-intake-run-001"
+      },
+      "components": [
+        {
+          "component_id": "transfer-pricing-component",
+          "component_type": "pricing",
+          "economic_measurement": "transfer_price",
+          "parameters": {
+            "cost_floor": 1.0,
+            "risk_charge": 0.2
+          }
+        },
+        {
+          "component_id": "redistribution-component",
+          "component_type": "allocation",
+          "economic_measurement": "subsidy_or_transfer",
+          "parameters": {
+            "max_transfer": 0.5
+          }
+        }
+      ],
+      "donor_corpus": {
+        "assimilation_mode": "conceptual-patterns-only",
+        "attribution_required": true,
+        "license": "BSD-3-Clause",
+        "name": "foundation-economic-simulation-reference",
+        "repository": "SocioProphet/ai-economist",
+        "runtime_dependency": false
+      },
+      "planner": {
+        "allowed_actions": [
+          "adjust_subsidy",
+          "adjust_transfer_price",
+          "block_release",
+          "request_review"
+        ],
+        "authority_surface": "triparty-release-policy-v0",
+        "planner_id": "governance-planner"
+      },
+      "profile_id": "policy-sim-source-intake-001",
+      "reward_functionals": [
+        {
+          "functional_id": "ep-plus-release-quality",
+          "objective": "economic profit delta plus release correctness under residual discipline",
+          "release_authority": "advisory_only",
+          "weight": 1.0
+        }
+      ],
+      "scenario": {
+        "cadence": "synthetic",
+        "description": "Synthetic profile mapping modular economic simulation patterns into Economic Prophet measurement objects.",
+        "economic_object_mapping": [
+          "relationship",
+          "instrument",
+          "transaction_event",
+          "collateral_set",
+          "funding_source"
+        ],
+        "scenario_id": "redistribution-transfer-release-synthetic"
+      },
+      "simulation_boundary": {
+        "dependency_policy": "no donor runtime import and no training dependency in v0.1",
+        "non_goals": [
+          "live policy automation",
+          "external settlement",
+          "production reinforcement learning",
+          "normative policy claim"
+        ],
+        "release_policy": "simulation score is advisory; triparty face controls release state",
+        "scope": "schema-first synthetic profile for economic-policy simulation patterns"
+      },
+      "triparty_faces": [
+        {
+          "face_id": "participant-planner-clearing-face",
+          "lambda_admit": 0.8,
+          "lambda_evid": 1.0,
+          "lambda_release": 0.6,
+          "parties": [
+            "participant-a",
+            "governance-planner",
+            "clearing-agent"
+          ],
+          "proof_artifact_id": "synthetic-proof-policy-sim-001",
+          "residual": 0.4,
+          "state": "ReviewRequired"
+        }
+      ]
+    }
+  },
+  "overrides": [],
+  "parameter_version": "0.1.0",
+  "run_id": "policy-sim-source-intake-run-001",
+  "scenario": "redistribution-transfer-release-synthetic",
+  "timestamp": "2026-06-04T07:16:23Z"
+}
