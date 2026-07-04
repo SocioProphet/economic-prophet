@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Value Driver Tree Profile",
+  "type": "object",
+  "required": [
+    "run_id",
+    "scenario",
+    "as_of",
+    "framework_version",
+    "industry",
+    "enterprise_value_baseline",
+    "drivers",
+    "domains",
+    "weights",
+    "kpis",
+    "measurement_boundary"
+  ],
+  "properties": {
+    "run_id": {"type": "string"},
+    "scenario": {"type": "string"},
+    "as_of": {"type": "string"},
+    "framework_version": {"type": "string"},
+    "industry": {"type": "string"},
+    "enterprise_value_baseline": {"type": "number", "minimum": 0},
+    "drivers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "domains": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "weights": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["driver", "domain", "weight"],
+        "properties": {
+          "driver": {"type": "string"},
+          "domain": {"type": "string"},
+          "weight": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "kpis": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["driver", "domain", "kpi", "delta_pct", "polarity"],
+        "properties": {
+          "driver": {"type": "string"},
+          "domain": {"type": "string"},
+          "kpi": {"type": "string"},
+          "delta_pct": {"type": "number"},
+          "polarity": {"type": "string"}
+        }
+      }
+    },
+    "measurement_boundary": {
+      "type": "object",
+      "required": ["mode", "non_goals"],
+      "properties": {
+        "mode": {"type": "string"},
+        "non_goals": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "reported_total_value_uplift": {"type": "number"},
+    "reported_value_uplift_fraction": {"type": "number"},
+    "epistemic_status": {"type": "object"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "input_hash": {"type": "string"},
+    "output_hash": {"type": "string"},
+    "replay_plan_ref": {"type": "string"}
+  }
+}

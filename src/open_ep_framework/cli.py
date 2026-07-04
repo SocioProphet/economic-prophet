@@ -17,6 +17,7 @@ from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
 from .validation import validate_json_file
+from .vdt import run_vdt
 
 
 def load_context(path: str):
@@ -157,6 +158,7 @@ def main():
             "associated-surplus",
             "policy-simulation",
             "policy-simulation-uvmc",
+            "vdt",
         ],
         default="instrument",
     )
@@ -218,6 +220,9 @@ def main():
         inputs = outputs["profile"]
     elif args.mode == "policy-simulation-uvmc":
         outputs = run_policy_simulation_measured_entity(args.example)
+        inputs = outputs["profile"]
+    elif args.mode == "vdt":
+        outputs = run_vdt(args.example)
         inputs = outputs["profile"]
     else:
         outputs = run_example(args.example)
