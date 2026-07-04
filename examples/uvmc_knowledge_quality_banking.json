@@ -1,0 +1,26 @@
+{
+  "knowledge_quality_id": "kq_acme_relationship_2026q1",
+  "scoring_mode": "weighted_geometric",
+  "components": {
+    "coverage": 0.86,
+    "quality": 0.82,
+    "stability": 0.78,
+    "provenance": 0.91
+  },
+  "weights": {
+    "coverage": 0.25,
+    "quality": 0.25,
+    "stability": 0.25,
+    "provenance": 0.25
+  },
+  "score": 0.84,
+  "knowledge_credit": 0.004,
+  "knowledge_credit_cap": 0.012,
+  "evidence_refs": [
+    "uvmc_ctx_bank_rel_0001",
+    "calc_receipt_bank_rel_0001"
+  ],
+  "freshness_as_of": "2026-03-31",
+  "owner": "economic-prophet",
+  "status": "draft"
+}
