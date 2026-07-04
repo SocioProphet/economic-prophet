@@ -1,0 +1,32 @@
+{
+  "measurement_context_id": "uvmc_ctx_bank_rel_0001",
+  "object_id": "relationship_acme_001",
+  "object_type": "relationship",
+  "as_of": "2026-03-31",
+  "period_id": "2026Q1",
+  "horizon": "1Y",
+  "scenario_id": "base_2026q1",
+  "industry_overlay_id": "naics_522110_commercial_banking",
+  "currency": "USD",
+  "cadence": "quarterly",
+  "source_system": "synthetic_uvmc_fixture",
+  "source_record_id": "fixture_relationship_acme_001",
+  "model_version": "uvmc-model-v0.1",
+  "parameter_set": "uvmc-params-banking-v0.1",
+  "formula_version": "uvmc-formula-v0.1",
+  "dimension_coordinates": {
+    "legal_entity": "bank_holdco_001",
+    "line_of_business": "commercial_banking",
+    "relationship": "relationship_acme_001",
+    "geography": "US",
+    "industry": "NAICS:522110"
+  },
+  "lineage": {
+    "parent_chain": ["bank_holdco_001", "commercial_banking", "relationship_acme_001"],
+    "type_chain": ["legal_entity", "line_of_business", "relationship"],
+    "input_hash": "sha256:synthetic-input-placeholder",
+    "output_hash": "sha256:synthetic-output-placeholder"
+  },
+  "owner": "economic-prophet",
+  "status": "draft"
+}
