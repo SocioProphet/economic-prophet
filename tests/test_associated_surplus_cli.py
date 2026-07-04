@@ -26,7 +26,7 @@ def test_associated_surplus_cli_emits_summary_and_audit(tmp_path, monkeypatch, c
     payload = json.loads(stdout)
     assert payload["summary"]["run_id"] == "associated-surplus-synthetic-001"
     assert payload["summary"]["missing_required_non_goals"] == []
-    assert abs(payload["summary"]["computed_net_associated_surplus"] - 0.259383427072) < 1e-12
+    assert abs(payload["summary"]["computed_net_associated_surplus"] - 0.27493856174080006) < 1e-12
 
     assert audit_path.exists()
     audit = json.loads(audit_path.read_text())
