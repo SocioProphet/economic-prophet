@@ -1,0 +1,112 @@
+{
+  "run_id": "vdt-impact-energy-equity-001",
+  "scenario": "energy-equity-impact-value-driver-tree",
+  "as_of": "2026-07-04T00:00:00Z",
+  "framework_version": "0.1.0",
+  "budget_usd": 10000000.0,
+  "drivers": [
+    "Delivery Efficiency",
+    "Demand Efficiency",
+    "Flexibility & Timing",
+    "Locality & Resilience"
+  ],
+  "interventions": [
+    {
+      "name": "Targeted local supply (roofs/canopies near load)",
+      "driver": "Locality & Resilience",
+      "people_per_million_low": 1100.0,
+      "people_per_million_high": 2000.0,
+      "allocation_usd": 2500000.0,
+      "equity_weight": 0.7
+    },
+    {
+      "name": "Utility PV in mixed climates (generation only)",
+      "driver": "Locality & Resilience",
+      "people_per_million_low": 900.0,
+      "people_per_million_high": 1600.0,
+      "allocation_usd": 2000000.0,
+      "equity_weight": 0.5
+    },
+    {
+      "name": "Heat-pump swaps (installed at scale)",
+      "driver": "Demand Efficiency",
+      "people_per_million_low": 100.0,
+      "people_per_million_high": 200.0,
+      "allocation_usd": 1500000.0,
+      "equity_weight": 0.8
+    },
+    {
+      "name": "Envelope upgrades (insulation/air-sealing)",
+      "driver": "Demand Efficiency",
+      "people_per_million_low": 80.0,
+      "people_per_million_high": 180.0,
+      "allocation_usd": 1000000.0,
+      "equity_weight": 0.8
+    },
+    {
+      "name": "Train regenerative braking + wayside storage",
+      "driver": "Delivery Efficiency",
+      "people_per_million_low": 200.0,
+      "people_per_million_high": 800.0,
+      "allocation_usd": 1000000.0,
+      "equity_weight": 0.4
+    },
+    {
+      "name": "Elevator/escalator regenerative drives",
+      "driver": "Delivery Efficiency",
+      "people_per_million_low": 150.0,
+      "people_per_million_high": 500.0,
+      "allocation_usd": 500000.0,
+      "equity_weight": 0.3
+    },
+    {
+      "name": "Critical microgrids (hospitals/campuses)",
+      "driver": "Locality & Resilience",
+      "people_per_million_low": 50.0,
+      "people_per_million_high": 150.0,
+      "allocation_usd": 1000000.0,
+      "equity_weight": 0.9
+    },
+    {
+      "name": "Footfall tiles for device autonomy",
+      "driver": "Flexibility & Timing",
+      "people_per_million_low": 5000.0,
+      "people_per_million_high": 20000.0,
+      "allocation_usd": 500000.0,
+      "equity_weight": 0.2
+    }
+  ],
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "grant_disbursement",
+      "procurement_commitment",
+      "investment_advice",
+      "beneficiary_enrollment"
+    ]
+  },
+  "epistemic_status": {
+    "level": "synthetic",
+    "confidence": 0.55,
+    "review_status": "machine_checked"
+  },
+  "evidence_refs": [
+    "schemas/impact_vdt.schema.json",
+    "docs/associated_surplus.md"
+  ],
+  "assumptions": [
+    "people-per-$1M yields are the intervention menu's cost-effectiveness ranges; reach is linear in budget.",
+    "Driver assignment + $10M allocation + equity weights (0-1) are modeling choices for this illustrative portfolio.",
+    "Equity weight scales people-reached toward vulnerability-served impact (microgrids/heat-pumps weighted high)."
+  ],
+  "limitations": [
+    "Synthetic portfolio; not a funding commitment or program design.",
+    "No money moves; no beneficiary is enrolled."
+  ],
+  "input_hash": "hash://synthetic/input-vdt-impact-001",
+  "output_hash": "hash://synthetic/output-vdt-impact-001",
+  "replay_plan_ref": "replay://vdt-impact/energy-equity-001",
+  "reported_total_people_mid": 13742.5,
+  "reported_total_equity_adjusted_people": 5835.25
+}
