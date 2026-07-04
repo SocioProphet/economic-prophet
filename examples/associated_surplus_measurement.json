@@ -53,8 +53,8 @@
     "epistemic_uncertainty_penalty": 0.09,
     "coordination_friction": 0.11
   },
-  "gross_associated_surplus": 0.579383427072,
-  "net_associated_surplus": 0.259383427072,
+  "gross_associated_surplus": 0.5949385617408001,
+  "net_associated_surplus": 0.27493856174080006,
   "knowledge_functional": {
     "completeness": 0.9,
     "quality": 0.8,
