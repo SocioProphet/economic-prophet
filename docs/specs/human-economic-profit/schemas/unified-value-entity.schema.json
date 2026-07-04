@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/human-economic-profit/unified-value-entity.schema.json",
+  "title": "Unified Value Entity",
+  "description": "Class/entity alignment record linking canonical objects to EP terms, KPI drivers, industry overlays, knowledge quality, provenance, and digital twin corridors.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_id",
+    "object_class",
+    "period",
+    "ep_terms",
+    "value_driver_families",
+    "knowledge_quality",
+    "provenance_class",
+    "digital_twin_corridor",
+    "evidence_ref"
+  ],
+  "properties": {
+    "object_id": {"type": "string", "minLength": 1},
+    "object_class": {
+      "type": "string",
+      "enum": [
+        "legal_entity",
+        "line_of_business",
+        "relationship",
+        "account",
+        "instrument",
+        "transaction_event",
+        "collateral_set",
+        "funding_source",
+        "hedge_set",
+        "civic_asset",
+        "reputation_profile",
+        "heller_balance",
+        "replay_row",
+        "standards_profile"
+      ]
+    },
+    "period": {"type": "string", "minLength": 1},
+    "industry_overlay": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "naics": {"type": "string"},
+        "isic": {"type": "string"},
+        "sector_label": {"type": "string"},
+        "driver_weight_matrix_id": {"type": "string"}
+      }
+    },
+    "ep_terms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["V_plus", "V_minus", "NOPAT_adj", "EL", "FCR", "FC", "Pi", "Capital_adj", "HurdleRate_adj", "EC_base", "EC_req", "Omega"]
+      }
+    },
+    "value_driver_families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["price", "volume", "cost", "productivity", "capital", "risk", "liquidity", "knowledge", "civic", "human", "governance"]
+      }
+    },
+    "kpi_leaves": {"type": "array", "items": {"type": "string"}},
+    "knowledge_quality": {"$ref": "knowledge-quality.schema.json"},
+    "provenance_class": {"type": "string", "enum": ["measured", "estimated", "governed", "imputed"]},
+    "digital_twin_corridor": {
+      "type": "string",
+      "enum": [
+        "treasury_liquidity",
+        "collateral_operations",
+        "settlement_queue_operations",
+        "margin_operations",
+        "fail_repair_operations",
+        "supervisory_federation"
+      ]
+    },
+    "evidence_ref": {"type": "string", "minLength": 1},
+    "standards_refs": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "string"}
+  }
+}

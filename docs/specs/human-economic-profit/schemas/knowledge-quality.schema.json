@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.org/schemas/human-economic-profit/knowledge-quality.schema.json",
+  "title": "Knowledge Quality",
+  "description": "Knowledge quality scalar K = C * Q * S * P with component scores for coverage, coherence, stability, and provenance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["coverage", "coherence", "stability", "provenance", "scalar"],
+  "properties": {
+    "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+    "coherence": {"type": "number", "minimum": 0, "maximum": 1},
+    "stability": {"type": "number", "minimum": 0, "maximum": 1},
+    "provenance": {"type": "number", "minimum": 0, "maximum": 1},
+    "scalar": {"type": "number", "minimum": 0, "maximum": 1},
+    "method": {"type": "string", "enum": ["product", "weighted_product", "governed_override", "estimated"]},
+    "source_refs": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "string"}
+  }
+}
