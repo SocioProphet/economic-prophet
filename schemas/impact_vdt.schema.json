@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Impact Value Driver Tree",
+  "type": "object",
+  "required": [
+    "run_id",
+    "scenario",
+    "as_of",
+    "framework_version",
+    "budget_usd",
+    "drivers",
+    "interventions",
+    "measurement_boundary"
+  ],
+  "properties": {
+    "run_id": {"type": "string"},
+    "scenario": {"type": "string"},
+    "as_of": {"type": "string"},
+    "framework_version": {"type": "string"},
+    "budget_usd": {"type": "number", "minimum": 0},
+    "drivers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "interventions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "driver", "people_per_million_low", "people_per_million_high", "allocation_usd", "equity_weight"],
+        "properties": {
+          "name": {"type": "string"},
+          "driver": {"type": "string"},
+          "people_per_million_low": {"type": "number", "minimum": 0},
+          "people_per_million_high": {"type": "number", "minimum": 0},
+          "allocation_usd": {"type": "number", "minimum": 0},
+          "equity_weight": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    },
+    "measurement_boundary": {
+      "type": "object",
+      "required": ["mode", "non_goals"],
+      "properties": {
+        "mode": {"type": "string"},
+        "non_goals": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "reported_total_people_mid": {"type": "number"},
+    "reported_total_equity_adjusted_people": {"type": "number"},
+    "epistemic_status": {"type": "object"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "input_hash": {"type": "string"},
+    "output_hash": {"type": "string"},
+    "replay_plan_ref": {"type": "string"}
+  }
+}

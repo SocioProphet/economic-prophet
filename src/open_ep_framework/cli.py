@@ -10,6 +10,7 @@ from .domain import CapitalStack, ExpectedLossInputs, FTPStack, PricingContext, 
 from .expected_loss import expected_loss_amount
 from .ftp import ftp_rate
 from .heller_mesh import run_heller_mesh
+from .impact_vdt import run_impact_vdt
 from .object_graph import ObjectGraph, lineage_aware_output
 from .policy_simulation import run_policy_simulation_profile
 from .policy_simulation_uvmc import run_policy_simulation_measured_entity
@@ -159,6 +160,7 @@ def main():
             "policy-simulation",
             "policy-simulation-uvmc",
             "vdt",
+            "vdt-impact",
         ],
         default="instrument",
     )
@@ -223,6 +225,9 @@ def main():
         inputs = outputs["profile"]
     elif args.mode == "vdt":
         outputs = run_vdt(args.example)
+        inputs = outputs["profile"]
+    elif args.mode == "vdt-impact":
+        outputs = run_impact_vdt(args.example)
         inputs = outputs["profile"]
     else:
         outputs = run_example(args.example)
