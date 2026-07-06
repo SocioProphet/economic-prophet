@@ -1,0 +1,265 @@
+{
+  "run_id": "vdt-materials-001",
+  "scenario": "materials-value-driver-tree",
+  "as_of": "2026-07-06T00:00:00Z",
+  "framework_version": "0.1.0",
+  "industry": "GICS15_Materials",
+  "enterprise_value_baseline": 1000000000.0,
+  "drivers": [
+    "RevenueGrowth",
+    "CostEfficiency",
+    "Experience",
+    "KnowledgeProductivity",
+    "TrustComplianceResilience",
+    "Innovation"
+  ],
+  "domains": [
+    "CustomerInterface",
+    "ProductServiceDev",
+    "SupplyDelivery",
+    "OperationsSupport",
+    "RiskSecurity",
+    "GovernanceKnowledge"
+  ],
+  "weights": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "ProductServiceDev",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "SupplyDelivery",
+      "weight": 0.05405405405405406
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "OperationsSupport",
+      "weight": 0.04054054054054054
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "RiskSecurity",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "ProductServiceDev",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "SupplyDelivery",
+      "weight": 0.06756756756756757
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "OperationsSupport",
+      "weight": 0.06756756756756757
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "RiskSecurity",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Experience",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Experience",
+      "domain": "ProductServiceDev",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Experience",
+      "domain": "SupplyDelivery",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Experience",
+      "domain": "OperationsSupport",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "Experience",
+      "domain": "RiskSecurity",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Experience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "ProductServiceDev",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "SupplyDelivery",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "OperationsSupport",
+      "weight": 0.04054054054054054
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "RiskSecurity",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "ProductServiceDev",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "SupplyDelivery",
+      "weight": 0.04054054054054054
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "OperationsSupport",
+      "weight": 0.04054054054054054
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "RiskSecurity",
+      "weight": 0.06756756756756757
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "Innovation",
+      "domain": "CustomerInterface",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Innovation",
+      "domain": "ProductServiceDev",
+      "weight": 0.05405405405405406
+    },
+    {
+      "driver": "Innovation",
+      "domain": "SupplyDelivery",
+      "weight": 0.04054054054054054
+    },
+    {
+      "driver": "Innovation",
+      "domain": "OperationsSupport",
+      "weight": 0.02702702702702703
+    },
+    {
+      "driver": "Innovation",
+      "domain": "RiskSecurity",
+      "weight": 0.013513513513513514
+    },
+    {
+      "driver": "Innovation",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02702702702702703
+    }
+  ],
+  "kpis": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "SupplyDelivery",
+      "kpi": "process_yield_pct",
+      "delta_pct": 4.0,
+      "polarity": "higher_better"
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "OperationsSupport",
+      "kpi": "energy_cost_per_ton",
+      "delta_pct": -5.0,
+      "polarity": "lower_better"
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "RiskSecurity",
+      "kpi": "safety_incident_rate",
+      "delta_pct": -6.0,
+      "polarity": "lower_better"
+    }
+  ],
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "securities_issuance",
+      "investment_advice",
+      "deposit_taking",
+      "external_token_issuance",
+      "payment_processing"
+    ]
+  },
+  "epistemic_status": {
+    "level": "synthetic",
+    "confidence": 0.55,
+    "review_status": "machine_checked"
+  },
+  "evidence_refs": [
+    "schemas/vdt_profile.schema.json",
+    "docs/whitepaper.md"
+  ],
+  "assumptions": [
+    "Cell weights are the GICS15_Materials driver x capability-domain value attribution (sums to ~1.0).",
+    "Value concentrates in production throughput/logistics (SupplyDelivery), plant operations (OperationsSupport), and safety/environmental risk (RiskSecurity).",
+    "A KPI lever moves the value carried by its (driver, domain) cell by the improvement fraction.",
+    "lower_better KPIs improve as they fall; a negative delta is a positive improvement.",
+    "Enterprise-value baseline is a synthetic $1B for illustration."
+  ],
+  "limitations": [
+    "Synthetic fixture; not calibrated to a real company.",
+    "No investment, securities, or valuation-opinion conclusion is implied."
+  ],
+  "input_hash": "hash://synthetic/input-vdt-materials-001",
+  "output_hash": "hash://synthetic/output-vdt-materials-001",
+  "replay_plan_ref": "replay://vdt/vdt-materials-001",
+  "reported_total_value_uplift": 9594594.594594594,
+  "reported_value_uplift_fraction": 0.009594594594594594
+}

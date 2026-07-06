@@ -1,0 +1,265 @@
+{
+  "run_id": "vdt-real_estate-001",
+  "scenario": "real-estate-value-driver-tree",
+  "as_of": "2026-07-06T00:00:00Z",
+  "framework_version": "0.1.0",
+  "industry": "GICS60_RealEstate",
+  "enterprise_value_baseline": 1000000000.0,
+  "drivers": [
+    "RevenueGrowth",
+    "CostEfficiency",
+    "Experience",
+    "KnowledgeProductivity",
+    "TrustComplianceResilience",
+    "Innovation"
+  ],
+  "domains": [
+    "CustomerInterface",
+    "ProductServiceDev",
+    "SupplyDelivery",
+    "OperationsSupport",
+    "RiskSecurity",
+    "GovernanceKnowledge"
+  ],
+  "weights": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "CustomerInterface",
+      "weight": 0.05194805194805195
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "ProductServiceDev",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "SupplyDelivery",
+      "weight": 0.05194805194805195
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "OperationsSupport",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "RiskSecurity",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "CustomerInterface",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "ProductServiceDev",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "SupplyDelivery",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "OperationsSupport",
+      "weight": 0.06493506493506493
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "RiskSecurity",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "Experience",
+      "domain": "CustomerInterface",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "Experience",
+      "domain": "ProductServiceDev",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "Experience",
+      "domain": "SupplyDelivery",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "Experience",
+      "domain": "OperationsSupport",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "Experience",
+      "domain": "RiskSecurity",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "Experience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "CustomerInterface",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "ProductServiceDev",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "SupplyDelivery",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "OperationsSupport",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "RiskSecurity",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "CustomerInterface",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "ProductServiceDev",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "SupplyDelivery",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "OperationsSupport",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "RiskSecurity",
+      "weight": 0.06493506493506493
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "Innovation",
+      "domain": "CustomerInterface",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "Innovation",
+      "domain": "ProductServiceDev",
+      "weight": 0.03896103896103896
+    },
+    {
+      "driver": "Innovation",
+      "domain": "SupplyDelivery",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "Innovation",
+      "domain": "OperationsSupport",
+      "weight": 0.025974025974025976
+    },
+    {
+      "driver": "Innovation",
+      "domain": "RiskSecurity",
+      "weight": 0.012987012987012988
+    },
+    {
+      "driver": "Innovation",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.025974025974025976
+    }
+  ],
+  "kpis": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "CustomerInterface",
+      "kpi": "occupancy_rate_pct",
+      "delta_pct": 3.0,
+      "polarity": "higher_better"
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "OperationsSupport",
+      "kpi": "opex_per_sqft",
+      "delta_pct": -4.0,
+      "polarity": "lower_better"
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "RiskSecurity",
+      "kpi": "building_incident_rate",
+      "delta_pct": -5.0,
+      "polarity": "lower_better"
+    }
+  ],
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "securities_issuance",
+      "investment_advice",
+      "deposit_taking",
+      "external_token_issuance",
+      "payment_processing"
+    ]
+  },
+  "epistemic_status": {
+    "level": "synthetic",
+    "confidence": 0.55,
+    "review_status": "machine_checked"
+  },
+  "evidence_refs": [
+    "schemas/vdt_profile.schema.json",
+    "docs/whitepaper.md"
+  ],
+  "assumptions": [
+    "Cell weights are the GICS60_RealEstate driver x capability-domain value attribution (sums to ~1.0).",
+    "Value concentrates in leasing/occupancy (CustomerInterface, SupplyDelivery), facilities operations (OperationsSupport), and building/ESG risk (RiskSecurity).",
+    "A KPI lever moves the value carried by its (driver, domain) cell by the improvement fraction.",
+    "lower_better KPIs improve as they fall; a negative delta is a positive improvement.",
+    "Enterprise-value baseline is a synthetic $1B for illustration."
+  ],
+  "limitations": [
+    "Synthetic fixture; not calibrated to a real company.",
+    "No investment, securities, or valuation-opinion conclusion is implied."
+  ],
+  "input_hash": "hash://synthetic/input-vdt-real_estate-001",
+  "output_hash": "hash://synthetic/output-vdt-real_estate-001",
+  "replay_plan_ref": "replay://vdt/vdt-real_estate-001",
+  "reported_total_value_uplift": 7402597.402597402,
+  "reported_value_uplift_fraction": 0.007402597402597402
+}
