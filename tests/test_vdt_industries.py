@@ -13,6 +13,9 @@ INDUSTRY_EXAMPLES = [
     "examples/vdt_software_platforms.json",
     "examples/vdt_banks_financials.json",
     "examples/vdt_energy.json",
+    "examples/vdt_real_estate.json",
+    "examples/vdt_materials.json",
+    "examples/vdt_consumer_staples.json",
 ]
 
 

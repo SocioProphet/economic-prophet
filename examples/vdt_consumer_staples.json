@@ -1,0 +1,265 @@
+{
+  "run_id": "vdt-consumer_staples-001",
+  "scenario": "consumer-staples-value-driver-tree",
+  "as_of": "2026-07-06T00:00:00Z",
+  "framework_version": "0.1.0",
+  "industry": "GICS30_ConsumerStaples",
+  "enterprise_value_baseline": 1000000000.0,
+  "drivers": [
+    "RevenueGrowth",
+    "CostEfficiency",
+    "Experience",
+    "KnowledgeProductivity",
+    "TrustComplianceResilience",
+    "Innovation"
+  ],
+  "domains": [
+    "CustomerInterface",
+    "ProductServiceDev",
+    "SupplyDelivery",
+    "OperationsSupport",
+    "RiskSecurity",
+    "GovernanceKnowledge"
+  ],
+  "weights": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "CustomerInterface",
+      "weight": 0.06666666666666667
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "ProductServiceDev",
+      "weight": 0.04
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "SupplyDelivery",
+      "weight": 0.04
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "OperationsSupport",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "RiskSecurity",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "RevenueGrowth",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "CustomerInterface",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "ProductServiceDev",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "SupplyDelivery",
+      "weight": 0.06666666666666667
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "OperationsSupport",
+      "weight": 0.04
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "RiskSecurity",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Experience",
+      "domain": "CustomerInterface",
+      "weight": 0.05333333333333334
+    },
+    {
+      "driver": "Experience",
+      "domain": "ProductServiceDev",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "Experience",
+      "domain": "SupplyDelivery",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Experience",
+      "domain": "OperationsSupport",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Experience",
+      "domain": "RiskSecurity",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Experience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "CustomerInterface",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "ProductServiceDev",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "SupplyDelivery",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "OperationsSupport",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "RiskSecurity",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "KnowledgeProductivity",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "CustomerInterface",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "ProductServiceDev",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "SupplyDelivery",
+      "weight": 0.05333333333333334
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "OperationsSupport",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "RiskSecurity",
+      "weight": 0.04
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "Innovation",
+      "domain": "CustomerInterface",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "Innovation",
+      "domain": "ProductServiceDev",
+      "weight": 0.05333333333333334
+    },
+    {
+      "driver": "Innovation",
+      "domain": "SupplyDelivery",
+      "weight": 0.02666666666666667
+    },
+    {
+      "driver": "Innovation",
+      "domain": "OperationsSupport",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Innovation",
+      "domain": "RiskSecurity",
+      "weight": 0.013333333333333334
+    },
+    {
+      "driver": "Innovation",
+      "domain": "GovernanceKnowledge",
+      "weight": 0.02666666666666667
+    }
+  ],
+  "kpis": [
+    {
+      "driver": "RevenueGrowth",
+      "domain": "CustomerInterface",
+      "kpi": "same_store_sales_pct",
+      "delta_pct": 3.0,
+      "polarity": "higher_better"
+    },
+    {
+      "driver": "CostEfficiency",
+      "domain": "SupplyDelivery",
+      "kpi": "cogs_per_unit",
+      "delta_pct": -3.0,
+      "polarity": "lower_better"
+    },
+    {
+      "driver": "TrustComplianceResilience",
+      "domain": "SupplyDelivery",
+      "kpi": "product_recall_rate",
+      "delta_pct": -5.0,
+      "polarity": "lower_better"
+    }
+  ],
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "securities_issuance",
+      "investment_advice",
+      "deposit_taking",
+      "external_token_issuance",
+      "payment_processing"
+    ]
+  },
+  "epistemic_status": {
+    "level": "synthetic",
+    "confidence": 0.55,
+    "review_status": "machine_checked"
+  },
+  "evidence_refs": [
+    "schemas/vdt_profile.schema.json",
+    "docs/whitepaper.md"
+  ],
+  "assumptions": [
+    "Cell weights are the GICS30_ConsumerStaples driver x capability-domain value attribution (sums to ~1.0).",
+    "Value concentrates in brand/retail demand (CustomerInterface), distribution/COGS (SupplyDelivery), and product/food safety (TrustComplianceResilience).",
+    "A KPI lever moves the value carried by its (driver, domain) cell by the improvement fraction.",
+    "lower_better KPIs improve as they fall; a negative delta is a positive improvement.",
+    "Enterprise-value baseline is a synthetic $1B for illustration."
+  ],
+  "limitations": [
+    "Synthetic fixture; not calibrated to a real company.",
+    "No investment, securities, or valuation-opinion conclusion is implied."
+  ],
+  "input_hash": "hash://synthetic/input-vdt-consumer_staples-001",
+  "output_hash": "hash://synthetic/output-vdt-consumer_staples-001",
+  "replay_plan_ref": "replay://vdt/vdt-consumer_staples-001",
+  "reported_total_value_uplift": 6666666.666666667,
+  "reported_value_uplift_fraction": 0.006666666666666667
+}
