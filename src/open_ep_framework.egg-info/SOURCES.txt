@@ -7,6 +7,7 @@ src/open_ep_framework/attribution.py
 src/open_ep_framework/audit.py
 src/open_ep_framework/breakeven.py
 src/open_ep_framework/capital.py
+src/open_ep_framework/causal_abduction.py
 src/open_ep_framework/causal_graph.py
 src/open_ep_framework/cli.py
 src/open_ep_framework/domain.py
@@ -34,6 +35,7 @@ tests/test_associated_surplus.py
 tests/test_associated_surplus_cli.py
 tests/test_associated_surplus_schema.py
 tests/test_breakeven.py
+tests/test_causal_abduction.py
 tests/test_causal_graph.py
 tests/test_context_output_schemas.py
 tests/test_heller_mesh.py
