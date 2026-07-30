@@ -160,8 +160,17 @@ def abduce(
         raise ValueError(f"invalid observed_sign {observed_sign!r}; expected positive|negative|either")
     if not (0.0 <= warrant_weight <= 1.0):
         raise ValueError(f"warrant_weight {warrant_weight} outside [0,1]")
-    if top_k is not None and top_k < 1:
-        raise ValueError(f"top_k must be >= 1 or None; got {top_k}")
+    if top_k is not None:
+        # Guard non-int (e.g. 1.5, "5", True) up front. Type-hints say int|None;
+        # without an isinstance check a float slips through the < 1 comparison
+        # and later dies in list slicing with TypeError, and a string raises
+        # TypeError inside the comparison itself. Either way, not a clean
+        # ValueError. bool is a subclass of int in Python — exclude it explicitly
+        # since top_k=True would otherwise pass as 1.
+        if isinstance(top_k, bool) or not isinstance(top_k, int):
+            raise ValueError(f"top_k must be an int (or None); got {type(top_k).__name__}")
+        if top_k < 1:
+            raise ValueError(f"top_k must be >= 1 or None; got {top_k}")
 
     hyps = list(hypotheses)
     edge_list = list(edges)

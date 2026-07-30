@@ -217,11 +217,6 @@ class CandidateSourceFilterTest(unittest.TestCase):
         for c in r_tariffs.candidates:
             self.assertEqual(c.source_id, "tariffs")
 
-
-if __name__ == "__main__":
-    unittest.main()
-
-
 class ArgumentValidationTest(unittest.TestCase):
     def test_bogus_observed_sign_raises_even_on_an_empty_graph(self):
         # Empty graph would otherwise produce a normal empty Abduction and swallow the bad arg.
@@ -243,3 +238,15 @@ class ArgumentValidationTest(unittest.TestCase):
         hs, es = _auto_parts()
         r = abduce(hs, es, "revenue", top_k=1)
         self.assertEqual(len(r.candidates), 1)
+
+    def test_top_k_non_int_raises_valueerror_not_typeerror(self):
+        """Copilot follow-up: type hints say int|None but the guard didn\'t
+        actually check the type — a float or string produced a downstream
+        TypeError instead of a clean ValueError."""
+        for bad in (1.5, "5", True):
+            with self.assertRaises(ValueError):
+                abduce([], [], "any", top_k=bad)
+
+
+if __name__ == "__main__":
+    unittest.main()
