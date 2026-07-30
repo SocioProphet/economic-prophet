@@ -115,8 +115,8 @@ def _score_path(path: PathContribution, warrant_weight: float) -> tuple[float, i
         raise ValueError(f"warrant_weight {warrant_weight} outside [0,1]")
     # Coverage is diminishing-returns via a linear ratio that SATURATES at 4:
     # 0 warrants → 0.00, 1 → 0.25, 2 → 0.50, 3 → 0.75, and 4+ all → 1.00. So
-    # the 5th warrant is worth nothing compared to the 4th, and the 2nd is
-    # worth what the 3rd is. Deliberate: it keeps the score bounded to [0,1]
+    # the 5th warrant is worth the same as the 4th, and the 2nd is worth
+    # the same as the 3rd. Deliberate: it keeps the score bounded to [0,1]
     # (the same domain as contract `weight` and `confidence`), and it makes
     # the ranking behaviour transparent — 4 was picked so a hypothesis with
     # multiple independent sources beats one with a single citation, without
