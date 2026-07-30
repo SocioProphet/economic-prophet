@@ -56,7 +56,7 @@ class AbductionCandidate:
     Wraps a `PathContribution` from the forward propagator so every candidate
     is an already-attributed, already-warrant-backed path. Fields:
 
-    - `source_label` — the origin hypothesis id an auditor names as the cause.
+    - `source_id` — the origin hypothesis id an auditor names as the cause.
     - `contribution` — the signed magnitude the forward propagator would emit
       for this source→target path at `source_value=1.0`. Its sign is the
       predicted direction of effect on the target.
@@ -113,12 +113,15 @@ def _score_path(path: PathContribution, warrant_weight: float) -> tuple[float, i
     coverage = len(set(path.all_warrants))
     if warrant_weight < 0.0 or warrant_weight > 1.0:
         raise ValueError(f"warrant_weight {warrant_weight} outside [0,1]")
-    # Coverage is diminishing-returns; log2-ish saturation so 1 warrant is a
-    # real jump from zero but the twentieth warrant is worth much less than
-    # the second. Keeps the score bounded roughly to [0,1] when magnitudes
-    # are already bounded to [0,1] (the contract's `weight` and `confidence`
-    # domains). A caller can inspect `warrant_coverage` directly if they
-    # want raw counts.
+    # Coverage is diminishing-returns via a linear ratio that SATURATES at 4:
+    # 0 warrants → 0.00, 1 → 0.25, 2 → 0.50, 3 → 0.75, and 4+ all → 1.00. So
+    # the 5th warrant is worth the same as the 4th, and the 2nd is worth
+    # the same as the 3rd. Deliberate: it keeps the score bounded to [0,1]
+    # (the same domain as contract `weight` and `confidence`), and it makes
+    # the ranking behaviour transparent — 4 was picked so a hypothesis with
+    # multiple independent sources beats one with a single citation, without
+    # rewarding warrant-count arms races. A caller can inspect
+    # `warrant_coverage` directly for raw counts.
     coverage_score = min(1.0, coverage / 4.0)   # saturates at 4 distinct warrants
     magnitude = min(1.0, abs(path.contribution))
     score = (1.0 - warrant_weight) * magnitude + warrant_weight * coverage_score
@@ -144,7 +147,31 @@ def abduce(
 
     `top_k=None` returns all matching candidates. Default 10 keeps the
     response cockpit-sized; a caller doing bulk analytics can override.
+
+    Validates arguments up front: an invalid `observed_sign` /
+    `warrant_weight` / `top_k` raises before any traversal happens, so a
+    caller with a degenerate graph still gets a fast, honest error rather
+    than a silent empty result.
     """
+    # Argument validation runs first so bad inputs cannot be masked by a
+    # graph that produces no candidates. `_sign_matches` and `_score_path`
+    # both validate too, but reaching them requires at least one path.
+    if observed_sign not in ("positive", "negative", "either"):
+        raise ValueError(f"invalid observed_sign {observed_sign!r}; expected positive|negative|either")
+    if not (0.0 <= warrant_weight <= 1.0):
+        raise ValueError(f"warrant_weight {warrant_weight} outside [0,1]")
+    if top_k is not None:
+        # Guard non-int (e.g. 1.5, "5", True) up front. Type-hints say int|None;
+        # without an isinstance check a float slips through the < 1 comparison
+        # and later dies in list slicing with TypeError, and a string raises
+        # TypeError inside the comparison itself. Either way, not a clean
+        # ValueError. bool is a subclass of int in Python — exclude it explicitly
+        # since top_k=True would otherwise pass as 1.
+        if isinstance(top_k, bool) or not isinstance(top_k, int):
+            raise ValueError(f"top_k must be an int (or None); got {type(top_k).__name__}")
+        if top_k < 1:
+            raise ValueError(f"top_k must be >= 1 or None; got {top_k}")
+
     hyps = list(hypotheses)
     edge_list = list(edges)
 

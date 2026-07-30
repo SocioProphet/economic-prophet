@@ -76,11 +76,12 @@ class SignMatchingTest(unittest.TestCase):
 
 class RankingTest(unittest.TestCase):
     def test_warrant_weight_moves_candidates_up_or_down(self):
-        # tariffs→revenue direct has 3 warrants; op_cost path has 1 warrant each edge.
-        # With warrant_weight=0, ranking is by |contribution|; direct (-0.4) wins over
-        # 2-hop (+0.3) even though warrant coverage differs.
-        # With warrant_weight=1 (all warrants), the 3-warrant direct path wins by a
-        # wider margin, and pure-warrant ordering swaps.
+        # tariffs→revenue direct has 3 warrants (contrib -0.4); the 2-hop path via
+        # op_cost accumulates 2 warrants (contrib +0.3). In this graph the direct
+        # path is highest by both criteria, so the ranking does NOT swap between
+        # warrant_weight=0 and 1 — but the SPREAD widens under pure warrants
+        # (0.75 vs 0.50) compared to pure magnitude (0.40 vs 0.30). That widening
+        # is the effect we care about pinning.
         hs, es = _auto_parts()
         r_pure_magnitude = abduce(hs, es, "revenue", observed_sign="either",
                                   warrant_weight=0.0)
@@ -100,6 +101,26 @@ class RankingTest(unittest.TestCase):
         # Pure-warrant scores are 0.75 (3/4) vs 0.5 (2/4); pure-magnitude are 0.4 vs 0.3.
         self.assertAlmostEqual(direct_score_wt, 0.75)
         self.assertAlmostEqual(two_hop_score_wt, 0.5)
+
+    def test_warrant_weight_can_reorder_candidates_when_it_matters(self):
+        """A separate graph where the swap Copilot flagged as missing actually happens:
+        one path has higher magnitude with 1 warrant; another has lower magnitude with
+        many warrants. Under pure magnitude the first wins; under pure warrants the
+        second wins. Pinning both orderings prevents future regressions of the mix."""
+        hs = [h("src_a"), h("src_b"), h("target")]
+        es = [
+            # Higher magnitude, single warrant
+            e("hi_mag", "src_a", "target", sign="negative", weight=0.9, confidence=1.0,
+              warrants=("urn:srcos:evidence:one",)),
+            # Lower magnitude, four warrants (saturated coverage)
+            e("hi_warr", "src_b", "target", sign="negative", weight=0.3, confidence=1.0,
+              warrants=("urn:srcos:evidence:a", "urn:srcos:evidence:b",
+                        "urn:srcos:evidence:c", "urn:srcos:evidence:d")),
+        ]
+        pure_mag = abduce(hs, es, "target", observed_sign="negative", warrant_weight=0.0)
+        pure_warr = abduce(hs, es, "target", observed_sign="negative", warrant_weight=1.0)
+        self.assertEqual([c.source_id for c in pure_mag.candidates], ["src_a", "src_b"])
+        self.assertEqual([c.source_id for c in pure_warr.candidates], ["src_b", "src_a"])
 
     def test_default_warrant_weight_is_nonzero(self):
         """warrant_weight defaulting to 0 would silently reproduce the naive engine
@@ -195,6 +216,36 @@ class CandidateSourceFilterTest(unittest.TestCase):
         self.assertGreater(len(r_all.candidates), len(r_tariffs.candidates))
         for c in r_tariffs.candidates:
             self.assertEqual(c.source_id, "tariffs")
+
+class ArgumentValidationTest(unittest.TestCase):
+    def test_bogus_observed_sign_raises_even_on_an_empty_graph(self):
+        # Empty graph would otherwise produce a normal empty Abduction and swallow the bad arg.
+        with self.assertRaises(ValueError):
+            abduce([], [], "any", observed_sign="upside_down")
+
+    def test_bogus_warrant_weight_raises_even_on_an_empty_graph(self):
+        with self.assertRaises(ValueError):
+            abduce([], [], "any", warrant_weight=1.5)
+
+    def test_bogus_top_k_raises(self):
+        with self.assertRaises(ValueError):
+            abduce([], [], "any", top_k=0)
+        with self.assertRaises(ValueError):
+            abduce([], [], "any", top_k=-3)
+
+    def test_top_k_of_one_is_valid(self):
+        # Boundary check: 1 is the smallest legitimate top_k.
+        hs, es = _auto_parts()
+        r = abduce(hs, es, "revenue", top_k=1)
+        self.assertEqual(len(r.candidates), 1)
+
+    def test_top_k_non_int_raises_valueerror_not_typeerror(self):
+        """Copilot follow-up: type hints say int|None but the guard didn\'t
+        actually check the type — a float or string produced a downstream
+        TypeError instead of a clean ValueError."""
+        for bad in (1.5, "5", True):
+            with self.assertRaises(ValueError):
+                abduce([], [], "any", top_k=bad)
 
 
 if __name__ == "__main__":
