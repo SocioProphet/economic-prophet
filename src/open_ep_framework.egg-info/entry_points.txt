@@ -1,2 +1,0 @@
-[console_scripts]
-oepf = open_ep_framework.cli:main
