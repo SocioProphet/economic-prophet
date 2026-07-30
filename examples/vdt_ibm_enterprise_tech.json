@@ -1,0 +1,170 @@
+{
+  "run_id": "vdt-ibm-enterprise-tech-001",
+  "scenario": "ibm-q2-2026-contested-downcase-value-driver-tree",
+  "as_of": "2026-07-22T00:00:00Z",
+  "framework_version": "0.1.0",
+  "industry": "GICS_InformationTechnology_ITServicesAndSoftware",
+  "enterprise_value_baseline": 313000000000.0,
+  "drivers": [
+    "RevenueGrowth",
+    "CostEfficiency",
+    "Experience",
+    "KnowledgeProductivity",
+    "TrustComplianceResilience",
+    "Innovation"
+  ],
+  "domains": [
+    "CustomerInterface",
+    "ProductServiceDev",
+    "SupplyDelivery",
+    "OperationsSupport",
+    "RiskSecurity",
+    "GovernanceKnowledge"
+  ],
+  "weights": [
+    {"driver": "RevenueGrowth", "domain": "CustomerInterface", "weight": 0.06},
+    {"driver": "RevenueGrowth", "domain": "ProductServiceDev", "weight": 0.09},
+    {"driver": "RevenueGrowth", "domain": "SupplyDelivery", "weight": 0.07},
+    {"driver": "RevenueGrowth", "domain": "OperationsSupport", "weight": 0.05},
+    {"driver": "RevenueGrowth", "domain": "RiskSecurity", "weight": 0.01},
+    {"driver": "RevenueGrowth", "domain": "GovernanceKnowledge", "weight": 0.02},
+    {"driver": "CostEfficiency", "domain": "CustomerInterface", "weight": 0.01},
+    {"driver": "CostEfficiency", "domain": "ProductServiceDev", "weight": 0.02},
+    {"driver": "CostEfficiency", "domain": "SupplyDelivery", "weight": 0.04},
+    {"driver": "CostEfficiency", "domain": "OperationsSupport", "weight": 0.05},
+    {"driver": "CostEfficiency", "domain": "RiskSecurity", "weight": 0.01},
+    {"driver": "CostEfficiency", "domain": "GovernanceKnowledge", "weight": 0.01},
+    {"driver": "Experience", "domain": "CustomerInterface", "weight": 0.04},
+    {"driver": "Experience", "domain": "ProductServiceDev", "weight": 0.02},
+    {"driver": "Experience", "domain": "SupplyDelivery", "weight": 0.005},
+    {"driver": "Experience", "domain": "OperationsSupport", "weight": 0.01},
+    {"driver": "Experience", "domain": "RiskSecurity", "weight": 0.0},
+    {"driver": "Experience", "domain": "GovernanceKnowledge", "weight": 0.005},
+    {"driver": "KnowledgeProductivity", "domain": "CustomerInterface", "weight": 0.02},
+    {"driver": "KnowledgeProductivity", "domain": "ProductServiceDev", "weight": 0.05},
+    {"driver": "KnowledgeProductivity", "domain": "SupplyDelivery", "weight": 0.02},
+    {"driver": "KnowledgeProductivity", "domain": "OperationsSupport", "weight": 0.04},
+    {"driver": "KnowledgeProductivity", "domain": "RiskSecurity", "weight": 0.01},
+    {"driver": "KnowledgeProductivity", "domain": "GovernanceKnowledge", "weight": 0.02},
+    {"driver": "TrustComplianceResilience", "domain": "CustomerInterface", "weight": 0.05},
+    {"driver": "TrustComplianceResilience", "domain": "ProductServiceDev", "weight": 0.02},
+    {"driver": "TrustComplianceResilience", "domain": "SupplyDelivery", "weight": 0.03},
+    {"driver": "TrustComplianceResilience", "domain": "OperationsSupport", "weight": 0.02},
+    {"driver": "TrustComplianceResilience", "domain": "RiskSecurity", "weight": 0.03},
+    {"driver": "TrustComplianceResilience", "domain": "GovernanceKnowledge", "weight": 0.05},
+    {"driver": "Innovation", "domain": "CustomerInterface", "weight": 0.01},
+    {"driver": "Innovation", "domain": "ProductServiceDev", "weight": 0.06},
+    {"driver": "Innovation", "domain": "SupplyDelivery", "weight": 0.02},
+    {"driver": "Innovation", "domain": "OperationsSupport", "weight": 0.01},
+    {"driver": "Innovation", "domain": "RiskSecurity", "weight": 0.01},
+    {"driver": "Innovation", "domain": "GovernanceKnowledge", "weight": 0.01}
+  ],
+  "kpis": [
+    {"driver": "RevenueGrowth", "domain": "ProductServiceDev", "kpi": "software_segment_revenue_growth_pct", "delta_pct": 5.0, "polarity": "higher_better", "accumulation": "compounding"},
+    {"driver": "RevenueGrowth", "domain": "ProductServiceDev", "kpi": "transaction_processing_revenue_pct", "delta_pct": -8.0, "polarity": "higher_better", "accumulation": "step"},
+    {"driver": "RevenueGrowth", "domain": "SupplyDelivery", "kpi": "infrastructure_segment_revenue_pct", "delta_pct": -7.4, "polarity": "higher_better", "accumulation": "step"},
+    {"driver": "RevenueGrowth", "domain": "SupplyDelivery", "kpi": "ibm_z_mainframe_revenue_pct", "delta_pct": -42.0, "polarity": "higher_better", "accumulation": "step"},
+    {"driver": "RevenueGrowth", "domain": "OperationsSupport", "kpi": "consulting_segment_revenue_pct", "delta_pct": 0.2, "polarity": "higher_better", "accumulation": "compounding"},
+    {"driver": "Innovation", "domain": "ProductServiceDev", "kpi": "data_software_revenue_pct", "delta_pct": 19.0, "polarity": "higher_better", "accumulation": "compounding"},
+    {"driver": "Innovation", "domain": "ProductServiceDev", "kpi": "redhat_hybrid_cloud_revenue_pct", "delta_pct": 11.0, "polarity": "higher_better", "accumulation": "compounding"},
+    {"driver": "Innovation", "domain": "CustomerInterface", "kpi": "genai_share_of_consulting_signings_pct", "delta_pct": 50.0, "polarity": "higher_better", "accumulation": "compounding"},
+    {"driver": "TrustComplianceResilience", "domain": "CustomerInterface", "kpi": "large_deal_on_time_close_rate", "delta_pct": -15.0, "polarity": "higher_better", "accumulation": "step"},
+    {"driver": "TrustComplianceResilience", "domain": "GovernanceKnowledge", "kpi": "forecast_to_actual_variance", "delta_pct": 4.0, "polarity": "lower_better", "accumulation": "step"}
+  ],
+  "rival_hypotheses": {
+    "note": "The market priced a ~25% (~US$68bn market-cap) drop because it could not distinguish these two. They implicate DIFFERENT drivers with DIFFERENT accumulation, so they have DIFFERENT value consequences and DIFFERENT observable falsifiers. The Prophet carries BOTH with confidences rather than asserting one; the card asserted H_sequencing.",
+    "H_sequencing": {
+      "label": "Exogenous demand-timing shock (management's account)",
+      "claim": "Late-June client capex rotation into supply-constrained AI servers/memory + IBM Z price-increase pull-forward deferred large deals; Krishna: 'numerous large deals failed to close on the timelines we expected.' Deals real, merely later.",
+      "value_calculus": "Delta_Volume timing shift. Provenance (P) and stability (S) of reported pipeline INTACT, so K = C*Q*S*P holds; f(K) hurdle penalty ~0. Step levers (mainframe -42%, TP -8%, infra -7.4%) RECOVER in 2H26; multiple should NOT permanently re-rate. Locus = RevenueGrowth x SupplyDelivery (hardware-adjacent).",
+      "predicted_observable": "RPO / consulting + infra backlog GROWS or holds even as recognized revenue dips (deferred, not lost). Mainframe rebounds on z17 cycle. FY guide 4-5% cc achievable.",
+      "prior_confidence": 0.5
+    },
+    "H_integrity": {
+      "label": "Endogenous pipeline-quality / forecasting-discipline impairment",
+      "claim": "Reported pipeline was never as firm as booked; forecast granularity failed (a shortfall this concentrated in the final weeks of June is itself evidence about forecast quality). Subject of plaintiff-firm securities investigations re: misrepresenting pace of deal-closure and IBM Z outlook.",
+      "value_calculus": "Collapse in S and P of reported backlog -> K falls -> effective hurdle rises via f(K) -> PERSISTENT re-rating, AND implies prior-period EP was OVERSTATED (inflated earnings/capital base -> restatement risk). Locus = TrustComplianceResilience x (CustomerInterface + GovernanceKnowledge) -- NOT RevenueGrowth.",
+      "predicted_observable": "RPO flat/declining DESPITE the deferral narrative (the 'deferred' deals do not appear in backlog because they were never firm). Consulting stays flat (no hardware substitute can explain it). Possible restatement / guidance re-cut.",
+      "prior_confidence": 0.5
+    },
+    "discriminating_warrant": {
+      "observable": "Remaining Performance Obligations (RPO) and consulting book-to-bill trajectory vs Q1-2026 and Q2-2025",
+      "status": "OPEN -- NOT disclosed in the 2026-07-22 earnings release; management asserts 'high-quality backlog' (GenAI ~50% of signings, >30% of consulting backlog; ~US$0.5bn distributed-infra backlog, record) qualitatively only. Hard RPO figure lands in the Q2 10-Q.",
+      "falsification_rule": "RPO up while revenue down => supports H_sequencing, refutes H_integrity. RPO flat/down while management claims deferral => supports H_integrity, refutes H_sequencing. The 'flat consulting' tell already strains H_sequencing: consulting has no hardware substitute competing for its budget line, so a DRAM/AI-crowd-out cause cannot reach it."
+    }
+  },
+  "reconciliation": {
+    "note": "Model-implied value change vs the market's actual reaction. The gap between what the OPERATING surprise justifies and what the market wiped is the punchline: it is a trust/forecasting RE-RATING, not a cash-flow markdown, and it maps to the TrustComplianceResilience driver.",
+    "enterprise_value_baseline_usd": 313000000000.0,
+    "market_implied": {
+      "equity_move_pct": -25.2,
+      "ev_move_pct": -22.0,
+      "market_cap_change_usd": -68800000000.0,
+      "basis": "close $290.23 -> $217.07 on 939.89M shares, July 14 2026 (worst single-day % drop in IBM history, since at least 1968)"
+    },
+    "model_operating_impact": {
+      "ev_move_pct_range": [-17.3, -9.9],
+      "usd_range": [-54300000000.0, -31000000000.0],
+      "method": "operating growth-SURPRISE (actual YoY minus consensus-expected YoY) per segment, weighted by segment share of enterprise value (Software 0.52, Consulting 0.26, Infrastructure 0.22), capitalized at a permanent growth-to-value multiplier of 2.0x (low) to 3.5x (high)",
+      "surprise_pp": {"Software": -5.0, "Consulting": -2.8, "Infrastructure": -7.4}
+    },
+    "growth_profile_net_pv_usd": 35900000000.0,
+    "growth_profile_note": "Running the disclosed growth LEVELS (not surprises) through the tensor over 5y at 9% is still net-POSITIVE (+$35.9bn PV; Software +5%, Data +19%, Red Hat +11%, GenAI ~50% of signings). The franchise is not shrinking -- so the crash is a credibility event, not a demand collapse.",
+    "trust_discount_residual": {
+      "usd_range": [-37800000000.0, -14500000000.0],
+      "ev_move_pct_range": [-12.1, -4.6],
+      "computation": "market_implied (-$68.8bn) minus model_operating_impact (-$31.0bn to -$54.3bn)",
+      "maps_to_driver": "TrustComplianceResilience",
+      "interpretation": "The operating surprise justifies at most ~-17% of EV; the market took -22%. The residual ~$15-38bn (~5-12pp) is a multiple RE-RATING pricing the forecasting-credibility / pipeline-integrity tail (H_integrity) that the cash-flow numbers alone do not justify -- i.e. the market priced a 25% drop *because it was not sure*. This residual collapses toward zero if the Q2 10-Q RPO line confirms H_sequencing, or hardens if it confirms H_integrity."
+    }
+  },
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "securities_issuance",
+      "investment_advice",
+      "deposit_taking",
+      "external_token_issuance",
+      "target_price_or_recommendation",
+      "allegation_of_wrongdoing",
+      "payment_processing"
+    ]
+  },
+  "epistemic_status": {
+    "level": "public_sourced_contested_scenario",
+    "confidence": 0.5,
+    "review_status": "primary_source_cited_warrant_open",
+    "carries_rival_hypotheses": true,
+    "assertion_refused": "single_causal_attribution_for_the_shortfall"
+  },
+  "evidence_refs": [
+    "https://newsroom.ibm.com/2026-07-22-IBM-RELEASES-SECOND-QUARTER-RESULTS",
+    "https://www.cnbc.com/2026/07/14/ibm-warns-second-quarter-earnings-fell-short-of-expectations.html",
+    "https://www.cnbc.com/2026/07/22/ibm-q2-earnings-report-2026.html",
+    "https://finance.biggo.com/news/99221129-7573-4204-ab53-2def734c40e3",
+    "https://www.businesswire.com/news/home/20260715713305/en/Securities-Fraud-Investigation-Into-International-Business-Machines-Corporation-IBM-Announced",
+    "schemas/vdt_profile.schema.json"
+  ],
+  "assumptions": [
+    "All monetary values are in USD.",
+    "Enterprise-value baseline ~US$313bn is the PRE-announcement figure (approx. 939.89M shares x $290.23 close = ~US$272.8bn market cap + ~US$40bn net debt), used so the ~25% July-14 drop (~US$68bn of market cap) can be located driver-by-driver and the two hypotheses' recovery paths compared from a common base.",
+    "Q2-2026 actuals grounding the scenario (quarter to 30 Jun 2026, per 2026-07-22 release): total revenue US$17.162bn (+1% YoY); Software US$7.761bn (+5%; Red Hat +11%, Data +19%, Automation +4%, Transaction Processing -8%); Consulting US$5.327bn (+0.2%, flat); Infrastructure US$3.835bn (-7.4%); IBM Z mainframe revenue -42%; non-GAAP diluted EPS $2.93 (GAAP $2.27); gross margin 59.4% non-GAAP / 57.7% GAAP; consensus was $3.02 EPS on $17.86bn.",
+    "Revised FY2026 guidance: constant-currency revenue growth of four-to-five percent; free cash flow to increase ~US$1bn YoY.",
+    "The weight tensor is an ANALYST attribution of enterprise value across the value-driver x capability-domain tensor (sums to 1.0); it is NOT disclosed by IBM. TrustComplianceResilience is deliberately weighted higher than a steady-state peer (0.20 total; 0.10 of it in CustomerInterface + GovernanceKnowledge) because this event's value swing lives in sales-pipeline integrity and forecasting discipline, not in demand.",
+    "Disclosed Q2 deltas are entered as KPIs at their actual signs; forward paths are NOT in the KPI array -- they are carried as rival_hypotheses so the model asserts no single causal story.",
+    "K_EP knowledge-quality discount (K = coverage*coherence*stability*provenance): H_integrity is modelled as a fall in S and P; H_sequencing leaves K intact. This is the mechanism by which the same revenue shortfall yields a transient vs a persistent value consequence."
+  ],
+  "limitations": [
+    "This is a measurement of a CONTESTED scenario's value-driver decomposition and two rival forward paths; it asserts no securities, investment, or valuation-opinion conclusion, and no finding of wrongdoing.",
+    "Authoring-model knowledge cutoff is January 2026; the July-2026 events post-date it, so every July-2026 figure here is warranted to the cited PRIMARY/secondary sources, not to model recall.",
+    "The securities-fraud items are PLAINTIFF-SIDE LAW-FIRM INVESTIGATIONS soliciting shareholders (BFA Law; Law Offices of Frank R. Cruz), NOT a confirmed SEC or DOJ enforcement action; they establish no wrongdoing.",
+    "The discriminating warrant (RPO / backlog trajectory) is UNDISCLOSED as of the 2026-07-22 release; until the Q2 10-Q, neither hypothesis is falsified by public data -- the model's honest state is a 50/50 prior, not a verdict.",
+    "The weight tensor is an analyst attribution, not company-disclosed segment economics; consensus EPS is variously reported as $3.01-$3.02 and is not reconciled here to a single provider."
+  ],
+  "input_hash": "hash://public-sourced/input-vdt-ibm-enterprise-tech-001",
+  "output_hash": "hash://public-sourced/output-vdt-ibm-enterprise-tech-001",
+  "replay_plan_ref": "replay://vdt/vdt-ibm-enterprise-tech-001",
+  "horizon_years": 5,
+  "discount_rate": 0.09
+}
