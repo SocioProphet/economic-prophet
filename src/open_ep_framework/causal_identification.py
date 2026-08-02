@@ -162,23 +162,37 @@ def _descendants(directed: set[tuple[str, str]], node: str) -> set[str]:
     return seen
 
 
-def _simple_paths(adj: dict[str, set[str]], src: str, dst: str, max_len: int) -> list[list[str]]:
+def _simple_paths(
+    adj: dict[str, set[str]], src: str, dst: str, max_len: int, max_paths: int
+) -> tuple[list[list[str]], bool]:
+    """Enumerate simple src->dst paths over the undirected skeleton.
+
+    Returns ``(paths, truncated)``. ``truncated`` is True if the ``max_paths``
+    budget was hit — the caller must then fail closed (identification cannot be
+    decided within budget) rather than trust a partial enumeration.
+    """
     paths: list[list[str]] = []
+    truncated = False
 
     def dfs(node: str, path: list[str]) -> None:
-        if len(path) > max_len:
+        nonlocal truncated
+        if truncated or len(path) > max_len:
             return
         if node == dst:
             paths.append(list(path))
+            if len(paths) > max_paths:
+                truncated = True
             return
         for nxt in sorted(adj.get(node, ())):
+            if truncated:
+                return
             if nxt not in path:
                 path.append(nxt)
                 dfs(nxt, path)
                 path.pop()
 
     dfs(src, [src])
-    return paths
+    return paths, truncated
 
 
 def _is_collider(directed: set[tuple[str, str]], prev: str, node: str, nxt: str) -> bool:
@@ -198,6 +212,7 @@ def identify(
     latents: "frozenset[str] | set[str]" = frozenset(),
     allow_assumptions: "frozenset[str] | set[str]" = frozenset(),
     max_path_length: int = 12,
+    max_paths: int = 2000,
 ) -> IdentificationResult:
     """Attempt backdoor identification of ``estimand`` against the graph.
 
@@ -205,50 +220,90 @@ def identify(
     ``allow_assumptions`` may contain ``NO_UNOBSERVED_CONFOUNDING`` to permit an
     identified-under-assumption result instead of a refusal.
     """
-    del hypotheses  # identification is a property of the graph structure only
-    directed = _directed(edges)
-    adj = _neighbours(directed)
     t, y = estimand.treatment, estimand.outcome
     latents = set(latents)
     eid = estimand.id
+
+    # Align the identification graph with the graph the solver would actually run:
+    # propagate() drops self-loops, edges whose endpoints are not declared
+    # hypotheses, and unwarranted edges. Governance must be evaluated on that same
+    # effective graph, or the gate can permit/refuse a scenario the solver treats
+    # differently.
+    hyp_ids = {h.id for h in hypotheses}
+    admissible = [
+        e for e in edges
+        if e.from_ref != e.to_ref
+        and (not hyp_ids or (e.from_ref in hyp_ids and e.to_ref in hyp_ids))
+        and e.warrant_refs
+    ]
+    directed = _directed(admissible)
+    adj = _neighbours(directed)
 
     if t not in adj or y not in adj:
         return IdentificationResult(
             outcome=IdentificationOutcome.NOT_IDENTIFIED,
             estimand_id=eid,
-            rationale=f"treatment {t!r} or outcome {y!r} not present in graph",
+            rationale=f"treatment {t!r} or outcome {y!r} not present in the admissible graph",
         )
 
     descendants_t = _descendants(directed, t)
+
+    all_paths, truncated = _simple_paths(adj, t, y, max_path_length, max_paths)
+    if truncated:
+        # Fail closed: we could not enumerate the backdoor structure within budget,
+        # so we cannot certify identifiability. Refuse rather than guess.
+        return IdentificationResult(
+            outcome=IdentificationOutcome.NOT_IDENTIFIED,
+            estimand_id=eid,
+            rationale=(
+                "identification budget exceeded (graph too dense to enumerate "
+                "backdoor paths within max_paths); refused rather than guessed"
+            ),
+        )
+
+    # First pass: find backdoor paths and every collider on them. Conditioning on a
+    # collider (or any descendant of one) opens the path it sits on, so those nodes
+    # can never be valid adjustment candidates — even if they lie on a different,
+    # otherwise-blockable backdoor path.
+    backdoor: list[list[str]] = []
+    collider_nodes: set[str] = set()
+    for path in all_paths:
+        if len(path) < 2:
+            continue
+        if (path[1], t) not in directed:
+            continue  # not a backdoor path (first edge points out of treatment)
+        backdoor.append(path)
+        for i in range(1, len(path) - 1):
+            if _is_collider(directed, path[i - 1], path[i], path[i + 1]):
+                collider_nodes.add(path[i])
+    collider_closure: set[str] = set(collider_nodes)
+    for c in collider_nodes:
+        collider_closure |= _descendants(directed, c)
 
     adjustment: set[str] = set()
     open_unblockable: list[tuple[str, ...]] = []
     latent_needed: set[str] = set()
 
-    for path in _simple_paths(adj, t, y, max_path_length):
-        if len(path) < 2:
-            continue
-        # Backdoor path: the first edge (at the treatment) points INTO the treatment.
-        first = path[1]
-        if (first, t) not in directed:
-            continue  # not a backdoor path (edge points out of treatment)
-
+    for path in backdoor:
         internal = path[1:-1]
         has_collider = any(
             _is_collider(directed, path[i - 1], path[i], path[i + 1])
             for i in range(1, len(path) - 1)
         )
         if has_collider:
-            # With an empty conditioning set, an unconditioned collider blocks the
-            # path already. We never condition on colliders/their descendants, so
-            # it stays blocked.
+            # An unconditioned collider blocks the path; we never condition on a
+            # collider or its descendants (excluded below), so it stays blocked.
             continue
 
-        # Open, collider-free backdoor path: it must be blocked by conditioning on
-        # a non-collider that is observed and not a descendant of the treatment.
+        # Open, collider-free backdoor path: block it by conditioning on a
+        # non-collider that is observed, not a descendant of the treatment, and not
+        # in the collider closure (so conditioning cannot open another path).
         blockers = [
             v for v in internal
-            if v not in latents and v not in descendants_t and v != y
+            if v not in latents
+            and v not in descendants_t
+            and v not in collider_closure
+            and v != y
         ]
         if blockers:
             adjustment.add(sorted(blockers)[0])
@@ -379,9 +434,17 @@ def scenario_from_document(doc: dict) -> dict:
     This is the exposed route: it gates the solver on identification and never
     returns a point estimate for an unidentified estimand.
     """
+    if not isinstance(doc, dict):
+        raise ValueError("scenario document must be a JSON object")
+    ed = doc.get("estimand")
+    if not isinstance(ed, dict):
+        raise ValueError("scenario document must contain an 'estimand' object")
+    for key in ("treatment", "outcome"):
+        if not ed.get(key):
+            raise ValueError(f"estimand must declare a non-empty {key!r}")
+
     hyps = [Hypothesis.from_dict(d) for d in doc.get("hypotheses", [])]
     edges = [Edge.from_dict(d) for d in doc.get("edges", [])]
-    ed = doc["estimand"]
     graph_ref = ed.get("graphRef") or doc.get("graphRef") or (hyps[0].graph_ref if hyps else "")
     estimand = Estimand(
         graph_ref=graph_ref,

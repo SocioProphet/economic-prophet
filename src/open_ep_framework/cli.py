@@ -232,7 +232,12 @@ def main():
         outputs = run_impact_vdt(args.example)
         inputs = outputs["profile"]
     elif args.mode == "causal-scenario":
-        inputs = json.loads(Path(args.example).read_text())
+        # The global --example default is an instrument doc, not a causal scenario;
+        # fall back to the causal example when the user hasn't overridden it.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/causal_scenario.json"
+        inputs = json.loads(Path(example).read_text())
         outputs = scenario_from_document(inputs)
     else:
         outputs = run_example(args.example)

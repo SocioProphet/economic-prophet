@@ -7,6 +7,8 @@ authority for inference).
 """
 from __future__ import annotations
 
+import json
+import sys
 import unittest
 
 from open_ep_framework.causal_graph import Edge, Hypothesis
@@ -110,6 +112,27 @@ class IdentificationTests(unittest.TestCase):
         self.assertEqual(res.outcome, IdentificationOutcome.IDENTIFIED)
         self.assertEqual(res.adjustment_set, ())
 
+    def test_path_budget_refuses_rather_than_guessing(self) -> None:
+        hyps = [h("Z"), h("T"), h("Y")]
+        edges = [e("zt", "Z", "T"), e("zy", "Z", "Y"), e("ty", "T", "Y")]
+        res = identify(hyps, edges, est("T", "Y"), max_paths=0)
+        self.assertEqual(res.outcome, IdentificationOutcome.NOT_IDENTIFIED)
+        self.assertIn("budget", res.rationale)
+
+    def test_unwarranted_edge_is_excluded_from_identification(self) -> None:
+        # The Z->Y edge carries no warrant, so it is inadmissible (as in propagate).
+        # The backdoor path T<-Z->Y therefore does not exist in the effective graph.
+        hyps = [h("Z"), h("T"), h("Y")]
+        edges = [
+            e("zt", "Z", "T"),
+            Edge(id="zy", graph_ref=G, from_ref="Z", to_ref="Y",
+                 sign="positive", warrant_refs=()),  # unwarranted
+            e("ty", "T", "Y"),
+        ]
+        res = identify(hyps, edges, est("T", "Y"))
+        self.assertEqual(res.outcome, IdentificationOutcome.IDENTIFIED)
+        self.assertEqual(res.adjustment_set, ())
+
     def test_modal_class_is_carried_independently_of_outcome(self) -> None:
         hyps = [h("U"), h("T"), h("Y")]
         edges = [e("ut", "U", "T"), e("uy", "U", "Y"), e("ty", "T", "Y")]
@@ -154,6 +177,12 @@ class RouteTests(unittest.TestCase):
         self.assertIsNone(out["pointEstimate"])
         self.assertEqual(out["requiredMeasurements"], ["Z"])
 
+    def test_missing_estimand_raises_clear_error(self) -> None:
+        with self.assertRaises(ValueError):
+            scenario_from_document({"hypotheses": [], "edges": []})
+        with self.assertRaises(ValueError):
+            scenario_from_document({"estimand": {"treatment": "T"}})  # no outcome
+
 
 class EstimandRegistryTests(unittest.TestCase):
     def test_deterministic_id_and_roundtrip(self) -> None:
@@ -168,6 +197,24 @@ class EstimandRegistryTests(unittest.TestCase):
 
     def test_distinct_estimands_get_distinct_ids(self) -> None:
         self.assertNotEqual(est("T", "Y").id, est("T", "Z").id)
+
+
+def test_cli_causal_scenario_mode_autoswitches_example(tmp_path, monkeypatch, capsys):
+    # No --example given: the mode must fall back to examples/causal_scenario.json
+    # instead of the instrument default (which would raise a confusing KeyError).
+    from open_ep_framework.cli import main
+
+    audit_path = tmp_path / "causal_audit.json"
+    monkeypatch.setattr(
+        sys, "argv",
+        ["oepf", "--mode", "causal-scenario", "--audit", str(audit_path)],
+    )
+    main()
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["identification"]["outcome"] == "identified"
+    assert payload["identification"]["adjustmentSet"] == ["Z"]
+    assert payload["refused"] is False
+    assert audit_path.exists()
 
 
 if __name__ == "__main__":
