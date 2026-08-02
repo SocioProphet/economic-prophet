@@ -6,6 +6,7 @@ from .associated_surplus import run_associated_surplus
 from .audit import write_audit_pack
 from .breakeven import economic_profit_for_rate, solve_break_even_rate
 from .capital import capital_charge
+from .causal_identification import scenario_from_document
 from .domain import CapitalStack, ExpectedLossInputs, FTPStack, PricingContext, RecoverySurfaceInputs
 from .expected_loss import expected_loss_amount
 from .ftp import ftp_rate
@@ -161,6 +162,7 @@ def main():
             "policy-simulation-uvmc",
             "vdt",
             "vdt-impact",
+            "causal-scenario",
         ],
         default="instrument",
     )
@@ -229,6 +231,9 @@ def main():
     elif args.mode == "vdt-impact":
         outputs = run_impact_vdt(args.example)
         inputs = outputs["profile"]
+    elif args.mode == "causal-scenario":
+        inputs = json.loads(Path(args.example).read_text())
+        outputs = scenario_from_document(inputs)
     else:
         outputs = run_example(args.example)
         inputs = json.loads(Path(args.example).read_text())
