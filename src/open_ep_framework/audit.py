@@ -11,7 +11,7 @@ def write_audit_pack(path: str, run_id: str, scenario: str, framework_version: s
     overrides = overrides or []
     record = {
         "run_id": run_id,
-        "timestamp": datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "framework_version": framework_version,
         "scenario": scenario,
         "parameter_version": framework_version,
