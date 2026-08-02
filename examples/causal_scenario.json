@@ -1,0 +1,16 @@
+{
+  "graphRef": "urn:srcos:causal-graph:eco-demo",
+  "hypotheses": [
+    {"id": "Z", "graphRef": "urn:srcos:causal-graph:eco-demo", "label": "macro_demand"},
+    {"id": "T", "graphRef": "urn:srcos:causal-graph:eco-demo", "label": "price_change"},
+    {"id": "Y", "graphRef": "urn:srcos:causal-graph:eco-demo", "label": "revenue"}
+  ],
+  "edges": [
+    {"id": "zt", "graphRef": "urn:srcos:causal-graph:eco-demo", "fromRef": "Z", "toRef": "T", "sign": "positive", "warrantRefs": ["urn:srcos:evidence:macro"]},
+    {"id": "zy", "graphRef": "urn:srcos:causal-graph:eco-demo", "fromRef": "Z", "toRef": "Y", "sign": "positive", "warrantRefs": ["urn:srcos:evidence:macro"]},
+    {"id": "ty", "graphRef": "urn:srcos:causal-graph:eco-demo", "fromRef": "T", "toRef": "Y", "sign": "negative", "warrantRefs": ["urn:srcos:evidence:pricing"]}
+  ],
+  "estimand": {"treatment": "T", "outcome": "Y", "query": "ate", "modalClass": "interventional"},
+  "latents": [],
+  "allowAssumptions": []
+}
