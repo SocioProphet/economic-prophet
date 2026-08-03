@@ -1,0 +1,24 @@
+{
+  "direction": "up",
+  "dow_phase": "accumulation",
+  "evidence": {
+    "inventory_cycle": {
+      "net_inventory": 1200.0,
+      "phase": "accumulation"
+    }
+  },
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "cc83affa4fd56921f3c0d4b1289a2495a495a16f6cf395725dd971a17767559e",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "dow",
+  "signalId": "ts-trend-noflow-001",
+  "signal_type": "trend"
+}

@@ -1,0 +1,127 @@
+{
+  "arrival": {
+    "base_intensity_mu": 1.0,
+    "branching_ratio_n": 0.4502,
+    "counting_hurst": 0.8497,
+    "duration_autocorr": 0.0883,
+    "family": "hawkes_powerlaw",
+    "index_of_dispersion": 3.3086,
+    "kernel": {
+      "c": 0.5,
+      "gamma": 0.3,
+      "type": "power_law"
+    },
+    "poisson_vs_hawkes": "hawkes",
+    "stable": true
+  },
+  "autocorr_kernel": "power_law",
+  "confidence": "established",
+  "decay": {
+    "cancel_hazard": 1.2,
+    "competing_fill_probability": 0.4,
+    "fill_hazard": 0.8,
+    "kernel_decay": {
+      "gamma": 0.3,
+      "type": "power_law"
+    },
+    "mean_lifetime": 0.5
+  },
+  "execution": {
+    "depletion_rate": 5.0,
+    "fill_probability": 0.5488,
+    "queue_ahead": 3.0,
+    "queue_position_model": "exp(-queue_ahead/depletion_rate)"
+  },
+  "inputDescriptor": {
+    "generator": {
+      "family": "hawkes_powerlaw",
+      "params": {
+        "c": 0.5,
+        "gamma": 0.3,
+        "mu": 1.0,
+        "n": 0.8
+      },
+      "seed": 13
+    },
+    "n_events": 2589,
+    "source": "seeded_generator"
+  },
+  "lob_signals": {
+    "consumes_interface": "market_instruments.liquidity_premium(volume, regime_hurst, base_bps)",
+    "effective_volume": 2589.0,
+    "kyle_lambda": 0.2222,
+    "order_flow_imbalance": 231.5345,
+    "signed_flow_hurst": 0.8497
+  },
+  "marks": {
+    "distribution": "power_law",
+    "excess_kurtosis": 339.4038,
+    "heavy_tailed": true,
+    "tail_index_hill": 1.2916
+  },
+  "processId": "ofp-hawkes-powerlaw-long-001",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "4dcc8c4aad9f037760b5b0dfbb7789e93155bd433761cfa2363dcdcc42039b33",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "OrderFlowProcess",
+  "regime": "long_memory",
+  "risk_distribution_F": {
+    "family": "empirical",
+    "horizon_unit": "event",
+    "kernel": "power_law",
+    "params": {
+      "samples": [
+        -2.8268,
+        -1.3374,
+        -1.3392,
+        -1.1338,
+        -3.651,
+        -3.0915,
+        -4.3668,
+        -3.1483,
+        -1.2685,
+        -4.7977,
+        -1.6266,
+        -3.275,
+        -2.5599,
+        -1.9086,
+        -1.146,
+        -1.4656,
+        -26.0552,
+        -2.6932,
+        -4.3771,
+        -1.1118,
+        -1.1763,
+        -1.1804,
+        -1.158,
+        -1.2545,
+        -1.0408,
+        -1.1944,
+        -2.8463,
+        -1.1332,
+        -1.7398,
+        -1.2413,
+        -1.5533,
+        -1.9155,
+        -2.1748,
+        -1.9146,
+        -2.4391,
+        -5.197,
+        -1.1653,
+        -1.1893,
+        -1.0112,
+        -1.329
+      ],
+      "sigma": 11.6426,
+      "tail_index": 1.2916
+    },
+    "raroc_interface": "risk(F, kernel, reference, horizon)",
+    "tail_class": "fat_tailed"
+  },
+  "schemaVersion": "microstructure.order-flow-process.v0.1"
+}

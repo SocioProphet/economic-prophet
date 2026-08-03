@@ -1,0 +1,36 @@
+{
+  "cycle_closure": {
+    "event_count": 5,
+    "frequency": 5.0,
+    "fundamental_closure": "icosa_5",
+    "tunability": 1.0
+  },
+  "direction": "up",
+  "evidence": {
+    "self_similarity": {
+      "cross_scale_hurst": 0.68,
+      "multifractal_spectrum_width": 0.3622,
+      "present": true,
+      "spectrum_ref": "memory-mesh:MemoryRegimeCharacterization#multifractal_spectrum"
+    }
+  },
+  "fibonacci_claim": {
+    "ratio_claimed": 0.618,
+    "ratio_measured": 0.61,
+    "tolerance": 0.03
+  },
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "adf840750af5f32980d1428ec899d92cc3b794f8c651fb58d65851bdbb7e9a96",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "elliott",
+  "signalId": "ts-wave-001",
+  "signal_type": "wave_count"
+}

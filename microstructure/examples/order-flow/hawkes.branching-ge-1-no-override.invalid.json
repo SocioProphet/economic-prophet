@@ -1,0 +1,125 @@
+{
+  "arrival": {
+    "base_intensity_mu": 1.0,
+    "branching_ratio_n": 1.05,
+    "counting_hurst": 0.5134,
+    "duration_autocorr": 0.1634,
+    "family": "hawkes_exponential",
+    "index_of_dispersion": 6.2392,
+    "kernel": {
+      "beta": 1.5,
+      "type": "exponential"
+    },
+    "poisson_vs_hawkes": "hawkes",
+    "stable": true
+  },
+  "autocorr_kernel": "exponential",
+  "confidence": "established",
+  "decay": {
+    "cancel_hazard": 1.2,
+    "competing_fill_probability": 0.4,
+    "fill_hazard": 0.8,
+    "kernel_decay": {
+      "beta": 1.5,
+      "type": "exponential"
+    },
+    "mean_lifetime": 0.5
+  },
+  "execution": {
+    "depletion_rate": 5.0,
+    "fill_probability": 0.5488,
+    "queue_ahead": 3.0,
+    "queue_position_model": "exp(-queue_ahead/depletion_rate)"
+  },
+  "inputDescriptor": {
+    "generator": {
+      "family": "hawkes_exponential",
+      "params": {
+        "beta": 1.5,
+        "mu": 1.0,
+        "n": 0.6
+      },
+      "seed": 202
+    },
+    "n_events": 10077,
+    "source": "seeded_generator"
+  },
+  "lob_signals": {
+    "consumes_interface": "market_instruments.liquidity_premium(volume, regime_hurst, base_bps)",
+    "effective_volume": 10077.0,
+    "kyle_lambda": 0.2235,
+    "order_flow_imbalance": 30.9785,
+    "signed_flow_hurst": 0.5134
+  },
+  "marks": {
+    "distribution": "power_law",
+    "excess_kurtosis": 9690.122,
+    "heavy_tailed": true,
+    "tail_index_hill": 1.3535
+  },
+  "processId": "ofp-unstable-branching-001",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "e7ff0b787af048642a30672a5585eb2f222253de64bb982b90d1515f6621ce63",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "OrderFlowProcess",
+  "regime": "short_decaying",
+  "risk_distribution_F": {
+    "family": "empirical",
+    "horizon_unit": "event",
+    "kernel": "power_law",
+    "params": {
+      "samples": [
+        -1.2121,
+        -1.3682,
+        -1.8924,
+        -3.1787,
+        -1.3217,
+        -1.0225,
+        -1.8342,
+        -1.1223,
+        -10.7285,
+        -1.5785,
+        -3.1395,
+        -1.6542,
+        -1.4213,
+        -1.1175,
+        -1.5889,
+        -1.1056,
+        -2.2231,
+        -4.3323,
+        -1.7281,
+        -1.2705,
+        -1.2798,
+        -10.589,
+        -2.7028,
+        -2.6589,
+        -1.7107,
+        -1.1122,
+        -2.5417,
+        -9.0354,
+        -1.0798,
+        -1.1053,
+        -1.2045,
+        -10.2065,
+        -2.6123,
+        -3.4476,
+        -1.0655,
+        -4.422,
+        -4.3544,
+        -2.943,
+        -1.1823,
+        -3.1794
+      ],
+      "sigma": 85.0258,
+      "tail_index": 1.3535
+    },
+    "raroc_interface": "risk(F, kernel, reference, horizon)",
+    "tail_class": "fat_tailed"
+  },
+  "schemaVersion": "microstructure.order-flow-process.v0.1"
+}

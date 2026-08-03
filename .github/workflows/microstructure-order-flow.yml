@@ -1,0 +1,29 @@
+name: microstructure-order-flow
+
+on:
+  pull_request:
+    paths:
+      - "microstructure/**"
+      - ".github/workflows/microstructure-order-flow.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "microstructure/**"
+      - ".github/workflows/microstructure-order-flow.yml"
+  workflow_dispatch:
+
+jobs:
+  validate-microstructure-order-flow:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install validation dependency
+        run: python -m pip install jsonschema
+      - name: Validate OrderFlowProcess + TrendSignal contracts (VERIFIES + REJECTS + COHERENCE + receipt teeth)
+        run: make -C microstructure validate

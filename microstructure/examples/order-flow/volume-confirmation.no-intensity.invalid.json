@@ -1,0 +1,17 @@
+{
+  "evidence": {},
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "3d4eb88d268d9b623a1b7ad28650f8911408d0814c0188d28bd111299e6edea1",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "dow",
+  "signalId": "ts-vol-noint-001",
+  "signal_type": "volume_confirmation"
+}
