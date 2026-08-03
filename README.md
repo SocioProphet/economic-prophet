@@ -361,6 +361,30 @@ closed, and no `settled` receipt is emitted. This is measurement, simulation, an
 audit only; it does not define live money movement, token issuance, redemption
 rights, or public-chain settlement (mirrors the associated-surplus boundary).
 
+## Value-Energy-Conservation Welfare-Annealing (WEA-1)
+
+The estate's constructive **"better framework"** — the normative *inverse* of *"Silent Weapons
+for Quiet Wars"*: same value-as-energy physics (value-energy conserved in exchange; growth is a
+production *source*; allocations flow under a free-energy potential read with a laminar/turbulent
+lens), objective **flipped** from elite-control to a **global QoL welfare index**. A record
+(`--record`, `src/open_ep_framework/welfare_annealing/`,
+`schemas/welfare_annealing.schema.json`) carries one `record_kind` ∈
+`{exchange, anneal, growth_path, discount}`. It **consumes by reference** IC-1 `settlement` (#39,
+exchange conserves value-energy), FRL-1 `flow_regime.lorenz` (#54, laminar/turbulent lens), ALC-1
+`asset_ladder` (#52, renewable vs depleting), and `inflation.real_rate` (Fisher).
+
+It **verifies** that pure exchange conserves value-energy; that the anneal monotonically lowers
+the free-energy potential / raises the QoL index toward a laminar attractor while conserving
+energy at every step; that a renewable-only growth path is sustainable; and that a low
+social-discount-rate (Stern) weights future QoL more than a high one (Nordhaus), the sensitivity
+reconciling. It **rejects / flags** value created in pure exchange, growth funded by
+non-renewable drawdown reported as sustainable (false-growth flag), a growth claim not
+Fisher-real-adjusted, a wrong-direction (free-energy-increasing / turbulent) anneal, and a QoL
+index missing a required dimension (population / life-length / health / education). Deterministic,
+stdlib-only, measurement/simulation/audit only. See `docs/welfare_annealing.md`,
+`scripts/validate_welfare_annealing.py`, `examples/welfare_annealing/`, and
+`.github/workflows/welfare-annealing.yml`.
+
 ## Canonical object model
 
 The runtime is moving toward a typed profitability graph:

@@ -1,0 +1,17 @@
+{
+  "record_kind": "anneal",
+  "record_id": "wea-qol-missing-education-INVALID",
+  "as_of": "2026-08-03",
+  "anneal": {
+    "groups": [
+      {"name": "A", "population": 5.0, "life_length": 0.50, "health": 0.50, "education": 0.50, "half_saturation": 0.3},
+      {"name": "B", "population": 40.0, "life_length": 0.95, "health": 0.95, "half_saturation": 0.3},
+      {"name": "C", "population": 15.0, "life_length": 0.40, "health": 0.40, "education": 0.40, "half_saturation": 0.3}
+    ],
+    "initial_allocation": [2.0, 2.0, 2.0],
+    "total_energy": 6.0,
+    "learning_rate": 0.3,
+    "steps": 400,
+    "expect_regime": "laminar"
+  }
+}

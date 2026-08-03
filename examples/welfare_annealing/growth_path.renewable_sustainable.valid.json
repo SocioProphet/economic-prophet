@@ -1,0 +1,12 @@
+{
+  "record_kind": "growth_path",
+  "record_id": "wea-growth-renewable-sustainable-001",
+  "as_of": "2026-08-03",
+  "growth_path": {
+    "periods": [
+      {"renewable_delta": 5.0, "nonrenewable_drawdown": 0.0, "claim_sustainable": true},
+      {"renewable_delta": 3.0, "nonrenewable_drawdown": 0.0, "claim_sustainable": true,
+       "nominal_growth": 0.05, "inflation": 0.02, "real_growth": 0.02941176470588247}
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record_kind": "discount",
+  "record_id": "wea-discount-stern-vs-nordhaus-001",
+  "as_of": "2026-08-03",
+  "discount": {
+    "mv_pq": {"M": 100.0, "V": 6.0, "P": 2.0, "Q": 300.0},
+    "fisher_ideal": {
+      "p0": [1.0, 2.0], "q0": [10.0, 5.0],
+      "p1": [1.1, 2.2], "q1": [9.0, 6.0]
+    },
+    "sensitivity": {
+      "future_qol": 1000.0,
+      "horizon": 100.0,
+      "g": 0.02,
+      "scenarios": [
+        {"name": "stern", "delta": 0.001, "eta": 1.0},
+        {"name": "mid", "delta": 0.008, "eta": 1.2},
+        {"name": "nordhaus", "delta": 0.015, "eta": 1.45}
+      ]
+    }
+  }
+}
