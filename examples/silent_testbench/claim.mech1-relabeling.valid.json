@@ -1,0 +1,7 @@
+{
+  "mechanism_id": "MECH-1-shock-test-estimator",
+  "asserted_verdict": "RELABELING",
+  "scope": "audit_only_falsification_not_operationalization",
+  "beats_econometric_baseline": false,
+  "interpretation": "The shock-test estimator reproduces the published gasoline cross-price elasticity and is an impulse-response / VAR relabeling of ordinary econometrics."
+}

@@ -1,0 +1,6 @@
+{
+  "mechanism_id": "MECH-4-debt-population-negation-strong",
+  "asserted_verdict": "NOT_FALSIFIED",
+  "scope": "audit_only_falsification_not_operationalization",
+  "interpretation": "Depopulation balances an over-indebted economy."
+}

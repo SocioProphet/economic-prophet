@@ -1,0 +1,6 @@
+{
+  "mechanism_id": "MECH-4-debt-population-negation-strong",
+  "asserted_verdict": "FALSIFIED",
+  "scope": "audit_only_falsification_not_operationalization",
+  "interpretation": "Every cited high-debt crisis resolved via default/restructuring/inflation/growth; none via population negation."
+}

@@ -1,0 +1,7 @@
+{
+  "mechanism_id": "MECH-2-behavioral-shock-claim",
+  "asserted_verdict": "REJECTED_NO_OUT_OF_SAMPLE",
+  "scope": "audit_only_falsification_not_operationalization",
+  "offers_out_of_sample_test": false,
+  "interpretation": "The gasoline-price -> headache/violence/tavern link is asserted with no fitted coefficient and no out-of-sample test."
+}

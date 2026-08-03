@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socioprophet.ai/schemas/silent_testbench_claim.schema.json",
+  "title": "Silent-Weapons testbench mechanism claim (audit-only falsification)",
+  "description": "A record asserting a verdict about one 'Silent Weapons for Quiet Wars' mechanism/estimator. The validator recomputes the confrontation on cited reference fixtures and applies teeth in both directions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mechanism_id", "asserted_verdict", "scope"],
+  "properties": {
+    "mechanism_id": {
+      "type": "string",
+      "enum": [
+        "MECH-1-shock-test-estimator",
+        "MECH-2-behavioral-shock-claim",
+        "MECH-3-debt-oscillation-weak",
+        "MECH-4-debt-population-negation-strong"
+      ]
+    },
+    "asserted_verdict": {
+      "type": "string",
+      "enum": [
+        "RELABELING",
+        "PARTLY_HOLDS",
+        "FALSIFIED",
+        "REJECTED_NO_OUT_OF_SAMPLE",
+        "VERIFIED",
+        "NOT_FALSIFIED",
+        "INCONCLUSIVE"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "const": "audit_only_falsification_not_operationalization",
+      "description": "The testbench is audit-only; any other scope is inadmissible."
+    },
+    "beats_econometric_baseline": {
+      "type": "boolean",
+      "description": "MECH-1 only: does the shock-test estimator out-predict the ordinary econometric baseline? The honest answer is false (it IS the baseline)."
+    },
+    "offers_out_of_sample_test": {
+      "type": "boolean",
+      "description": "MECH-2 only: does the document offer a fitted, out-of-sample-validated behavioural coefficient?"
+    },
+    "interpretation": {
+      "description": "Free text; a claim that reproducing the mechanism CONFIRMS the conspiracy is rejected.",
+      "type": ["string", "array", "null"],
+      "items": {"type": "string"}
+    }
+  }
+}

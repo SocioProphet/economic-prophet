@@ -1,0 +1,7 @@
+{
+  "mechanism_id": "MECH-2-behavioral-shock-claim",
+  "asserted_verdict": "VERIFIED",
+  "scope": "audit_only_falsification_not_operationalization",
+  "offers_out_of_sample_test": false,
+  "interpretation": "The behavioural coefficient is confirmed."
+}

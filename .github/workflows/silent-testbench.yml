@@ -1,0 +1,75 @@
+name: silent-testbench
+
+on:
+  pull_request:
+    paths:
+      - "src/open_ep_framework/silent_testbench/**"
+      - "schemas/silent_testbench_claim.schema.json"
+      - "examples/silent_testbench/**"
+      - "scripts/validate_silent_testbench.py"
+      - "tests/test_silent_testbench_*.py"
+      - ".github/workflows/silent-testbench.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/open_ep_framework/silent_testbench/**"
+      - "schemas/silent_testbench_claim.schema.json"
+      - "examples/silent_testbench/**"
+      - "scripts/validate_silent_testbench.py"
+      - "tests/test_silent_testbench_*.py"
+      - ".github/workflows/silent-testbench.yml"
+  workflow_dispatch:
+
+jobs:
+  silent-testbench:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + validation deps
+        run: python -m pip install -e . pytest jsonschema
+      - name: Byte-compile the deterministic, stdlib-only module
+        run: >-
+          python -m py_compile
+          src/open_ep_framework/silent_testbench/linalg.py
+          src/open_ep_framework/silent_testbench/shock_estimator.py
+          src/open_ep_framework/silent_testbench/oscillation.py
+          src/open_ep_framework/silent_testbench/fixtures.py
+          src/open_ep_framework/silent_testbench/confront.py
+          scripts/validate_silent_testbench.py
+      - name: Per-tooth mutation tests (estimator + oscillation + confrontation)
+        run: >-
+          python -m pytest -q
+          tests/test_silent_testbench_estimator.py
+          tests/test_silent_testbench_oscillation.py
+          tests/test_silent_testbench_confront.py
+      - name: Contract teeth (VERIFIES + REJECTS over the claim fixtures)
+        run: python scripts/validate_silent_testbench.py
+      - name: Emit + check the audit receipt (audit-only)
+        run: |
+          python -m open_ep_framework.silent_testbench --audit silent_testbench_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path('silent_testbench_audit.json').read_text())
+          assert audit['scope'] == 'audit_only_falsification_not_operationalization'
+          assert audit['phase1_estimator_is_var_demonstration']['equivalent'] is True
+          summary = audit['phase2_confrontation']['verdict_summary']
+          assert summary['MECH-1-shock-test-estimator'] == 'RELABELING'
+          assert summary['MECH-2-behavioral-shock-claim'] == 'REJECTED_NO_OUT_OF_SAMPLE'
+          assert summary['MECH-3-debt-oscillation-weak'] == 'PARTLY_HOLDS'
+          assert summary['MECH-4-debt-population-negation-strong'] == 'FALSIFIED'
+          assert audit['phase2_confrontation']['all_verdicts_as_expected'] is True
+          PY
+      - name: Upload silent-testbench audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: silent-testbench-audit
+          path: silent_testbench_audit.json
+          if-no-files-found: error
