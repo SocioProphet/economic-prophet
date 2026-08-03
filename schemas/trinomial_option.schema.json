@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/trinomial_option.schema.json",
+  "title": "Regime-Aware Trinomial Option Contract (FRT-1)",
+  "description": "A Boyle trinomial (up/stay/down) option-pricing record whose MIDDLE branch projects to the regime's stable point. The regime kind is drawn from the memory-mesh process->regime->option crosswalk (memoryless->Black-Scholes; mean_reverting->the OU reversion target mu, with theta/mu/half_life consumed from the memory-mesh OU fit; trending->drift-dominated; chaotic->attractor centroid). Every node's ternary branch probabilities lie in [0,1] and sum to 1. Deterministic, stdlib-only, measurement/simulation/audit only.",
+  "type": "object",
+  "required": ["regime", "option"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "regime": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {"type": "string", "enum": ["memoryless", "mean_reverting", "trending", "chaotic"]},
+        "theta": {"type": "number", "minimum": 0},
+        "mu": {"type": "number", "exclusiveMinimum": 0},
+        "momentum_drift": {"type": "number"},
+        "half_life": {"type": "number", "exclusiveMinimum": 0},
+        "source_regime": {
+          "type": "string",
+          "description": "memory-mesh taxonomy label (provenance), e.g. ornstein_uhlenbeck",
+          "enum": ["brownian_gbm", "markov_regime_switching", "ornstein_uhlenbeck", "fractional_brownian_motion", "hawkes", "jump_levy", "chaotic"]
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "required": ["spot", "strike", "vol", "maturity"],
+      "properties": {
+        "spot": {"type": "number", "exclusiveMinimum": 0},
+        "strike": {"type": "number", "exclusiveMinimum": 0},
+        "vol": {"type": "number", "exclusiveMinimum": 0},
+        "maturity": {"type": "number", "exclusiveMinimum": 0},
+        "rate": {"type": "number"},
+        "call": {"type": "boolean"}
+      }
+    },
+    "steps": {"type": "integer", "minimum": 8},
+    "prices": {
+      "type": "object",
+      "properties": {
+        "black_scholes_reference": {"type": "number", "minimum": 0},
+        "trinomial_price": {"type": "number", "minimum": 0},
+        "regime_priced": {
+          "type": "boolean",
+          "description": "true iff a mean_reverting/chaotic regime's price DIFFERS from Black-Scholes (the regime was actually consumed). A regime-aware record identical to BS across all regimes is REJECTED."
+        }
+      }
+    },
+    "branch_probabilities": {
+      "type": "array",
+      "description": "Per-node (pu, pm, pd) triples; each in [0,1], each summing to 1.",
+      "items": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

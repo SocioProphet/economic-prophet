@@ -1,0 +1,12 @@
+{
+  "contract_id": "frt-ou-mean-reverting-001",
+  "as_of": "2026-08-03",
+  "regime": {"kind": "mean_reverting", "theta": 1.5, "mu": 90.0, "half_life": 0.462098, "source_regime": "ornstein_uhlenbeck"},
+  "option": {"spot": 100.0, "strike": 100.0, "vol": 0.20, "maturity": 1.0, "rate": 0.05, "call": true},
+  "steps": 200,
+  "prices": {
+    "black_scholes_reference": 10.450584,
+    "trinomial_price": 1.514821,
+    "regime_priced": true
+  }
+}

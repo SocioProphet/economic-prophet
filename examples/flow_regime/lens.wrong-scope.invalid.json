@@ -1,0 +1,8 @@
+{
+  "contract_id": "frl-wrong-scope-INVALID",
+  "scope": "solves_navier_stokes",
+  "params": {"sigma": 10.0, "rho": 28.0, "beta": 2.6666666666666665},
+  "regime": "turbulent",
+  "lambda_max": 0.9183,
+  "memory_regime": "chaotic"
+}

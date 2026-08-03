@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/flow_regime_lens.schema.json",
+  "title": "Low-Dimensional Flow-Regime Lens Contract (FRL-1)",
+  "description": "A Lorenz-style 3-variable Navier-Stokes reduction read as a market regime lens: Jacobian fixed-point stability + the largest Lyapunov exponent classify laminar (stable fixed point, lambda<=0) vs turbulent (strange attractor, lambda>0). The Lyapunov sign must agree with the memory-mesh characterizer's taxonomy (chaotic<->turbulent, stable<->laminar). The market volatility cascade is mapped to the Kolmogorov turbulent energy cascade (multifractal/intermittency; Ghashghaie 1996; rough-vol H~=0.1). ANALOGUE / characterization only: 'scope' is pinned to analogue_characterization_only and any claim to solve or prove Navier-Stokes existence/smoothness is REJECTED.",
+  "type": "object",
+  "required": ["scope", "params", "regime"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "scope": {
+      "const": "analogue_characterization_only",
+      "description": "Honesty pin. This lens does NOT solve, prove, or bear on Navier-Stokes existence and smoothness (Clay Millennium)."
+    },
+    "params": {
+      "type": "object",
+      "required": ["sigma", "rho", "beta"],
+      "properties": {
+        "sigma": {"type": "number", "exclusiveMinimum": 0, "description": "Prandtl number"},
+        "rho": {"type": "number", "minimum": 0, "description": "reduced Rayleigh number (drive)"},
+        "beta": {"type": "number", "exclusiveMinimum": 0, "description": "geometry factor"}
+      }
+    },
+    "regime": {"type": "string", "enum": ["laminar", "turbulent"]},
+    "lambda_max": {"type": "number", "description": "largest Lyapunov exponent"},
+    "stable_fixed_point": {"type": "boolean"},
+    "memory_regime": {
+      "type": "string",
+      "description": "memory-mesh taxonomy label the Lyapunov sign must agree with",
+      "enum": ["memoryless", "short_decaying", "long_memory", "chaotic"]
+    },
+    "energy_cascade_analogy": {
+      "type": "object",
+      "description": "The market vol-cascade <-> turbulent energy-cascade mapping (analogue).",
+      "properties": {
+        "market_cascade": {"type": "string"},
+        "fluid_cascade": {"type": "string"},
+        "hurst_axis": {"type": "number", "description": "rough-vol Hurst H (~0.1 = intermittent)"},
+        "references": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "interpretation": {
+      "type": "array",
+      "description": "Free-text notes. Scanned by the validator; a Navier-Stokes existence/smoothness over-claim is REJECTED.",
+      "items": {"type": "string"}
+    }
+  }
+}

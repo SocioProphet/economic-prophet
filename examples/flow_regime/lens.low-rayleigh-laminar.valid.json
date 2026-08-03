@@ -1,0 +1,19 @@
+{
+  "contract_id": "frl-low-rayleigh-laminar-001",
+  "as_of": "2026-08-03",
+  "scope": "analogue_characterization_only",
+  "params": {"sigma": 10.0, "rho": 0.5, "beta": 2.6666666666666665},
+  "regime": "laminar",
+  "lambda_max": -0.5189,
+  "stable_fixed_point": true,
+  "memory_regime": "memoryless",
+  "energy_cascade_analogy": {
+    "market_cascade": "quiescent low-volatility regime; no cascade",
+    "fluid_cascade": "sub-critical Rayleigh number: heat conducts, no convective overturning",
+    "hurst_axis": 0.5,
+    "references": ["Lorenz (1963) Deterministic Nonperiodic Flow"]
+  },
+  "interpretation": [
+    "Below the critical Rayleigh number the origin is a stable fixed point; the largest Lyapunov exponent is negative, classified laminar."
+  ]
+}

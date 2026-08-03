@@ -1,0 +1,9 @@
+{
+  "contract_id": "frl-sign-mismatch-INVALID",
+  "scope": "analogue_characterization_only",
+  "params": {"sigma": 10.0, "rho": 28.0, "beta": 2.6666666666666665},
+  "regime": "turbulent",
+  "lambda_max": 0.9183,
+  "stable_fixed_point": false,
+  "memory_regime": "memoryless"
+}
