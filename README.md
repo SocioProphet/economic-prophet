@@ -307,6 +307,31 @@ as governed Systema Concept Entries. See `docs/specs/outcome-pricing-opx1.md` an
 - `schemas/outcome_pricing.schema.json`
 - `examples/outcome_pricing_engagement.json` (+ `examples/outcome_pricing_*.invalid.json` teeth fixtures)
 - `src/open_ep_framework/outcome_pricing/` (OPX-1 engine), `tests/test_outcome_pricing.py`
+## Index-relative benchmarking + relativity-of-price value ordering (IRB-1 / RVO-1)
+
+The honest **consistency model** and **factor-decomposition layer** under the
+omnirisk / EP + outcome-pricing spine. Two contracts-with-teeth, deterministic /
+stdlib.
+
+- **IRB-1** decomposes any cohort measure `X = beta*B + epsilon` (systematic +
+  idiosyncratic) against a declared baseline index, splitting risk exactly
+  (`var(X) = beta^2 var(B) + var(eps)`); cross-frame comparisons ride the
+  **dimensionless** idiosyncratic differential (z-score / spread-to-baseline /
+  rank), never an absolute level. Grounds the RM-1
+  `PD_short = PD_long*(w1*systematic + w2*idiosyncratic)` / CAPM beta by reference.
+  REJECTS an undecomposed measure, a non-reconciling split, an absolute cross-frame
+  comparison, and a cohort with no baseline.
+- **RVO-1** models price as a **partially-ordered, eventually-consistent** quantity:
+  per-frame (market/venue/currency) local real-time prices, a causal (vector-clock)
+  partial order, and a **CRDT** merge (commutative/associative/idempotent) that
+  converges order-independently. The causal order is hash-chained (SHA-256 = the
+  value-event clock) to the receipt spine. REJECTS an order-dependent merge, a
+  single-global-price / global-simultaneity over-claim, a total order over
+  concurrent events, and an immediate-global-consistency claim.
+
+`make benchmarking` / `make value-ordering` / `make value-relativity`. Upward
+bindings + routed ontology concepts in `docs/index_relative_value_ordering.md`,
+`docs/bindings/`, `docs/concepts/systema_concept_entries.jsonld`.
 
 ## Platform service boundary
 

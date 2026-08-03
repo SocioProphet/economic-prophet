@@ -1,0 +1,57 @@
+{
+  "record_id": "rvo-eventual-consistency-001",
+  "description": "Per-frame real-time prices (NYSE/USD, LSE/GBP, TSE/JPY) reconciled by a causal (vector-clock) partial order and a CRDT merge; global consistency is EVENTUAL, not instantaneous.",
+  "consistency_scope": "eventual",
+  "observations": [
+    {
+      "frame_id": "NYSE",
+      "currency": "USD",
+      "value": 101.25,
+      "lamport": 1,
+      "vclock": {
+        "NYSE": 1
+      },
+      "receipt_hash": "sha256:136784d2b8126dfc2e720e5229f4f7a1a53581934c0cb87a60ef4a3da9286f6c",
+      "scope": "local_realtime"
+    },
+    {
+      "frame_id": "LSE",
+      "currency": "GBP",
+      "value": 80.1,
+      "lamport": 1,
+      "vclock": {
+        "LSE": 1
+      },
+      "receipt_hash": "sha256:afb753fe1c8bd77d99ed449cffc878647cc6f7e05e0f6d670a3a5741958f986b",
+      "scope": "local_realtime"
+    },
+    {
+      "frame_id": "TSE",
+      "currency": "JPY",
+      "value": 14850.0,
+      "lamport": 2,
+      "vclock": {
+        "TSE": 1
+      },
+      "receipt_hash": "sha256:059eb12773ac19ea8ffd7042aff10e3ff3d60dd873a325c1757893abe383a032",
+      "scope": "local_realtime"
+    },
+    {
+      "frame_id": "NYSE",
+      "currency": "USD",
+      "value": 101.4,
+      "lamport": 3,
+      "vclock": {
+        "NYSE": 2,
+        "LSE": 1
+      },
+      "receipt_hash": "sha256:7881648575d68b2e09598ee75561ae275d4a624a00c3232d50f2b3f197a65e9c",
+      "scope": "local_realtime"
+    }
+  ],
+  "interpretation": [
+    "Each frame carries a local, real-time price; there is no global instantaneous price.",
+    "The cross-frame merge is a per-frame LWW-register CRDT (commutative, associative, idempotent); the global view is eventually consistent.",
+    "The receipt hash-chain is the value-event clock binding the causal order to the estate receipt spine."
+  ]
+}

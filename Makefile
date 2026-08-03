@@ -4,7 +4,7 @@
 PYTHON ?= python3
 PYTHONPATH := src
 
-.PHONY: help ladder ladder-receipt outcome-pricing outcome-pricing-receipt welfare-annealing test check
+.PHONY: help ladder ladder-receipt outcome-pricing outcome-pricing-receipt welfare-annealing benchmarking value-ordering value-relativity test check
 
 help:
 	@echo "Targets:"
@@ -13,8 +13,11 @@ help:
 	@echo "  make outcome-pricing          # price the OPX-1 engagement fixture (stdlib gate)"
 	@echo "  make outcome-pricing-receipt  # write build/outcome_pricing_receipt.json"
 	@echo "  make welfare-annealing        # run the WEA-1 Welfare-Annealing contract teeth"
+	@echo "  make benchmarking             # check the index-relative benchmarking contract (IRB-1)"
+	@echo "  make value-ordering           # check the relativity-of-price value-ordering contract (RVO-1)"
+	@echo "  make value-relativity         # IRB-1 + RVO-1 fixture teeth (needs jsonschema)"
 	@echo "  make test                     # run the test suite (needs pytest)"
-	@echo "  make check                    # ladder + outcome-pricing + welfare-annealing + test"
+	@echo "  make check                    # ladder + outcome-pricing + welfare-annealing + benchmarking + value-ordering + test"
 
 # ALC-1: schema-validate the canonical ladder, then apply every tooth. Pure
 # stdlib -- this is the gate that cannot be skipped for lack of dependencies.
@@ -49,7 +52,25 @@ outcome-pricing-receipt:
 welfare-annealing:
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) scripts/validate_welfare_annealing.py
 
+# IRB-1: index-relative benchmarking -- baseline+idiosyncratic decomposition with
+# the cross-frame dimensionless-differential teeth.
+benchmarking:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m open_ep_framework.benchmarking \
+		--book examples/benchmarking/index_relative_book.valid.json \
+		--schema schemas/index_relative_cohort.schema.json
+
+# RVO-1: relativity of price -- CRDT order-independent merge + no-global-price teeth.
+value-ordering:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m open_ep_framework.value_ordering \
+		--record examples/value_ordering/eventual_consistency.valid.json \
+		--schema schemas/value_frame_observation.schema.json
+
+# Full fixture-driven teeth for both contracts (VERIFIES + REJECTS + COHERENCE).
+value-relativity:
+	$(PYTHON) scripts/validate_benchmarking.py
+	$(PYTHON) scripts/validate_value_ordering.py
+
 test:
 	$(PYTHON) -m pytest -q
 
-check: ladder outcome-pricing welfare-annealing test
+check: ladder outcome-pricing welfare-annealing benchmarking value-ordering test

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/index_relative_cohort.schema.json",
+  "title": "Index-Relative Benchmarking Book -- IRB-1",
+  "description": "A governed book of cohorts, each with a declared baseline index B and a measure series X, decomposed X = beta*B + epsilon into systematic + idiosyncratic parts. Cross-cohort comparisons are admitted only on a DIMENSIONLESS differential (idiosyncratic z-score, spread-to-baseline, cross-sectional rank) -- never an absolute level across a currency/region/legal-regime boundary. Grounds the estate omnirisk systematic/idiosyncratic factorization (RM-1). Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["book_id", "cohorts"],
+  "properties": {
+    "book_id": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "cohorts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["cohort_id", "key", "baseline_index", "measure"],
+        "properties": {
+          "cohort_id": {"type": "string", "minLength": 1},
+          "key": {
+            "type": "object",
+            "required": ["asset_class", "market"],
+            "description": "The cohort key. asset_class + market are required; issuer / rating_agency_bucket / region / sector refine it.",
+            "properties": {
+              "asset_class": {"type": "string", "minLength": 1},
+              "market": {"type": "string", "minLength": 1},
+              "issuer": {"type": "string"},
+              "rating_agency_bucket": {"type": "string"},
+              "region": {"type": "string"},
+              "sector": {"type": "string"}
+            },
+            "additionalProperties": false
+          },
+          "frame": {
+            "type": "object",
+            "description": "The value frame the cohort's absolute levels live in (currency/venue). Two cohorts with differing frames may only be compared on a dimensionless basis.",
+            "properties": {
+              "currency": {"type": "string"},
+              "venue": {"type": "string"}
+            },
+            "additionalProperties": false
+          },
+          "baseline_index": {
+            "type": "object",
+            "required": ["index_id", "series"],
+            "description": "The declared baseline index B. A cohort with no baseline index is REJECTED.",
+            "properties": {
+              "index_id": {"type": "string", "minLength": 1},
+              "label": {"type": "string"},
+              "series": {
+                "type": "array",
+                "minItems": 2,
+                "items": {"type": "number"}
+              }
+            },
+            "additionalProperties": false
+          },
+          "measure": {
+            "type": "object",
+            "required": ["measure_id", "series"],
+            "description": "The measure X to decompose against B. decomposed=false is REJECTED.",
+            "properties": {
+              "measure_id": {"type": "string", "minLength": 1},
+              "label": {"type": "string"},
+              "decomposed": {"type": "boolean"},
+              "series": {
+                "type": "array",
+                "minItems": 2,
+                "items": {"type": "number"}
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "comparisons": {
+      "type": "array",
+      "description": "Cross-cohort comparisons. basis must be dimensionless; an absolute basis across differing frames is REJECTED.",
+      "items": {
+        "type": "object",
+        "required": ["left", "right", "basis"],
+        "properties": {
+          "left": {"type": "string", "minLength": 1},
+          "right": {"type": "string", "minLength": 1},
+          "basis": {
+            "type": "string",
+            "enum": [
+              "idiosyncratic_z",
+              "spread_to_baseline",
+              "cross_sectional_rank",
+              "absolute",
+              "absolute_level",
+              "raw_level",
+              "price_level"
+            ],
+            "description": "Comparison basis. The dimensionless bases (idiosyncratic_z / spread_to_baseline / cross_sectional_rank) are cross-frame admissible; the absolute bases are only admissible within one frame."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

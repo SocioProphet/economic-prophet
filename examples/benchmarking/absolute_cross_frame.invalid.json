@@ -1,0 +1,37 @@
+{
+  "book_id": "irb-absolute-cross-frame-INVALID",
+  "description": "Comparing two cohorts in different frames (USD/US vs EUR/EU) on an ABSOLUTE basis assumes a common price across a currency/region boundary and is REJECTED; only the dimensionless differential is admissible cross-frame.",
+  "cohorts": [
+    {
+      "cohort_id": "us-ig-corp",
+      "key": {"asset_class": "corporate_credit", "market": "us_ig_corp", "region": "US"},
+      "frame": {"currency": "USD"},
+      "baseline_index": {
+        "index_id": "us_ig_corp_oas_index",
+        "series": [0.012, 0.009, 0.015, 0.011, 0.008, 0.013]
+      },
+      "measure": {
+        "measure_id": "us-issuer-excess-return",
+        "decomposed": true,
+        "series": [0.020, 0.014, 0.026, 0.019, 0.012, 0.023]
+      }
+    },
+    {
+      "cohort_id": "eu-ig-corp",
+      "key": {"asset_class": "corporate_credit", "market": "eu_ig_corp", "region": "EU"},
+      "frame": {"currency": "EUR"},
+      "baseline_index": {
+        "index_id": "eu_ig_corp_oas_index",
+        "series": [0.010, 0.011, 0.009, 0.013, 0.012, 0.008]
+      },
+      "measure": {
+        "measure_id": "eu-issuer-excess-return",
+        "decomposed": true,
+        "series": [0.016, 0.019, 0.013, 0.022, 0.021, 0.011]
+      }
+    }
+  ],
+  "comparisons": [
+    {"left": "us-ig-corp", "right": "eu-ig-corp", "basis": "absolute_level"}
+  ]
+}

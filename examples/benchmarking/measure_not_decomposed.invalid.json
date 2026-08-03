@@ -1,0 +1,24 @@
+{
+  "book_id": "irb-not-decomposed-INVALID",
+  "description": "A measure that declares decomposed=false has made no systematic/idiosyncratic attribution and is REJECTED.",
+  "cohorts": [
+    {
+      "cohort_id": "us-ig-corp-raw",
+      "key": {
+        "asset_class": "corporate_credit",
+        "market": "us_ig_corp",
+        "region": "US"
+      },
+      "frame": {"currency": "USD"},
+      "baseline_index": {
+        "index_id": "us_ig_corp_oas_index",
+        "series": [0.012, 0.009, 0.015, 0.011, 0.008, 0.013]
+      },
+      "measure": {
+        "measure_id": "us-issuer-raw-level",
+        "decomposed": false,
+        "series": [0.020, 0.014, 0.026, 0.019, 0.012, 0.023]
+      }
+    }
+  ]
+}
