@@ -1,0 +1,13 @@
+{
+  "contract_id": "frt-memoryless-bs-limit-001",
+  "as_of": "2026-08-03",
+  "regime": {"kind": "memoryless", "source_regime": "brownian_gbm"},
+  "option": {"spot": 100.0, "strike": 100.0, "vol": 0.20, "maturity": 1.0, "rate": 0.05, "call": true},
+  "steps": 400,
+  "prices": {
+    "black_scholes_reference": 10.450584,
+    "trinomial_price": 10.44589,
+    "regime_priced": false
+  },
+  "branch_probabilities": [[0.166667, 0.666667, 0.166667]]
+}

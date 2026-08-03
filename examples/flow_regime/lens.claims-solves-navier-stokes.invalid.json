@@ -1,0 +1,11 @@
+{
+  "contract_id": "frl-overclaim-INVALID",
+  "scope": "analogue_characterization_only",
+  "params": {"sigma": 10.0, "rho": 28.0, "beta": 2.6666666666666665},
+  "regime": "turbulent",
+  "lambda_max": 0.9183,
+  "memory_regime": "chaotic",
+  "interpretation": [
+    "This Lorenz reduction proves Navier-Stokes global existence and smoothness, settling the Clay Millennium problem."
+  ]
+}

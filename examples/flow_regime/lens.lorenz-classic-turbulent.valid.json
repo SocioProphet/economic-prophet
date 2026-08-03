@@ -1,0 +1,24 @@
+{
+  "contract_id": "frl-lorenz-classic-turbulent-001",
+  "as_of": "2026-08-03",
+  "scope": "analogue_characterization_only",
+  "params": {"sigma": 10.0, "rho": 28.0, "beta": 2.6666666666666665},
+  "regime": "turbulent",
+  "lambda_max": 0.9183,
+  "stable_fixed_point": false,
+  "memory_regime": "chaotic",
+  "energy_cascade_analogy": {
+    "market_cascade": "volatility cascade: large-scale vol shocks fragment into small-scale intermittent bursts (multifractal)",
+    "fluid_cascade": "Kolmogorov energy cascade: energy injected at large eddies dissipated at the Kolmogorov microscale",
+    "hurst_axis": 0.1,
+    "references": [
+      "Lorenz (1963) Deterministic Nonperiodic Flow",
+      "Ghashghaie et al. (Nature, 1996) Turbulent cascades in foreign exchange markets",
+      "Gatheral, Jaisson, Rosenbaum (2018) Volatility is rough (H~=0.1)"
+    ]
+  },
+  "interpretation": [
+    "The classic Lorenz set has a positive largest Lyapunov exponent and no stable fixed point: a strange attractor, classified turbulent.",
+    "This is an analogue lens for Navier-Stokes turbulence; it characterizes a regime and does not address existence or smoothness."
+  ]
+}

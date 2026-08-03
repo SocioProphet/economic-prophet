@@ -1,0 +1,43 @@
+name: flow-regime
+
+on:
+  pull_request:
+    paths:
+      - "src/open_ep_framework/flow_regime/**"
+      - "schemas/trinomial_option.schema.json"
+      - "schemas/flow_regime_lens.schema.json"
+      - "examples/flow_regime/**"
+      - "scripts/validate_flow_regime.py"
+      - "tests/test_flow_regime_*.py"
+      - ".github/workflows/flow-regime.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/open_ep_framework/flow_regime/**"
+      - "schemas/trinomial_option.schema.json"
+      - "schemas/flow_regime_lens.schema.json"
+      - "examples/flow_regime/**"
+      - "scripts/validate_flow_regime.py"
+      - "tests/test_flow_regime_*.py"
+      - ".github/workflows/flow-regime.yml"
+  workflow_dispatch:
+
+jobs:
+  flow-regime:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + validation deps
+        run: python -m pip install -e . pytest jsonschema
+      - name: Byte-compile the deterministic, stdlib-only module
+        run: python -m py_compile src/open_ep_framework/flow_regime/trinomial.py src/open_ep_framework/flow_regime/lorenz.py scripts/validate_flow_regime.py
+      - name: FRT-1 + FRL-1 per-tooth mutation tests
+        run: python -m pytest -q tests/test_flow_regime_trinomial.py tests/test_flow_regime_lorenz.py
+      - name: FRT-1 + FRL-1 contract teeth (VERIFIES + REJECTS + COHERENCE over fixtures)
+        run: python scripts/validate_flow_regime.py
