@@ -1,0 +1,7 @@
+{
+  "mechanism_id": "MECH-1-shock-test-estimator",
+  "asserted_verdict": "RELABELING",
+  "scope": "audit_only_falsification_not_operationalization",
+  "beats_econometric_baseline": false,
+  "interpretation": "Reproducing this estimator confirms the Silent Weapons conspiracy."
+}
