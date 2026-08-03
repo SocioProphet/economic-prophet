@@ -18,6 +18,7 @@ from .policy_simulation_uvmc import run_policy_simulation_measured_entity
 from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
+from .risk_adjusted_profit import run_risk_adjusted_profit
 from .settlement import run_settlement
 from .validation import validate_json_file
 from .vdt import run_vdt
@@ -141,8 +142,8 @@ def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
         receipt = inputs.get("calculation_receipt", {})
         context = inputs.get("measurement_context", {})
         return receipt.get("run_id", args.object_id), context.get("scenario_ref", "base")
-    run_id = inputs.get("run_id") or inputs.get("relationship_id") or args.object_id
-    scenario = inputs.get("scenario", "base")
+    run_id = inputs.get("run_id") or inputs.get("relationship_id") or inputs.get("contract_id") or args.object_id
+    scenario = inputs.get("scenario") or inputs.get("scoring_mode") or "base"
     return run_id, scenario
 
 
@@ -165,6 +166,7 @@ def main():
             "vdt-impact",
             "causal-scenario",
             "settlement",
+            "risk-adjusted-profit",
         ],
         default="instrument",
     )
@@ -239,6 +241,15 @@ def main():
         if example == "examples/synthetic_run.json":
             example = "examples/conservation_settlement_balanced.json"
         outputs = run_settlement(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "risk-adjusted-profit":
+        # RAROC / economic-profit contract (RAP-1): EP + RAROC with a pluggable
+        # risk measure, IC-1 conservation reconciliation across org cuts, and dual
+        # economic/epistemic scoring. Rejects non-conserving cuts and no-capital arms.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/risk_adjusted_profit_economic.json"
+        outputs = run_risk_adjusted_profit(example)
         inputs = json.loads(Path(example).read_text())
     elif args.mode == "causal-scenario":
         # The global --example default is an instrument doc, not a causal scenario;

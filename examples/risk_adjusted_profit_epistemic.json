@@ -1,0 +1,45 @@
+{
+  "contract_id": "rap-epistemic-synthetic-001",
+  "as_of": "2026-08-03",
+  "scoring_mode": "epistemic",
+  "provenance": {
+    "gkn_standing_ref": "gkn:guild:forensics:standing-vector:agent-synthetic-001",
+    "counter_test_ref": "counter-test:batch3:probe-verdicts-2026-08-01"
+  },
+  "arm": {
+    "arm_id": "epistemic-arm",
+    "hurdle_rate": 0.20,
+    "return_components": {
+      "revenue": 40.0,
+      "expected_loss": 5.0,
+      "expense": 3.0,
+      "funding_costs": 2.0,
+      "funding_credits": 1.0,
+      "taxes": 0.0
+    },
+    "economic_capital": {
+      "components": {
+        "credit": 50.0,
+        "market": 20.0,
+        "operating": 10.0,
+        "business": 8.0,
+        "other": 12.0
+      }
+    },
+    "risk_measure": {
+      "kernel": "expected_shortfall",
+      "alpha": 0.95,
+      "horizon": 1.0,
+      "reference": 0.0,
+      "capital_from_measure": false,
+      "distribution": {
+        "samples": [
+          0.05, 0.04, 0.06, 0.03, 0.02, -0.01, 0.07, 0.05, 0.04, 0.03,
+          0.06, 0.02, -0.03, 0.05, 0.04, 0.08, 0.03, 0.01, -0.02, 0.06,
+          0.05, 0.04, 0.03, 0.07, -0.05, 0.02, 0.06, 0.04, 0.05, 0.03,
+          0.01, -0.04, 0.06, 0.05, 0.04, 0.07, 0.02, 0.03, -0.06, 0.05
+        ]
+      }
+    }
+  }
+}

@@ -86,6 +86,85 @@ The Heller mesh CLI emits a validated internal measurement run for the Heller fl
 
 The associated-surplus CLI emits a validated doctrine/measurement/simulation/audit run for SocioProfit associated surplus: component scores, deductions, computed knowledge quality, gross and net associated surplus, triparty admission/release ratios, and non-goal boundary checks.
 
+## Risk-adjusted profit / RAROC contract (RAP-1)
+
+The repository includes a risk-adjusted return contract that computes economic
+profit and RAROC on top of the residual-value + conservation engine:
+- model: `EP = revenue - expected_loss - expense - funding_costs + funding_credits - taxes - capital_charge`;
+  `CapitalCharge = HurdleRate * EconomicCapital`; `RAROC = RiskAdjustedReturn / EconomicCapital`
+  (compared to the hurdle, RORAC).
+- `schemas/risk_adjusted_profit.schema.json`
+- `examples/risk_adjusted_profit_economic.json` (decomposed org cut),
+  `examples/risk_adjusted_profit_epistemic.json` (dual scoring),
+  `examples/risk_adjusted_profit_nonreconciling.invalid.json`
+- `src/open_ep_framework/risk_adjusted_profit.py` (RAP-1 contract)
+- `src/open_ep_framework/risk_measures.py` (RM-1 unified risk-measure family)
+- `tests/test_risk_adjusted_profit.py`, `tests/test_risk_measures.py`
+
+Run it:
+
+```bash
+python -m open_ep_framework.cli --mode risk-adjusted-profit --example examples/risk_adjusted_profit_economic.json --audit rap_audit.json
+```
+
+It consumes, and does not reinvent:
+- the EP identity (`uvmc.reconcile_ep_components`),
+- the IC-1 conservation law and receipt spine (`settlement`, economic-prophet#39) —
+  org/entity decomposition is reconciled AS a conservation settlement (parent EP is the
+  inflow, each child EP an outflow); a cut whose children do not sum to the parent is
+  rejected.
+
+**Unified risk-measure family (RM-1).** Every measure is derived from one interface,
+`risk(F, kernel, reference, horizon, ...)`, over the same fitted/simulated loss
+distribution `F`:
+- reward-to-risk: Sharpe -> Sortino (downside deviation about a MAR) -> Kappa_n
+  (`(E[R]-tau)/LPM_n(tau)^(1/n)`; `n=0` shortfall-prob, `n=1` Omega, `n=2` Sortino, `n>2` extreme-averse);
+- tail/coherent: VaR (non-coherent, flagged), Expected Shortfall / CVaR (coherent),
+  spectral (coherent iff the spectrum is non-increasing; ES is the flat-tail spectrum).
+  EconomicCapital for RAROC defaults to a coherent measure.
+- `F` builders for two asset classes over the same interface: credit (PD·LGD·EAD under a
+  one-factor common shock) and equity/market (fat-tailed Student-t returns with beta,
+  drawdown). Risk is a horizon term structure (`risk_term_structure`) plus an LCR-style
+  `largest_cumulative_gap`, not a scalar.
+- structure/issuance: `structural_transform(F_pool, attach, detach)` derives a
+  securitization tranche (equity = first-loss residual claim) from the pool; contiguous
+  tranche ELs reconcile to the pool EL; `detach <= attach` is rejected.
+- coherent allocation: `euler_allocation(...)` returns marginal (Euler) component
+  capital; for a coherent measure the contributions sum to the total (the same IC-1
+  conservation), which lets EconomicCapital aggregate up and allocate down a hierarchy.
+
+**Calculus over (value x time) (TC-1).** The risk kernel is a calculus on two axes.
+Measures and distributional moments (mean/variance/skewness/kurtosis, LPM_n, VaR, ES)
+are INTEGRALS over the loss/return distribution F; WAL (`average_life`) and duration are
+integrals over the cash-flow/loss-timing schedule F(t). Sensitivities are DERIVATIVES:
+modified duration `= -(1/P) dP/dy`, convexity `= (1/P) d2P/dy2`, and generalized factor
+Greeks, with analytic derivatives reconciled to finite-difference bump-and-reprice (so
+optionality/prepayment uses the same operator numerically) and marginal/component capital
+matching the numerical derivative of portfolio risk. The tenor curve carries a term regime
+(upward/flat/inverted; persistent vs mean-reverting) read with a Hurst exponent on the
+tenor dimension; `term_calculus.term_regime` exposes an injection seam (`hurst_fn`) so the
+estate memory-regime characterizer's H is consumed rather than reimplemented (a local R/S
+estimate is the fallback only when nothing is injected). See
+`src/open_ep_framework/term_calculus.py` and `tests/test_term_calculus.py`.
+
+**Dual scoring (Economia Mentium).** The same contract computes economic profit and
+epistemic profit: in `scoring_mode: "epistemic"` the return legs carry an epistemic-value
+delta, EconomicCapital is GKN standing (epistemic capital), and the risk leg is
+counter-test uncertainty.
+
+**Teeth.** An EP with a real CapitalCharge and RAROC >= hurdle VERIFIES; a value-destroying
+arm (RAROC < hurdle) is FLAGGED; a RAROC with no risk measure or no economic capital is
+REJECTED; a non-coherent measure used as RAROC capital (or Euler-allocated) requires an
+explicit override and emits a coherence warning; a fitted `F` with `n < 30` is flagged
+provisional; an org-cut whose children do not reconcile to the parent is REJECTED under
+IC-1. Every computation records its distribution + measure choice on a SHA-256 receipt.
+
+The aggregation/allocation architecture across arbitrary org cuts (product cut
+`business_unit -> subportfolio -> transaction` vs client-segment cut
+`geography/segment -> obligor`) is a separate consuming layer (omnirisk ADR) that binds
+this kernel: RAP-1/RM-1 provide the per-node kernel and marginal contributions; they do
+not implement the hierarchy walker.
+
 ## Platform service boundary
 
 Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.
