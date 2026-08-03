@@ -9,7 +9,12 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
+
+# jsonschema is the Draft 2020-12 validator; only the dedicated welfare-annealing workflow
+# installs it. Under the stdlib-only main CI job it is absent -> skip this module cleanly
+# (the module's teeth are also covered by the pure-stdlib code paths elsewhere).
+jsonschema = pytest.importorskip("jsonschema")
+Draft202012Validator = jsonschema.Draft202012Validator
 
 from open_ep_framework.welfare_annealing.contract import run_record
 from open_ep_framework.welfare_annealing.gaia_binding import (
