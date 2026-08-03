@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/asset_class_ladder.schema.json",
+  "title": "Asset-Class Ladder (Jacob's Ladder of Assets) -- ALC-1",
+  "description": "A governed, total and ordered asset-class ontology that grounds the estate omnirisk `asset_class` axis in the real economy, from tangible extraction (rung 0) up to pure digital services (rung 8). It REPLACES the thin {credit,equity,market,crypto} asset_class enum with the full value-transformation ladder and supplies economic-prophet's value-genesis: labor-mixing (rung 2) and extraction (rungs 1/1') are where Revenue originates before it is a financial claim. Every rung carries all structuring axes (tangibility, rivalry, renewability, labor_content, value_stage, process_regime) and binds a valuation_model plus a risk_F_family that the RM-1 risk kernel can consume. Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["ladder_id", "rungs"],
+  "properties": {
+    "ladder_id": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "replaces_enum": {
+      "type": "array",
+      "description": "The thin asset_class enum this ladder supersedes.",
+      "items": {"type": "string"}
+    },
+    "rungs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "value_stage",
+          "key",
+          "label",
+          "tangibility",
+          "rivalry",
+          "renewability",
+          "labor_content",
+          "process_regime",
+          "valuation_model",
+          "risk_F_family"
+        ],
+        "properties": {
+          "value_stage": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The ordered rung index (value-transformation stage). Strictly increasing tangible -> digital."
+          },
+          "rung_label": {
+            "type": "string",
+            "description": "Human ladder label, e.g. '1' for the renewable-harvest sibling of the extractive rung."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Canonical asset-class key.",
+            "enum": [
+              "natural_capital",
+              "extractive_nonrenewable",
+              "renewable_harvest",
+              "processed_goods",
+              "commodity_market",
+              "labor_market",
+              "mercantile_trade",
+              "pure_service",
+              "digital_asset",
+              "digital_service"
+            ]
+          },
+          "label": {"type": "string", "minLength": 1},
+          "tangibility": {
+            "type": "string",
+            "description": "Physical embodiment of the asset. Monotone non-increasing along value_stage.",
+            "enum": ["tangible", "semi_tangible", "intangible"]
+          },
+          "rivalry": {
+            "type": "string",
+            "description": "Rival goods are consumed by use; non-rival goods (data/tokens/software/IP/digital services) are not.",
+            "enum": ["rival", "non_rival"]
+          },
+          "renewability": {
+            "type": "string",
+            "description": "depleting_stock = a finite stock that only diminishes when drawn; regenerating_flow = a biological/producible flow with a sustainable yield; non_physical = a claim/service/digital asset with no physical stock.",
+            "enum": ["depleting_stock", "regenerating_flow", "non_physical"]
+          },
+          "process_regime": {
+            "type": "string",
+            "description": "The stochastic process regime the renewability axis induces. Crosswalk (enforced by the checker): depleting_stock <-> monotone_absorbing (drift toward an absorbing barrier at zero reserves; Hotelling), regenerating_flow <-> mean_reverting_ou (Ornstein-Uhlenbeck reversion to a sustainable yield; TC-1 persistence), non_physical <-> non_physical.",
+            "enum": ["monotone_absorbing", "mean_reverting_ou", "non_physical"]
+          },
+          "labor_content": {
+            "type": "string",
+            "description": "Lockean labor-mixing intensity (labor + capital + know-how) embodied in the asset class.",
+            "enum": ["none", "low", "moderate", "high"]
+          },
+          "valuation_model": {
+            "type": "string",
+            "description": "The value-genesis model the EP kernel consumes for this rung.",
+            "enum": [
+              "real_option",
+              "hotelling_rent",
+              "sustainable_yield",
+              "labor_value_add",
+              "spot_futures_vol",
+              "human_capital_wage",
+              "spatiotemporal_arbitrage",
+              "dcf",
+              "network_memetic",
+              "economia_mentium"
+            ]
+          },
+          "risk_F_family": {
+            "type": "string",
+            "description": "The RM-1 risk kernel that scores this rung's loss distribution F. Must be a known RM-1 kernel.",
+            "enum": ["sharpe", "sortino", "kappa", "var", "expected_shortfall", "spectral", "stddev"]
+          },
+          "risk_F_note": {
+            "type": "string",
+            "description": "Free-text description of the loss distribution F the kernel is applied to (e.g. reflexive fat-tailed return)."
+          },
+          "genesis_note": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
