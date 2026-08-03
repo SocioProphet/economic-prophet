@@ -1,0 +1,11 @@
+{
+  "contract_id": "agg-superadditive-reject-001",
+  "as_of": "2026-08-03",
+  "chosen_method": "constant_diversification",
+  "confidence": 0.999,
+  "risk_inputs": {"credit": 1000.0, "market": 600.0, "operational": 400.0},
+  "assumption": {
+    "diversification_factor": -0.25
+  },
+  "limitation": "a negative diversification factor claims the whole exceeds the sum of parts"
+}

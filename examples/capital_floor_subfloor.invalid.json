@@ -1,0 +1,16 @@
+{
+  "contract_id": "rfl-subfloor-reject-001",
+  "as_of": "2026-08-03",
+  "approach": "IRB-Advanced",
+  "assumptions": {
+    "target_capital_ratio": 0.08
+  },
+  "nodes": [
+    {
+      "node_id": "retail-book-diversified-under-floor",
+      "economic_capital_contribution": 30000.0,
+      "declared_allocated_capital": 30000.0,
+      "regulatory": {"pd": 0.05, "lgd": 0.30, "ead": 500000.0, "maturity": 2.5}
+    }
+  ]
+}

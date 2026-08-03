@@ -1,0 +1,14 @@
+{
+  "contract_id": "cld-out-of-order-reject-001",
+  "as_of": "2026-08-03",
+  "going_gone_boundary_alpha": 0.999,
+  "capital_stack": [
+    {"layer": "hidden_reserves", "concern": "going", "amount": 50.0, "kind": "hidden_reserves"},
+    {"layer": "cet1_retained_earnings", "concern": "going", "amount": 200.0, "kind": "cet1"},
+    {"layer": "tier2_subordinated", "concern": "gone", "amount": 150.0, "kind": "tier2"}
+  ],
+  "scenarios": [
+    {"name": "early_warning", "confidence_alpha": 0.80, "absorbing_capital_layer": "hidden_reserves", "concern": "going", "loss_at_alpha": 40.0},
+    {"name": "severe_stress_booked_senior", "confidence_alpha": 0.95, "absorbing_capital_layer": "tier2_subordinated", "concern": "going", "loss_at_alpha": 180.0}
+  ]
+}

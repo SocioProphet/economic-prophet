@@ -2,10 +2,13 @@ import argparse
 import json
 from pathlib import Path
 
+from .aggregation_method import run_aggregation_method
 from .associated_surplus import run_associated_surplus
 from .audit import write_audit_pack
 from .breakeven import economic_profit_for_rate, solve_break_even_rate
 from .capital import capital_charge
+from .capital_floor import run_capital_floor
+from .concern_ladder import run_concern_ladder
 from .causal_identification import scenario_from_document
 from .domain import CapitalStack, ExpectedLossInputs, FTPStack, PricingContext, RecoverySurfaceInputs
 from .expected_loss import expected_loss_amount
@@ -169,6 +172,9 @@ def main():
             "settlement",
             "risk-adjusted-profit",
             "ftp-separation",
+            "capital-floor",
+            "concern-ladder",
+            "aggregation-method",
         ],
         default="instrument",
     )
@@ -260,6 +266,31 @@ def main():
         if example == "examples/synthetic_run.json":
             example = "examples/ftp_separation_book.json"
         outputs = run_ftp_separation(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "capital-floor":
+        # R-Cap vs E-Cap regulatory floor (RFL-1): allocated = max(E-Cap, Basel 8% x RWA).
+        # Rejects a node allocated at a diversified E-Cap below its regulatory minimum.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/capital_floor_book.json"
+        outputs = run_capital_floor(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "concern-ladder":
+        # Going/gone-concern confidence ladder == capital waterfall (CLD-1). Rejects a
+        # non-monotone ladder, out-of-subordination booking, or gone->going-soft mapping.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/concern_ladder_book.json"
+        outputs = run_concern_ladder(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "aggregation-method":
+        # Aggregation-methodology taxonomy + tail-dependence guard (AGG-1). Summation is
+        # the conservative upper bound; a super-additive method or a tail-blind var-covar is
+        # rejected/flagged.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/aggregation_method_copula.json"
+        outputs = run_aggregation_method(example)
         inputs = json.loads(Path(example).read_text())
     elif args.mode == "causal-scenario":
         # The global --example default is an instrument doc, not a causal scenario;

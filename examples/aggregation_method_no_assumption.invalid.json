@@ -1,0 +1,9 @@
+{
+  "contract_id": "agg-no-assumption-reject-001",
+  "as_of": "2026-08-03",
+  "chosen_method": "variance_covariance",
+  "confidence": 0.999,
+  "risk_inputs": {"credit": 1000.0, "market": 600.0, "operational": 400.0},
+  "assumption": {},
+  "limitation": "no correlation declared"
+}
