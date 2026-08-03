@@ -1,0 +1,28 @@
+{
+  "asset_id": "no-cashflow-token-synthetic",
+  "as_of": "2026-08-03",
+  "valuation_method": "dcf",
+  "tokenomics": {
+    "circulating_supply": 1000000000,
+    "price": 1.25,
+    "emission_rate": 0.08,
+    "burn_tokens_annual": 0,
+    "cash_flow_bearing": false
+  },
+  "onchain": {
+    "active_addresses": 42000,
+    "tvl": 0,
+    "fee_revenue": 0,
+    "annual_tx_volume": 5000000000
+  },
+  "network": {
+    "metcalfe_coefficient": 500.0
+  },
+  "risk": {
+    "risk_notional": 500000000,
+    "sigma": 0.09,
+    "reflexivity": 0.8,
+    "df": 3.0,
+    "seed": 3
+  }
+}

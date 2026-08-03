@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/manipulation_signal.schema.json",
+  "title": "Manipulation / Information-Asymmetry Signal Contract (MS-1)",
+  "description": "Predatory-cartel / information-asymmetry detection for the crypto asset class. Extends adverse-selection microstructure models (Glosten-Milgrom spread, Kyle's lambda) with concentration (whale/Gini, top-holder share), wash-trade (self-trade share, volume inflation) and MEV intensity indicators, and emits a governed-blast-radius-graph (GBRG) shaped signal with evidence. An attested-clean claim contradicted by on-chain concentration evidence is rejected. Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["subject"],
+  "properties": {
+    "signal_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "subject": {"type": "string", "minLength": 1},
+    "attested_clean": {"type": "boolean"},
+    "blast_radius": {"type": "array", "items": {"type": "string"}},
+    "concentration": {
+      "type": "object",
+      "properties": {
+        "holders": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "gini": {"type": "number", "minimum": 0, "maximum": 1},
+        "top_holder_share": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "volume": {
+      "type": "object",
+      "properties": {
+        "reported_volume": {"type": "number", "minimum": 0},
+        "onchain_settled_volume": {"type": "number", "minimum": 0},
+        "self_trade_volume": {"type": "number", "minimum": 0}
+      }
+    },
+    "mev": {
+      "type": "object",
+      "properties": {
+        "mev_extracted": {"type": "number", "minimum": 0},
+        "block_volume": {"type": "number", "minimum": 0}
+      }
+    },
+    "adverse_selection": {
+      "type": "object",
+      "properties": {
+        "pin": {"type": "number", "minimum": 0, "maximum": 1},
+        "value_high": {"type": "number"},
+        "value_low": {"type": "number"},
+        "sigma_v": {"type": "number", "minimum": 0},
+        "sigma_u": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

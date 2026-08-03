@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/behavioral_regime.schema.json",
+  "title": "Behavioral Greed/Fear Regime Contract (BR-1)",
+  "description": "A 2-state (greed/fear) Hamilton-style Markov regime-switching overlay for crypto returns, with a per-regime Gaussian return distribution, a row-stochastic transition matrix, a prospect-theory value/probability distortion (loss aversion lambda>1, monotone probability weighting), and an arrival-regime label drawn from the memory-mesh characterizer taxonomy (reflexive/self-exciting == Hawkes/long-memory). Seeded and deterministic. Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["transition_matrix", "regimes"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "arrival_regime": {"type": "string", "enum": ["poisson_memoryless", "hawkes_self_exciting", "long_memory"]},
+    "memory_regime_ref": {"type": "string"},
+    "transition_matrix": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "regimes": {
+      "type": "object",
+      "required": ["greed", "fear"],
+      "properties": {
+        "greed": {
+          "type": "object",
+          "required": ["mu", "sigma"],
+          "properties": {
+            "mu": {"type": "number"},
+            "sigma": {"type": "number", "exclusiveMinimum": 0}
+          }
+        },
+        "fear": {
+          "type": "object",
+          "required": ["mu", "sigma"],
+          "properties": {
+            "mu": {"type": "number"},
+            "sigma": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      }
+    },
+    "prospect_theory": {
+      "type": "object",
+      "properties": {
+        "alpha": {"type": "number", "exclusiveMinimum": 0},
+        "beta": {"type": "number", "exclusiveMinimum": 0},
+        "lambda": {"type": "number"},
+        "gamma": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "simulate": {
+      "type": "object",
+      "properties": {
+        "n": {"type": "integer", "minimum": 2},
+        "seed": {"type": "integer"}
+      }
+    },
+    "series": {"type": "array", "items": {"type": "number"}}
+  }
+}
