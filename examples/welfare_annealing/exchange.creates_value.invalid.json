@@ -1,0 +1,17 @@
+{
+  "record_kind": "exchange",
+  "record_id": "wea-exchange-creates-value-INVALID",
+  "as_of": "2026-08-03",
+  "exchange": {
+    "conserved_quantity": "value_energy",
+    "tolerance": 1e-09,
+    "inflows": [
+      {"party": "region-A", "amount": 40.0},
+      {"party": "region-B", "amount": 45.0}
+    ],
+    "outflows": [
+      {"party": "region-C", "amount": 50.0},
+      {"party": "region-D", "amount": 25.0}
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+name: welfare-annealing
+
+on:
+  pull_request:
+    paths:
+      - "src/open_ep_framework/welfare_annealing/**"
+      - "schemas/welfare_annealing.schema.json"
+      - "examples/welfare_annealing/**"
+      - "scripts/validate_welfare_annealing.py"
+      - "tests/test_welfare_annealing_*.py"
+      - "tests/fixtures/gaia/**"
+      - ".github/workflows/welfare-annealing.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/open_ep_framework/welfare_annealing/**"
+      - "schemas/welfare_annealing.schema.json"
+      - "examples/welfare_annealing/**"
+      - "scripts/validate_welfare_annealing.py"
+      - "tests/test_welfare_annealing_*.py"
+      - "tests/fixtures/gaia/**"
+      - ".github/workflows/welfare-annealing.yml"
+  workflow_dispatch:
+
+jobs:
+  welfare-annealing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package + validation deps
+        run: python -m pip install -e . pytest jsonschema
+      - name: Byte-compile the deterministic, stdlib-only module
+        run: >-
+          python -m py_compile
+          src/open_ep_framework/welfare_annealing/qol.py
+          src/open_ep_framework/welfare_annealing/energy.py
+          src/open_ep_framework/welfare_annealing/anneal.py
+          src/open_ep_framework/welfare_annealing/discount.py
+          src/open_ep_framework/welfare_annealing/gaia_binding.py
+          src/open_ep_framework/welfare_annealing/contract.py
+          scripts/validate_welfare_annealing.py
+      - name: WEA-1 per-tooth mutation tests
+        run: python -m pytest -q tests/test_welfare_annealing_qol.py tests/test_welfare_annealing_energy.py tests/test_welfare_annealing_anneal.py tests/test_welfare_annealing_discount.py tests/test_welfare_annealing_gaia.py tests/test_welfare_annealing_contract.py
+      - name: WEA-1 contract teeth (VERIFIES + REJECTS + COHERENCE over fixtures, incl. GAIA manifest conformance)
+        run: python scripts/validate_welfare_annealing.py
+      - name: WEA-1 receipts for the valid fixtures (deterministic CI artifact)
+        run: |
+          mkdir -p build
+          for f in examples/welfare_annealing/*.valid.json; do
+            name=$(basename "$f" .valid.json)
+            PYTHONPATH=src python -m open_ep_framework.welfare_annealing \
+              --record "$f" --receipt "build/welfare_annealing_${name}_receipt.json" >/dev/null
+          done
+      - name: Upload WEA-1 receipt artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: welfare-annealing-receipts
+          path: build/welfare_annealing_*_receipt.json
+          if-no-files-found: error

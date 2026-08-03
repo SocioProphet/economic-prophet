@@ -4,7 +4,7 @@
 PYTHON ?= python3
 PYTHONPATH := src
 
-.PHONY: help ladder ladder-receipt outcome-pricing outcome-pricing-receipt test check
+.PHONY: help ladder ladder-receipt outcome-pricing outcome-pricing-receipt welfare-annealing test check
 
 help:
 	@echo "Targets:"
@@ -12,8 +12,9 @@ help:
 	@echo "  make ladder-receipt           # write build/asset_class_ladder_receipt.json"
 	@echo "  make outcome-pricing          # price the OPX-1 engagement fixture (stdlib gate)"
 	@echo "  make outcome-pricing-receipt  # write build/outcome_pricing_receipt.json"
+	@echo "  make welfare-annealing        # run the WEA-1 Welfare-Annealing contract teeth"
 	@echo "  make test                     # run the test suite (needs pytest)"
-	@echo "  make check                    # ladder + outcome-pricing + test"
+	@echo "  make check                    # ladder + outcome-pricing + welfare-annealing + test"
 
 # ALC-1: schema-validate the canonical ladder, then apply every tooth. Pure
 # stdlib -- this is the gate that cannot be skipped for lack of dependencies.
@@ -43,7 +44,12 @@ outcome-pricing-receipt:
 		--schema schemas/outcome_pricing.schema.json \
 		--receipt build/outcome_pricing_receipt.json
 
+# WEA-1: run the Welfare-Annealing contract teeth (VERIFIES + REJECTS + COHERENCE).
+# Needs jsonschema (the Draft 2020-12 validator); the module itself is pure stdlib.
+welfare-annealing:
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) scripts/validate_welfare_annealing.py
+
 test:
 	$(PYTHON) -m pytest -q
 
-check: ladder outcome-pricing test
+check: ladder outcome-pricing welfare-annealing test

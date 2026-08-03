@@ -1,0 +1,49 @@
+{
+  "record_kind": "gaia_binding",
+  "record_id": "wea-gaia-nonconserving-twin-scale-INVALID",
+  "as_of": "2026-08-03",
+  "gaia": {
+    "binding_id": "wea-vfb-nonconserving",
+    "world_model_ref": "SocioProphet/gaia-world-model@2abb7a2afd66835879d13cff3e43e33b27c1fd78",
+    "economic_spine_ref": "SocioProphet/economic-prophet@054f473ffffe975923b5971568bce594a97975cc",
+    "carrying_capacity": {
+      "source": {"kind": "world_model_read", "read_ref": "gaia://biosphere/carrying_capacity/global@2026-08-03"},
+      "value_index": 0.87
+    },
+    "ecosystem_assets": [
+      {
+        "rung": "renewable_harvest",
+        "biosphere_ref": "gaia://biosphere/forest/amazon",
+        "regeneration": {
+          "source": {"kind": "world_model_read", "read_ref": "gaia://biosphere/forest/amazon/regen@2026-08-03"},
+          "rate": 0.03
+        },
+        "stock": {
+          "current": 1000.0, "non_renewable_draw": 0.0,
+          "reserve": {"source": {"kind": "world_model_read", "read_ref": "gaia://biosphere/forest/amazon/reserve@2026-08-03"}, "floor": 200.0}
+        }
+      }
+    ],
+    "qol": {
+      "population_ref": "twin://human/population/global",
+      "groups": [
+        {"name": "A", "population": 5.0, "life_length": 0.50, "health": 0.50, "education": 0.50},
+        {"name": "B", "population": 40.0, "life_length": 0.95, "health": 0.95, "education": 0.95}
+      ],
+      "dimensions": [
+        {"name": "life_length", "from_twin_dimension": "twin://human/dimension/life_length"},
+        {"name": "health", "from_twin_dimension": "twin://human/dimension/health"},
+        {"name": "education", "from_twin_dimension": "twin://human/dimension/education"}
+      ]
+    },
+    "twin_scale": {
+      "transfer_id": "wea-tsvt-nonconserving",
+      "parent": {"scale": "world_economic_twin", "ref": "twin://economy/world", "value": 1200.0},
+      "children": [
+        {"scale": "human_digital_twin", "ref": "twin://human/cohort/a", "value": 450.0},
+        {"scale": "human_digital_twin", "ref": "twin://human/cohort/b", "value": 500.0}
+      ],
+      "tolerance": 1e-06
+    }
+  }
+}

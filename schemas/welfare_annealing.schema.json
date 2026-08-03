@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/welfare_annealing.schema.json",
+  "title": "Value-Energy-Conservation Welfare-Annealing Contract (WEA-1)",
+  "description": "The constructive inverse of 'Silent Weapons': same value-as-energy physics (value-energy conserved in exchange; growth is a production source; allocations flow under a free-energy potential read with a laminar/turbulent lens), objective flipped from elite-control to a global QoL welfare index. A record carries one 'record_kind' -- exchange | anneal | growth_path | discount -- and the teeth for that kind are applied. Consumes IC-1 settlement (#39), FRL-1 flow-regime (#54), ALC-1 asset-ladder (#52) and inflation (Fisher) BY REFERENCE.",
+  "type": "object",
+  "required": ["record_kind"],
+  "properties": {
+    "record_kind": {
+      "type": "string",
+      "enum": ["exchange", "anneal", "growth_path", "discount", "gaia_binding"],
+      "description": "Which constituent contract's teeth to apply."
+    },
+    "record_id": {"type": "string"},
+    "as_of": {"type": "string"},
+
+    "exchange": {
+      "type": "object",
+      "description": "A pure exchange in the IC-1 settlement shape. VERIFIES value-energy conservation.",
+      "required": ["inflows", "outflows"],
+      "properties": {
+        "conserved_quantity": {"type": "string"},
+        "tolerance": {"type": "number", "minimum": 0},
+        "inflows": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/leg"}},
+        "outflows": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/leg"}}
+      }
+    },
+
+    "anneal": {
+      "type": "object",
+      "description": "A welfare anneal over allocations. VERIFIES monotone free-energy descent to a laminar attractor with conserved value-energy.",
+      "required": ["groups", "initial_allocation", "learning_rate", "steps"],
+      "properties": {
+        "groups": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/qol_group"}},
+        "initial_allocation": {"type": "array", "minItems": 2, "items": {"type": "number", "minimum": 0}},
+        "total_energy": {"type": "number", "exclusiveMinimum": 0},
+        "learning_rate": {"type": "number", "exclusiveMinimum": 0},
+        "steps": {"type": "integer", "minimum": 1},
+        "expect_regime": {"type": "string", "enum": ["laminar", "turbulent"]},
+        "memory_regime": {
+          "type": "string",
+          "enum": ["memoryless", "short_decaying", "long_memory", "chaotic"],
+          "description": "FRL-1 memory-mesh taxonomy label; must map (TAXONOMY_TO_FLOW) to the recomputed regime."
+        }
+      }
+    },
+
+    "growth_path": {
+      "type": "object",
+      "description": "A multi-period growth path. VERIFIES renewable-only sustainability and Fisher-real adjustment; FLAGS non-renewable drawdown booked as sustainable.",
+      "required": ["periods"],
+      "properties": {
+        "periods": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "renewable_delta": {"type": "number"},
+              "nonrenewable_drawdown": {"type": "number", "minimum": 0},
+              "claim_sustainable": {"type": "boolean"},
+              "nominal_growth": {"type": "number"},
+              "inflation": {"type": "number"},
+              "real_growth": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+
+    "discount": {
+      "type": "object",
+      "description": "The social-discount-rate machinery. VERIFIES MV=PQ, the Fisher-ideal index, and the Stern-vs-Nordhaus sensitivity reconciliation.",
+      "properties": {
+        "mv_pq": {
+          "type": "object",
+          "required": ["M", "V", "P", "Q"],
+          "properties": {
+            "M": {"type": "number"}, "V": {"type": "number"},
+            "P": {"type": "number"}, "Q": {"type": "number"}
+          }
+        },
+        "fisher_ideal": {
+          "type": "object",
+          "required": ["p0", "q0", "p1", "q1"],
+          "properties": {
+            "p0": {"type": "array", "items": {"type": "number"}},
+            "q0": {"type": "array", "items": {"type": "number"}},
+            "p1": {"type": "array", "items": {"type": "number"}},
+            "q1": {"type": "array", "items": {"type": "number"}}
+          }
+        },
+        "sensitivity": {
+          "type": "object",
+          "required": ["future_qol", "horizon", "g", "scenarios"],
+          "properties": {
+            "future_qol": {"type": "number"},
+            "horizon": {"type": "number", "exclusiveMinimum": 0},
+            "g": {"type": "number"},
+            "scenarios": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "required": ["delta", "eta"],
+                "properties": {
+                  "name": {"type": "string"},
+                  "delta": {"type": "number"},
+                  "eta": {"type": "number"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "gaia": {
+      "type": "object",
+      "description": "Inputs for emitting the two GAIA value-flow manifests (value_flow_binding.v1 + twin_scale_transfer.v1) from this welfare run. The world-model read refs are the free parameters the gaia teeth forbid being constant; the EP-side teeth (gaia_binding.py) enforce them here on real runs.",
+      "required": ["binding_id", "world_model_ref", "economic_spine_ref", "carrying_capacity", "ecosystem_assets", "qol", "twin_scale"],
+      "properties": {
+        "binding_id": {"type": "string"},
+        "world_model_ref": {"type": "string", "pattern": "^SocioProphet/gaia-world-model@.+$"},
+        "economic_spine_ref": {"type": "string", "pattern": "^SocioProphet/economic-prophet@.+$"},
+        "welfare_annealing_ref": {"type": "string", "pattern": "^SocioProphet/economic-prophet@.+$"},
+        "carrying_capacity": {
+          "type": "object",
+          "required": ["source", "value_index"],
+          "properties": {
+            "source": {"$ref": "#/$defs/wm_source"},
+            "value_index": {"type": "number"}
+          }
+        },
+        "ecosystem_assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["rung", "biosphere_ref", "regeneration", "stock"],
+            "properties": {
+              "rung": {"type": "string", "enum": ["natural_capital", "extractive_nonrenewable", "renewable_harvest"]},
+              "biosphere_ref": {"type": "string"},
+              "regeneration": {
+                "type": "object",
+                "required": ["source"],
+                "properties": {
+                  "source": {
+                    "type": "object",
+                    "required": ["kind"],
+                    "properties": {
+                      "kind": {"type": "string", "enum": ["world_model_read", "constant", "none"]},
+                      "read_ref": {"type": "string"}
+                    }
+                  },
+                  "rate": {"type": "number"}
+                }
+              },
+              "stock": {
+                "type": "object",
+                "required": ["current", "reserve"],
+                "properties": {
+                  "current": {"type": "number"},
+                  "non_renewable_draw": {"type": "number", "minimum": 0},
+                  "reserve": {
+                    "type": "object",
+                    "required": ["source", "floor"],
+                    "properties": {
+                      "source": {"$ref": "#/$defs/wm_source"},
+                      "floor": {"type": "number"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "qol": {
+          "type": "object",
+          "required": ["groups", "dimensions"],
+          "properties": {
+            "population_ref": {"type": "string"},
+            "groups": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/qol_group"}},
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {"type": "string", "enum": ["life_length", "health", "education"]},
+                  "from_twin_dimension": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "twin_scale": {
+          "type": "object",
+          "required": ["transfer_id", "parent", "children"],
+          "properties": {
+            "transfer_id": {"type": "string"},
+            "parent": {"$ref": "#/$defs/twin_node"},
+            "children": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/twin_node"}},
+            "declared_sources": {"type": "array", "items": {"$ref": "#/$defs/twin_flow"}},
+            "declared_sinks": {"type": "array", "items": {"$ref": "#/$defs/twin_flow"}},
+            "tolerance": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "wm_source": {
+      "type": "object",
+      "description": "A value source: a world-model read (gaia://...) or a constant. The EP-side teeth reject a constant where a world-model read is required (T1-CONST / T4-REGEN).",
+      "required": ["kind"],
+      "properties": {
+        "kind": {"type": "string", "enum": ["world_model_read", "constant"]},
+        "read_ref": {"type": "string"}
+      }
+    },
+    "twin_node": {
+      "type": "object",
+      "required": ["scale", "value"],
+      "properties": {
+        "scale": {"type": "string", "enum": ["galactic_space_twin", "world_economic_twin", "human_digital_twin"]},
+        "ref": {"type": "string"},
+        "value": {"type": "number"}
+      }
+    },
+    "twin_flow": {
+      "type": "object",
+      "required": ["ref", "amount"],
+      "properties": {"ref": {"type": "string"}, "amount": {"type": "number"}}
+    },
+    "leg": {
+      "type": "object",
+      "required": ["amount"],
+      "properties": {
+        "party": {"type": "string"},
+        "amount": {"type": "number"}
+      }
+    },
+    "qol_group": {
+      "type": "object",
+      "description": "A population group carrying ALL required QoL dimensions (population x life-length x health x education). A missing dimension is REJECTED.",
+      "required": ["population", "life_length", "health", "education"],
+      "properties": {
+        "name": {"type": "string"},
+        "population": {"type": "number", "exclusiveMinimum": 0},
+        "life_length": {"type": "number", "minimum": 0, "maximum": 1},
+        "health": {"type": "number", "minimum": 0, "maximum": 1},
+        "education": {"type": "number", "minimum": 0, "maximum": 1},
+        "half_saturation": {"type": "number", "exclusiveMinimum": 0}
+      }
+    }
+  }
+}
