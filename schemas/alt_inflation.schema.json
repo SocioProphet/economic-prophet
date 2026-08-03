@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "alt_inflation.schema.json",
+  "title": "Alternative inflation reconstruction",
+  "description": "A reconstructed alternative-inflation measure (Billion Prices Project online-price index, or ShadowStats alternate CPI). reconstructed=true marks that the vendor's proprietary series was unavailable and the published methodology was rebuilt from estate-supplied inputs; feed a real feed to emit the genuine series.",
+  "type": "object",
+  "required": ["measure", "method", "reconstructed"],
+  "properties": {
+    "measure": {"enum": ["billion-prices-project", "shadowstats", "official-cpi"]},
+    "method": {"type": "string"},
+    "reconstructed": {"type": "boolean"},
+    "annualized_inflation": {"type": "number"},
+    "alt_inflation": {"type": "number"},
+    "official_inflation": {"type": "number"},
+    "addback": {"type": "number"},
+    "basis": {"enum": ["1980", "1990"]},
+    "index": {"type": "array", "items": {"type": "number"}},
+    "components": {"type": "object"},
+    "provenance": {"type": "string"}
+  }
+}
