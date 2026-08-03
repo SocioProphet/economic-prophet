@@ -15,6 +15,7 @@ from .impact_vdt import run_impact_vdt
 from .object_graph import ObjectGraph, lineage_aware_output
 from .policy_simulation import run_policy_simulation_profile
 from .policy_simulation_uvmc import run_policy_simulation_measured_entity
+from .ftp_curve import run_ftp_separation
 from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
@@ -142,7 +143,7 @@ def _derive_audit_identity(inputs: dict, args) -> tuple[str, str]:
         receipt = inputs.get("calculation_receipt", {})
         context = inputs.get("measurement_context", {})
         return receipt.get("run_id", args.object_id), context.get("scenario_ref", "base")
-    run_id = inputs.get("run_id") or inputs.get("relationship_id") or inputs.get("contract_id") or args.object_id
+    run_id = inputs.get("run_id") or inputs.get("relationship_id") or inputs.get("contract_id") or inputs.get("book_id") or args.object_id
     scenario = inputs.get("scenario") or inputs.get("scoring_mode") or "base"
     return run_id, scenario
 
@@ -167,6 +168,7 @@ def main():
             "causal-scenario",
             "settlement",
             "risk-adjusted-profit",
+            "ftp-separation",
         ],
         default="instrument",
     )
@@ -250,6 +252,14 @@ def main():
         if example == "examples/synthetic_run.json":
             example = "examples/risk_adjusted_profit_economic.json"
         outputs = run_risk_adjusted_profit(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "ftp-separation":
+        # Matched-maturity FTP separation-theorem decomposition (FTP-1): unit spreads
+        # + Treasury residual reconciled to NIM under IC-1. Rejects hidden cross-subsidy.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/ftp_separation_book.json"
+        outputs = run_ftp_separation(example)
         inputs = json.loads(Path(example).read_text())
     elif args.mode == "causal-scenario":
         # The global --example default is an instrument doc, not a causal scenario;

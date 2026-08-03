@@ -1,0 +1,20 @@
+{
+  "book_id": "ftp-sep-cross-subsidy-001",
+  "as_of": "2026-08-03",
+  "tolerance": 1e-6,
+  "curve": {
+    "points": [
+      {"tenor": 0.25, "rate": 0.03},
+      {"tenor": 1.0, "rate": 0.035},
+      {"tenor": 5.0, "rate": 0.04},
+      {"tenor": 10.0, "rate": 0.045}
+    ]
+  },
+  "assets": [
+    {"unit": "commercial_loans", "balance": 1000.0, "tenor": 5.0, "customer_rate": 0.06, "booked_ftp_rate": 0.03}
+  ],
+  "liabilities": [
+    {"unit": "retail_deposits", "balance": 1000.0, "tenor": 0.25, "customer_rate": 0.01}
+  ],
+  "treasury": {"structural": 6.0, "liquidity": 3.0, "basis": 1.0}
+}

@@ -165,6 +165,41 @@ The aggregation/allocation architecture across arbitrary org cuts (product cut
 this kernel: RAP-1/RM-1 provide the per-node kernel and marginal contributions; they do
 not implement the hierarchy walker.
 
+## FTP + market-instruments layer (FTP-1 / HDG-1 / MKT-1)
+
+Building on the RAROC kernel (#43) and IC-1 conservation (#39), this layer adds funding
+and market instruments (consume-not-fork; deterministic/stdlib). See
+`docs/ftp_market_instruments.md`.
+
+- **Matched-maturity FTP** (`src/open_ep_framework/ftp_curve.py`): an `FTPCurve` on the
+  term-structure axis and `assign_ftp` that transfer-prices each cash flow at its
+  matched tenor (5y flow -> 5y point, not overnight), feeding `funding_costs`/
+  `funding_credits` in the EP identity. **Separation theorem**: NIM splits into unit
+  spreads + Treasury residual (structural + liquidity + basis), reconciled AS an IC-1
+  settlement. Teeth: a hidden cross-subsidy (off-market booked FTP not booked to
+  Treasury) is REJECTED; a Treasury residual whose components don't reconcile is
+  REJECTED; matched-maturity is asserted. Schema `schemas/ftp_separation.schema.json`;
+  fixtures `examples/ftp_separation_book.json` and
+  `examples/ftp_separation_cross_subsidy.invalid.json`; CLI `--mode ftp-separation`.
+- **Swaps/futures as zeroing derivatives** (`hedging.py`): DV01/duration (1st derivative)
+  and convexity (2nd) from `term_calculus` give the hedge ratio. Teeth: a DV01-neutral
+  hedge drives the net first derivative to ~0 under a curve bump; a convexity-mismatched
+  linear hedge still shows 2nd-order P&L. Futures = daily mark-to-market linear hedge.
+- **Options + vol surface + Merton + Ross** (`market_instruments.py`): a `VolSurface`
+  (skew/smile) -> Breeden-Litzenberger risk-neutral `F_Q` -> Ross/Radon-Nikodym physical
+  F -> the risk kernel's downside measures. Teeth: put skew implies a fatter downside
+  than flat vol; negative implied variance and calendar/butterfly arbitrage are REJECTED;
+  the **Merton bridge** (`equity_as_call`/`pd_from_structural`) gives equity=call,
+  risky debt = risk-free - put, PD & recovery inversely related, EL reconciled via
+  PD*LGD*EAD; the **Ross seam** (`physical_from_riskneutral`) returns F_Q unchanged under
+  an identity kernel and lifts the physical mean under a risk-averse kernel.
+- **Liquidity/information pricing**: `liquidity_premium(volume, regime_hurst)` (light)
+  feeds both curve and surface; the Economia Mentium framing prices information's
+  upside/downside off an implied-vol-style surface, with the memory-regime H shaping the
+  term structure (injection seam, not a fork).
+
+Tests: `tests/test_ftp_curve.py`, `tests/test_hedging.py`, `tests/test_market_instruments.py`.
+
 ## Platform service boundary
 
 Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.
