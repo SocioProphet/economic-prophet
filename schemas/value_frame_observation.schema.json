@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/value_frame_observation.schema.json",
+  "title": "Relativity-of-Price Value-Ordering Record -- RVO-1",
+  "description": "A record of per-frame (market/venue/currency) value observations under an eventually-consistent, causally-ordered value model. Each observation is a local real-time price carrying a vector clock and a hash-chained receipt (the value-event clock). The cross-frame merge is a per-frame LWW-register CRDT (commutative/associative/idempotent) that converges to an eventually-consistent global view. consistency_scope must be local_realtime or eventual: immediate_global is REJECTED. Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["record_id", "observations"],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 1},
+    "description": {"type": "string"},
+    "consistency_scope": {
+      "type": "string",
+      "enum": ["local_realtime", "eventual"],
+      "description": "Scope of the consistency claim. A per-frame price is local_realtime; the global view is eventual. immediate_global is inadmissible (the relativity-of-value guard)."
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["frame_id", "currency", "value", "lamport", "vclock", "receipt_hash"],
+        "properties": {
+          "frame_id": {"type": "string", "minLength": 1},
+          "currency": {"type": "string", "minLength": 1},
+          "venue": {"type": "string"},
+          "value": {"type": "number"},
+          "lamport": {"type": "integer", "minimum": 0},
+          "vclock": {
+            "type": "object",
+            "description": "Vector clock: frame_id -> counter. Defines the causal (partial) order.",
+            "additionalProperties": {"type": "integer", "minimum": 0}
+          },
+          "receipt_hash": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Hash-chained receipt id (sha256:...), the value-event clock binding to the receipt spine."
+          },
+          "scope": {
+            "type": "string",
+            "enum": ["local_realtime"],
+            "description": "A per-frame observation is a local, real-time price."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "declared_total_order": {
+      "type": "array",
+      "description": "An OPTIONAL proposed linear order of receipt_hashes. If it linearizes two causally-concurrent events it is REJECTED (only a partial/causal order exists).",
+      "items": {"type": "string"}
+    },
+    "interpretation": {
+      "type": "array",
+      "description": "Free-text interpretation. A single-global-price / global-simultaneity claim here is REJECTED.",
+      "items": {"type": "string"}
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,18 @@
+{
+  "record_id": "rvo-global-price-INVALID",
+  "consistency_scope": "eventual",
+  "observations": [
+    {
+      "frame_id": "NYSE",
+      "currency": "USD",
+      "value": 101.25,
+      "lamport": 1,
+      "vclock": {"NYSE": 1},
+      "receipt_hash": "sha256:136784d2b8126dfc2e720e5229f4f7a1a53581934c0cb87a60ef4a3da9286f6c",
+      "scope": "local_realtime"
+    }
+  ],
+  "interpretation": [
+    "There is a single global price for this asset that holds simultaneously across every venue and currency at every instant."
+  ]
+}

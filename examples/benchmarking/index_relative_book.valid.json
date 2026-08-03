@@ -1,0 +1,54 @@
+{
+  "book_id": "irb-cross-frame-credit-001",
+  "description": "Two investment-grade corporate-credit cohorts in different value frames (US/USD and EU/EUR). Each measure X (issuer excess-return series) is decomposed against its declared baseline index B; the cross-frame comparison rides the dimensionless idiosyncratic differential, never an absolute level.",
+  "cohorts": [
+    {
+      "cohort_id": "us-ig-corp",
+      "key": {
+        "asset_class": "corporate_credit",
+        "market": "us_ig_corp",
+        "rating_agency_bucket": "A_to_BBB",
+        "region": "US",
+        "sector": "industrials"
+      },
+      "frame": {"currency": "USD", "venue": "TRACE"},
+      "baseline_index": {
+        "index_id": "us_ig_corp_oas_index",
+        "label": "US IG corporate OAS baseline",
+        "series": [0.012, 0.009, 0.015, 0.011, 0.008, 0.013, 0.010, 0.014]
+      },
+      "measure": {
+        "measure_id": "us-issuer-excess-return",
+        "label": "US IG issuer excess return vs baseline",
+        "decomposed": true,
+        "series": [0.020, 0.014, 0.026, 0.019, 0.012, 0.023, 0.017, 0.024]
+      }
+    },
+    {
+      "cohort_id": "eu-ig-corp",
+      "key": {
+        "asset_class": "corporate_credit",
+        "market": "eu_ig_corp",
+        "rating_agency_bucket": "A_to_BBB",
+        "region": "EU",
+        "sector": "industrials"
+      },
+      "frame": {"currency": "EUR", "venue": "MTS"},
+      "baseline_index": {
+        "index_id": "eu_ig_corp_oas_index",
+        "label": "EU IG corporate OAS baseline",
+        "series": [0.010, 0.011, 0.009, 0.013, 0.012, 0.008, 0.014, 0.010]
+      },
+      "measure": {
+        "measure_id": "eu-issuer-excess-return",
+        "label": "EU IG issuer excess return vs baseline",
+        "decomposed": true,
+        "series": [0.016, 0.019, 0.013, 0.022, 0.021, 0.011, 0.025, 0.017]
+      }
+    }
+  ],
+  "comparisons": [
+    {"left": "us-ig-corp", "right": "eu-ig-corp", "basis": "idiosyncratic_z"},
+    {"left": "us-ig-corp", "right": "eu-ig-corp", "basis": "cross_sectional_rank"}
+  ]
+}

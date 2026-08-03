@@ -1,0 +1,20 @@
+{
+  "book_id": "irb-no-baseline-INVALID",
+  "description": "A cohort with no declared baseline index cannot attribute systematic vs idiosyncratic and is REJECTED.",
+  "cohorts": [
+    {
+      "cohort_id": "us-ig-corp-no-baseline",
+      "key": {
+        "asset_class": "corporate_credit",
+        "market": "us_ig_corp",
+        "region": "US"
+      },
+      "frame": {"currency": "USD"},
+      "measure": {
+        "measure_id": "us-issuer-excess-return",
+        "decomposed": true,
+        "series": [0.020, 0.014, 0.026, 0.019, 0.012, 0.023]
+      }
+    }
+  ]
+}

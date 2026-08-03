@@ -1,0 +1,228 @@
+{
+  "@context": "https://raw.githubusercontent.com/SocioProphet/ontogenesis/main/contexts/systema-concept.context.jsonld",
+  "@graph": [
+    {
+      "@id": "systema:concept:baseline-index",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:baseline-index",
+      "skos:prefLabel": "Baseline Index",
+      "skos:altLabel": ["cohort baseline", "systematic factor B"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:irb-1-baseline-index",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/benchmarking/index_relative.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Derived from the committed IRB-1 contract; candidate until ontogenesis promotion review."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:baseline-index:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "The declared systematic factor B for a cohort, against which any measure X is decomposed as X = beta*B + epsilon.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "Every cohort (asset_class, market, issuer?, rating_agency_bucket?, region?, sector?) must declare a baseline index series; a cohort with no baseline index cannot attribute systematic vs idiosyncratic risk and is rejected.",
+      "allowedUse": ["single-factor cohort decomposition", "systematic-risk attribution"],
+      "forbiddenUse": ["treating a flat (zero-variance) series as a baseline", "omitting the baseline and reporting a raw measure"],
+      "implementationSurface": [
+        {"@id": "systema:surface:irb-1-benchmarking", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/benchmarking/index_relative.py"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:baseline-declared", "@type": "EvidenceRequirement", "evidenceRequirementText": "A baseline_index with a >=2-point series and a beta identified by cov(X,B)/var(B)."}
+      ],
+      "revision": [{"@id": "systema:revision:baseline-index:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet IRB-1.", "revisionVersion": "v0.1"}]
+    },
+    {
+      "@id": "systema:concept:systematic-idiosyncratic-decomposition",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:systematic-idiosyncratic-decomposition",
+      "skos:prefLabel": "Systematic/Idiosyncratic Decomposition",
+      "skos:altLabel": ["baseline+idiosyncratic split", "beta*B + epsilon"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:irb-1-decomposition",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/benchmarking/index_relative.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Consumes the RM-1 systematic/idiosyncratic factorization (risk_measures) by reference."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:decomposition:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "The exact partition var(X) = beta^2 var(B) + var(epsilon) of a measure into a systematic (baseline) and an orthogonal idiosyncratic part.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "A measure is admissible only if it reconciles in level (beta*B_t + eps_t == X_t) and in variance (beta^2 var(B) + var(eps) == var(X)); a non-reconciling split is rejected.",
+      "allowedUse": ["risk attribution", "cross-cohort factor comparison"],
+      "forbiddenUse": ["reporting a measure without a systematic/idiosyncratic attribution", "a split whose residual is not orthogonal to the baseline"],
+      "implementationSurface": [
+        {"@id": "systema:surface:irb-1-decompose", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/benchmarking/index_relative.py"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:reconciliation", "@type": "EvidenceRequirement", "evidenceRequirementText": "Level + variance reconciliation within tolerance, checked by check_reconciliation."}
+      ],
+      "revision": [{"@id": "systema:revision:decomposition:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet IRB-1.", "revisionVersion": "v0.1"}]
+    },
+    {
+      "@id": "systema:concept:idiosyncratic-differential",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:idiosyncratic-differential",
+      "skos:prefLabel": "Idiosyncratic Differential",
+      "skos:altLabel": ["unit-free cross-cohort differential", "idiosyncratic z-score"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:irb-1-differential",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/benchmarking/index_relative.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Dimensionless residual; the only cross-frame-admissible comparison quantity."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:differential:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "The cross-cohort residual expressed unit-free (idiosyncratic_z = mean(eps)/std(eps), spread_to_baseline, or cross_sectional_rank) so it is comparable across currencies/regions/legal-regimes.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "Cross-frame comparisons must ride a dimensionless basis; comparing absolute levels across a currency/region/legal-regime boundary is rejected.",
+      "allowedUse": ["cross-currency cohort ranking", "regime-neutral relative-value scoring"],
+      "forbiddenUse": ["comparing absolute price levels across frames", "assuming a common scale across legal regimes"],
+      "implementationSurface": [
+        {"@id": "systema:surface:irb-1-differential", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/benchmarking/index_relative.py"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:scale-invariance", "@type": "EvidenceRequirement", "evidenceRequirementText": "idiosyncratic_z invariant under rescaling of the measure (test_idiosyncratic_z_is_scale_invariant)."}
+      ],
+      "revision": [{"@id": "systema:revision:differential:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet IRB-1.", "revisionVersion": "v0.1"}]
+    },
+    {
+      "@id": "systema:concept:price-frame",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:price-frame",
+      "skos:prefLabel": "Price Frame",
+      "skos:altLabel": ["value frame", "market/venue/currency frame"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:rvo-1-price-frame",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/value_ordering/relativity.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Binds upward to gaia-world-model#41 value-flow frames (economy_observation.v1)."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:price-frame:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "A market/venue/currency with a local real-time price; the reference frame within which an absolute value level is locally consistent.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "A per-frame price is admitted as local_realtime (locally consistent, real time); it is a value-flow frame of the world-economic-twin.",
+      "allowedUse": ["per-venue local price observation", "value-flow subsystem frame mapping"],
+      "forbiddenUse": ["treating a frame-local price as a global price", "cross-frame absolute-level comparison"],
+      "implementationSurface": [
+        {"@id": "systema:surface:rvo-1-frame", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/value_ordering/relativity.py"},
+        {"@id": "systema:surface:gaia-value-flow", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/gaia-world-model", "surfacePath": "schemas/economy/economy_observation.v1"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:local-scope", "@type": "EvidenceRequirement", "evidenceRequirementText": "Observation scope == local_realtime; no global-price assertion."}
+      ],
+      "revision": [{"@id": "systema:revision:price-frame:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet RVO-1.", "revisionVersion": "v0.1"}]
+    },
+    {
+      "@id": "systema:concept:causal-partial-value-order",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:causal-partial-value-order",
+      "skos:prefLabel": "Causal/Partial Value Order",
+      "skos:altLabel": ["vector-clock value order", "no-total-order-of-value"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:rvo-1-causal-order",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/value_ordering/relativity.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Bound to the receipt spine hash-chain (value-event clock) and the holographic-message-stream (TriTRPC #99)."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:causal-order:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "The vector-clock partial order over cross-frame value events; two events with incomparable clocks are causally concurrent and cannot be linearized.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "Value events are ordered by a causal (vector-clock) partial order bound to a SHA-256 receipt hash-chain; imposing a total global order over concurrent events is rejected.",
+      "allowedUse": ["causal reconciliation of cross-venue value events", "receipt-chained value-event clocking"],
+      "forbiddenUse": ["linearizing concurrent events into a total order", "asserting global simultaneity of value"],
+      "implementationSurface": [
+        {"@id": "systema:surface:rvo-1-causal", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/value_ordering/relativity.py"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:concurrency", "@type": "EvidenceRequirement", "evidenceRequirementText": "vc_concurrent detects incomparable clocks; reject_total_order_on_concurrent fires on linearization."}
+      ],
+      "revision": [{"@id": "systema:revision:causal-order:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet RVO-1.", "revisionVersion": "v0.1"}]
+    },
+    {
+      "@id": "systema:concept:eventual-consistency-value-order",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:eventual-consistency-value-order",
+      "skos:prefLabel": "Eventual-Consistency Value Order",
+      "skos:altLabel": ["CRDT value merge", "no-global-price consistency model"],
+      "sourceAnchor": [
+        {
+          "@id": "systema:source-anchor:rvo-1-eventual",
+          "@type": "SourceAnchor",
+          "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/value_ordering/relativity.py",
+          "sourceKind": "implementation_surface",
+          "extractionConfidence": "A",
+          "reviewState": "candidate",
+          "quoteBoundary": "operational_translation",
+          "uncertaintyNote": "Per-frame LWW-register CRDT; order-independent convergence to an eventually-consistent global view."
+        }
+      ],
+      "definition": [
+        {
+          "@id": "systema:definition:eventual:v0-1",
+          "@type": "ConceptDefinition",
+          "definitionText": "A commutative/associative/idempotent CRDT merge of per-frame value observations that converges, order-independently, to an eventually-consistent global view; there is no global instantaneous price.",
+          "claimLevel": "operational_definition"
+        }
+      ],
+      "operationalDefinition": "Global consistency of value is asserted only as eventual; a merge that depends on order is rejected, and any immediate-global-consistency claim is rejected.",
+      "allowedUse": ["cross-frame value reconciliation", "eventually-consistent global value view"],
+      "forbiddenUse": ["asserting immediate global consistency", "an order-dependent (non-CRDT) merge"],
+      "implementationSurface": [
+        {"@id": "systema:surface:rvo-1-converge", "@type": "ImplementationSurface", "ownerRepo": "SocioProphet/economic-prophet", "surfacePath": "src/open_ep_framework/value_ordering/relativity.py"}
+      ],
+      "evidenceRequirement": [
+        {"@id": "systema:evidence-requirement:order-independence", "@type": "EvidenceRequirement", "evidenceRequirementText": "assert_merge_order_independent passes over all permutations; converge is idempotent."}
+      ],
+      "revision": [{"@id": "systema:revision:eventual:v0-1", "@type": "ConceptRevision", "revisionNote": "Seeded from economic-prophet RVO-1.", "revisionVersion": "v0.1"}]
+    }
+  ]
+}

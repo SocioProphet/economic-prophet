@@ -1,0 +1,31 @@
+{
+  "record_id": "rvo-total-order-concurrent-INVALID",
+  "consistency_scope": "eventual",
+  "observations": [
+    {
+      "frame_id": "NYSE",
+      "currency": "USD",
+      "value": 101.25,
+      "lamport": 1,
+      "vclock": {"NYSE": 1},
+      "receipt_hash": "sha256:136784d2b8126dfc2e720e5229f4f7a1a53581934c0cb87a60ef4a3da9286f6c",
+      "scope": "local_realtime"
+    },
+    {
+      "frame_id": "LSE",
+      "currency": "GBP",
+      "value": 80.1,
+      "lamport": 1,
+      "vclock": {"LSE": 1},
+      "receipt_hash": "sha256:afb753fe1c8bd77d99ed449cffc878647cc6f7e05e0f6d670a3a5741958f986b",
+      "scope": "local_realtime"
+    }
+  ],
+  "declared_total_order": [
+    "sha256:136784d2b8126dfc2e720e5229f4f7a1a53581934c0cb87a60ef4a3da9286f6c",
+    "sha256:afb753fe1c8bd77d99ed449cffc878647cc6f7e05e0f6d670a3a5741958f986b"
+  ],
+  "interpretation": [
+    "These two frame-local events are linearized into a single global total order even though their vector clocks are causally concurrent."
+  ]
+}
