@@ -1,0 +1,25 @@
+{
+  "signal_id": "ms1:attested-clean-but-concentrated",
+  "as_of": "2026-08-03",
+  "subject": "attested-clean-but-concentrated",
+  "attested_clean": true,
+  "concentration": {
+    "holders": [920000, 30000, 25000, 15000, 10000]
+  },
+  "volume": {
+    "reported_volume": 200000000,
+    "onchain_settled_volume": 190000000,
+    "self_trade_volume": 5000000
+  },
+  "mev": {
+    "mev_extracted": 100000,
+    "block_volume": 200000000
+  },
+  "adverse_selection": {
+    "pin": 0.1,
+    "value_high": 101.0,
+    "value_low": 99.0,
+    "sigma_v": 0.5,
+    "sigma_u": 2.0
+  }
+}

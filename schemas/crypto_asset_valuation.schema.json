@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/crypto_asset_valuation.schema.json",
+  "title": "Crypto Asset Valuation Contract (CAV-1)",
+  "description": "Valuation of a crypto asset by network/fee/memetic criteria rather than DCF. Combines tokenomics (supply, emission, burn, security budget), on-chain metrics (active addresses, TVL, fee revenue, transaction volume), Metcalfe network value and the NVT ratio, a modified economic profit (fee_revenue - security_cost - emission_dilution - risk_capital, where risk_capital is a coherent Expected-Shortfall charge over a reflexive fat-tailed loss distribution consumed from the RM-1 risk kernel), and an evidence-bound memetic/information-theoretic value. A cash-flow (DCF) model asserted on a no-cash-flow token is rejected. Measurement, simulation and audit only.",
+  "type": "object",
+  "required": ["asset_id", "tokenomics", "onchain"],
+  "properties": {
+    "asset_id": {"type": "string", "minLength": 1},
+    "as_of": {"type": "string"},
+    "valuation_method": {"type": "string", "enum": ["network_metcalfe", "nvt", "fee_modified_ep", "memetic", "dcf", "ddm", "cash_flow"]},
+    "tokenomics": {
+      "type": "object",
+      "required": ["circulating_supply", "price"],
+      "properties": {
+        "circulating_supply": {"type": "number", "minimum": 0},
+        "max_supply": {"type": "number", "minimum": 0},
+        "price": {"type": "number", "minimum": 0},
+        "emission_rate": {"type": "number"},
+        "burn_tokens_annual": {"type": "number", "minimum": 0},
+        "staking_yield": {"type": "number"},
+        "cash_flow_bearing": {"type": "boolean"}
+      }
+    },
+    "onchain": {
+      "type": "object",
+      "required": ["active_addresses", "annual_tx_volume"],
+      "properties": {
+        "active_addresses": {"type": "number", "minimum": 0},
+        "tvl": {"type": "number", "minimum": 0},
+        "fee_revenue": {"type": "number", "minimum": 0},
+        "annual_tx_volume": {"type": "number", "minimum": 0}
+      }
+    },
+    "network": {
+      "type": "object",
+      "properties": {
+        "metcalfe_coefficient": {"type": "number", "minimum": 0}
+      }
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "security_cost": {"type": "number", "minimum": 0},
+        "security_budget": {"type": "number", "minimum": 0}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "description": "Reflexive fat-tailed F for the RM-1 risk kernel (Expected Shortfall).",
+      "properties": {
+        "risk_notional": {"type": "number", "minimum": 0},
+        "mu": {"type": "number"},
+        "sigma": {"type": "number", "exclusiveMinimum": 0},
+        "reflexivity": {"type": "number", "minimum": 0},
+        "df": {"type": "number", "exclusiveMinimum": 0},
+        "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+        "mar": {"type": "number"},
+        "n_scenarios": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer"}
+      }
+    },
+    "memetic": {
+      "type": "object",
+      "description": "Evidence-bound memetic/information value (Economia Mentium).",
+      "properties": {
+        "attention_series": {"type": "array", "items": {"type": "number"}},
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["metric", "source"],
+            "properties": {
+              "metric": {"type": "string"},
+              "value": {"type": "number"},
+              "source": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -200,6 +200,49 @@ and market instruments (consume-not-fork; deterministic/stdlib). See
 
 Tests: `tests/test_ftp_curve.py`, `tests/test_hedging.py`, `tests/test_market_instruments.py`.
 
+## Crypto as a distinct asset class (CAV-1 / BR-1 / MS-1)
+
+Crypto is not credit and not equity: most tokens have no cash flows, exhibit extreme
+reflexivity, and take value from network/narrative/psychology, so the DCF machinery
+does not apply. This layer lands as a separate `crypto/` package
+(`src/open_ep_framework/crypto/`) that gives crypto its own value criteria and its own
+reflexive `F` while **reusing the regime + risk kernel by reference** (it does not
+touch the #43/#44 FTP/RAROC files). See `docs/crypto_asset_class.md`.
+
+- **CryptoAssetValuation (CAV-1)** (`crypto/valuation.py`): tokenomics + on-chain +
+  **Metcalfe** value (∝ n²) + **NVT** (crypto P/E) + a **modified EP**
+  `= fee_revenue − security_cost − emission_dilution − risk_capital`, where
+  `risk_capital` is a coherent Expected-Shortfall charge over a **reflexive fat-tailed
+  F consumed from RM-1**; plus an evidence-bound **memetic/information** value
+  (Economia Mentium: value = epistemic delta, liquidity = attention). Teeth: a
+  DCF model on a no-cash-flow token is REJECTED (wrong-model); unpriced emission
+  (silent inflation) is REJECTED; a bare narrative score with no evidence is REJECTED;
+  a fee-bearing chain gets a finite modified-EP and Metcalfe/NVT reconcile.
+  Schema `schemas/crypto_asset_valuation.schema.json`; fixtures
+  `examples/crypto_valuation_fee_bearing.json`,
+  `examples/crypto_valuation_dcf_wrong_model.invalid.json`.
+- **BehavioralRegime (BR-1)** (`crypto/behavioral_regime.py`): a 2-state greed/fear
+  **Hamilton Markov regime-switching** overlay + **prospect theory** (loss aversion
+  λ>1, TK probability weighting). Teeth: a seeded greed series classifies greed with
+  higher mean AND vol; rows not summing to 1, λ≤1, or non-monotone weighting are
+  REJECTED. The regime tags the memory-mesh **arrival-regime** taxonomy
+  (`hawkes_self_exciting`/`long_memory`) by reference. Schema
+  `schemas/behavioral_regime.schema.json`.
+- **ManipulationSignal (MS-1)** (`crypto/manipulation.py`): adverse selection
+  (Glosten-Milgrom / Kyle) extended with concentration (whale/Gini), wash-trade and
+  MEV indicators, emitted in a **GBRG governance-plane** shape with evidence. Teeth: a
+  whale+wash fixture raises the signal with evidence (and a diffuse book stays clean);
+  an `attested_clean` claim contradicted by concentration is REJECTED. Schema
+  `schemas/manipulation_signal.schema.json`.
+
+**Three consume-by-reference hooks:** the reflexive fat-tailed F is shaped for the
+RM-1 risk kernel's LPM/ES; the greed/fear regime reuses the memory-mesh characterizer's
+arrival-regime taxonomy; the ManipulationSignal is shaped for the GBRG plane (and its
+adverse-selection block for the in-flight order-flow contract).
+
+Tests: `tests/test_crypto_valuation.py`, `tests/test_crypto_behavioral_regime.py`,
+`tests/test_crypto_manipulation.py`.
+
 ## Platform service boundary
 
 Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.

@@ -1,0 +1,26 @@
+{
+  "signal_id": "ms1:lowcap-token-synthetic",
+  "as_of": "2026-08-03",
+  "subject": "lowcap-token-synthetic",
+  "attested_clean": false,
+  "blast_radius": ["price_discovery", "counterparties", "index_inclusion", "lending_collateral"],
+  "concentration": {
+    "holders": [900000, 40000, 30000, 20000, 10000]
+  },
+  "volume": {
+    "reported_volume": 1000000000,
+    "onchain_settled_volume": 100000000,
+    "self_trade_volume": 500000000
+  },
+  "mev": {
+    "mev_extracted": 30000000,
+    "block_volume": 1000000000
+  },
+  "adverse_selection": {
+    "pin": 0.5,
+    "value_high": 110.0,
+    "value_low": 90.0,
+    "sigma_v": 2.0,
+    "sigma_u": 1.0
+  }
+}

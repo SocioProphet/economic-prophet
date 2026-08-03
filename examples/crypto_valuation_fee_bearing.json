@@ -1,0 +1,46 @@
+{
+  "asset_id": "L1-fee-bearing-synthetic",
+  "as_of": "2026-08-03",
+  "valuation_method": "fee_modified_ep",
+  "tokenomics": {
+    "circulating_supply": 120000000,
+    "max_supply": 0,
+    "price": 3000.0,
+    "emission_rate": 0.005,
+    "burn_tokens_annual": 900000,
+    "staking_yield": 0.035,
+    "cash_flow_bearing": false
+  },
+  "onchain": {
+    "active_addresses": 750000,
+    "tvl": 45000000000,
+    "fee_revenue": 3000000000,
+    "annual_tx_volume": 900000000000
+  },
+  "network": {
+    "metcalfe_coefficient": 800.0
+  },
+  "security": {
+    "security_cost": 1200000000,
+    "security_budget": 1800000000
+  },
+  "risk": {
+    "risk_notional": 4000000000,
+    "mu": 0.0,
+    "sigma": 0.05,
+    "reflexivity": 0.35,
+    "df": 4.0,
+    "alpha": 0.975,
+    "mar": 0.0,
+    "n_scenarios": 3000,
+    "seed": 11
+  },
+  "memetic": {
+    "attention_series": [100, 120, 150, 140, 130, 210, 300],
+    "evidence": [
+      {"metric": "social_volume", "value": 300, "source": "synthetic-social-index"},
+      {"metric": "search_interest", "value": 88, "source": "synthetic-search-trends"},
+      {"metric": "dev_commits_30d", "value": 412, "source": "synthetic-repo-activity"}
+    ]
+  }
+}

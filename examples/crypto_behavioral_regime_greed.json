@@ -1,0 +1,24 @@
+{
+  "contract_id": "greed-fear-synthetic",
+  "as_of": "2026-08-03",
+  "arrival_regime": "hawkes_self_exciting",
+  "memory_regime_ref": "memory-mesh:characterizer/arrival-regime#self-exciting",
+  "transition_matrix": [
+    [0.9, 0.1],
+    [0.2, 0.8]
+  ],
+  "regimes": {
+    "greed": {"mu": 0.03, "sigma": 0.06},
+    "fear": {"mu": -0.02, "sigma": 0.03}
+  },
+  "prospect_theory": {
+    "alpha": 0.88,
+    "beta": 0.88,
+    "lambda": 2.25,
+    "gamma": 0.61
+  },
+  "simulate": {
+    "n": 600,
+    "seed": 7
+  }
+}
