@@ -52,6 +52,7 @@ python -m open_ep_framework.cli --mode object-graph --example examples/object_gr
 python -m open_ep_framework.cli --mode object-context --object-id instrument-loan-001 --audit object_context_audit.json
 python -m open_ep_framework.cli --mode heller-mesh --example examples/heller_mesh_measurement.json --audit heller_mesh_audit.json
 python -m open_ep_framework.cli --mode associated-surplus --example examples/associated_surplus_measurement.json --audit associated_surplus_audit.json
+python -m open_ep_framework.cli --mode settlement --example examples/conservation_settlement_balanced.json --audit settlement_audit.json
 ```
 
 The instrument CLI emits:
@@ -123,6 +124,20 @@ The repository now includes the SocioProfit associated-surplus doctrine:
 This doctrine frames SocioProfit as profit from association, not extraction. It extends Economic Prophet from conventional economic-profit measurement toward auditable measurement of trained attention, knowledge quality, governance legitimacy, evidence reliability, coordination bandwidth, automation leverage, network surplus, extraction leakage, capture risk, uncertainty penalties, and coordination friction.
 
 The associated-surplus boundary is doctrine, measurement, simulation, and audit only. It does **not** define live money movement, external token issuance, public-chain settlement, exchange trading, redemption rights, securities issuance, deposit-taking, or payment processing.
+
+## Conservation-law settlement
+
+EP's additive value identity is a conservation law: a settlement re-attributes value
+across ledger legs but does not create or destroy it. `--mode settlement`
+(`src/open_ep_framework/settlement.py`, `schemas/conservation_settlement.schema.json`)
+makes that law enforceable. A settlement conserves its declared quantity iff
+`| sum(inflows.amount) - sum(outflows.amount) | <= tolerance`. A conserving ledger
+returns a `settled` receipt carrying the conservation ledger plus `input_hash` /
+`output_hash` / `receipt_hash` (SHA-256, estate receipt-spine convention). A
+**non-conserving settlement is rejected** with `SettlementError` — the engine fails
+closed, and no `settled` receipt is emitted. This is measurement, simulation, and
+audit only; it does not define live money movement, token issuance, redemption
+rights, or public-chain settlement (mirrors the associated-surplus boundary).
 
 ## Canonical object model
 

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/conservation_settlement.schema.json",
+  "title": "Conservation Settlement",
+  "description": "A conservation-law settlement of an economic/agency ledger. The core invariant: the conserved quantity is neither created nor destroyed by the settlement, i.e. sum(inflows.amount) == sum(outflows.amount) within an absolute tolerance. A non-conserving settlement MUST be rejected. Measurement, simulation, and audit only: this does not define live money movement, token issuance, redemption rights, or public-chain settlement.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["settlement_id", "as_of", "conserved_quantity", "tolerance", "inflows", "outflows"],
+  "properties": {
+    "settlement_id": {"type": "string", "minLength": 1},
+    "as_of": {"type": "string", "minLength": 1},
+    "conserved_quantity": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The unit conserved across the settlement, e.g. 'value_usd', 'economic_profit', 'tokens'. Every leg is denominated in this unit."
+    },
+    "tolerance": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Absolute tolerance in the conserved unit. |sum(inflows) - sum(outflows)| must be <= tolerance for the settlement to conserve. Use 0 for exact conservation."
+    },
+    "inflows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/leg"}
+    },
+    "outflows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/leg"}
+    },
+    "memo": {"type": "string"}
+  },
+  "$defs": {
+    "leg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["leg_id", "party", "amount"],
+      "properties": {
+        "leg_id": {"type": "string", "minLength": 1},
+        "party": {"type": "string", "minLength": 1},
+        "amount": {
+          "type": "number",
+          "description": "Magnitude of the conserved quantity moving on this leg, denominated in conserved_quantity."
+        },
+        "memo": {"type": "string"}
+      }
+    }
+  }
+}

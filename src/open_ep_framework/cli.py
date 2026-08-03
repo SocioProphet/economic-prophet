@@ -18,6 +18,7 @@ from .policy_simulation_uvmc import run_policy_simulation_measured_entity
 from .product_objects import build_instrument_context
 from .recovery import market_implied_recovery, planning_recovery, recovery_wedge
 from .relationship import RelationshipEffects, relationship_required_rate
+from .settlement import run_settlement
 from .validation import validate_json_file
 from .vdt import run_vdt
 
@@ -163,6 +164,7 @@ def main():
             "vdt",
             "vdt-impact",
             "causal-scenario",
+            "settlement",
         ],
         default="instrument",
     )
@@ -231,6 +233,13 @@ def main():
     elif args.mode == "vdt-impact":
         outputs = run_impact_vdt(args.example)
         inputs = outputs["profile"]
+    elif args.mode == "settlement":
+        # Conservation-law settlement (IC-1): rejects non-conserving ledgers.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/conservation_settlement_balanced.json"
+        outputs = run_settlement(example)
+        inputs = json.loads(Path(example).read_text())
     elif args.mode == "causal-scenario":
         # The global --example default is an instrument doc, not a causal scenario;
         # fall back to the causal example when the user hasn't overridden it.

@@ -1,0 +1,15 @@
+{
+  "settlement_id": "settle-2026-08-03-001",
+  "as_of": "2026-08-03T00:00:00Z",
+  "conserved_quantity": "value_usd",
+  "tolerance": 0.01,
+  "memo": "Triparty netting: value re-attributed across legs, none created or destroyed.",
+  "inflows": [
+    {"leg_id": "in-1", "party": "counterparty_a", "amount": 1000000.0, "memo": "principal received"},
+    {"leg_id": "in-2", "party": "counterparty_b", "amount": 250000.0, "memo": "fee income"}
+  ],
+  "outflows": [
+    {"leg_id": "out-1", "party": "book_of_record", "amount": 1200000.0, "memo": "balance re-attribution"},
+    {"leg_id": "out-2", "party": "clearing_reserve", "amount": 50000.0, "memo": "reserve top-up"}
+  ]
+}
