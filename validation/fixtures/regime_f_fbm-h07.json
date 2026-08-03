@@ -1,0 +1,17 @@
+{
+  "characterizationId": "mrc-long-fgn-h07",
+  "regime": "long_memory",
+  "tail_class": "gaussian",
+  "risk_distribution_F": {
+    "family": "fractional_brownian_motion",
+    "params": {
+      "hurst_H": 0.6881,
+      "sigma": 1.0
+    },
+    "tail_class": "gaussian",
+    "kernel": "power_law",
+    "horizon_unit": "step",
+    "raroc_interface": "risk(F, reference, kernel, horizon)"
+  },
+  "_source": "memory-mesh#50 examples/memory-regime/long-memory.fgn-h07.valid.json"
+}
