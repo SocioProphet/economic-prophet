@@ -71,6 +71,6 @@ value-relativity:
 	$(PYTHON) scripts/validate_value_ordering.py
 
 test:
-	$(PYTHON) -m pytest -q
+	PYTHONPATH=$(PYTHONPATH) $(PYTHON) -m pytest -q
 
 check: ladder outcome-pricing welfare-annealing benchmarking value-ordering test
