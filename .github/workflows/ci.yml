@@ -45,6 +45,34 @@ jobs:
           assert audit['outputs']['summary']['missing_required_non_goals'] == []
           assert audit['outputs']['summary']['measurement_boundary_mode'] == 'doctrine_measurement_simulation_audit_only'
           PY
+      - name: Smoke FTP separation CLI (with teeth)
+        run: |
+          python -m open_ep_framework.cli --mode ftp-separation --example examples/ftp_separation_book.json --audit ftp_separation_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path('ftp_separation_audit.json').read_text())
+          out = audit['outputs']
+          assert audit['run_id'] == 'ftp-sep-synthetic-001'
+          assert abs(out['net_interest_margin'] - 50.0) < 1e-6
+          assert abs(out['total_unit_spreads'] - 40.0) < 1e-6
+          assert abs(out['treasury_residual']['computed'] - 10.0) < 1e-6
+          assert out['conservation']['conserved'] is True
+          PY
+      - name: Teeth - cross-subsidy fixture must be rejected
+        run: |
+          if python -m open_ep_framework.cli --mode ftp-separation --example examples/ftp_separation_cross_subsidy.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: cross-subsidy fixture was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: cross-subsidy fixture rejected as expected"
+          fi
+      - name: Upload FTP separation audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftp-separation-audit
+          path: ftp_separation_audit.json
+          if-no-files-found: error
       - name: Upload policy simulation audit artifact
         uses: actions/upload-artifact@v4
         with:

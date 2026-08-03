@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/ftp_separation.schema.json",
+  "title": "FTP Separation-Theorem Decomposition",
+  "description": "Matched-maturity Fund Transfer Pricing separation of net interest margin into unit spreads (lending/deposit spread to the curve) plus a Treasury residual (structural + liquidity + basis). The decomposition reconciles to NIM under the IC-1 conservation law; a hidden cross-subsidy or a non-reconciling Treasury residual is rejected. Measurement/simulation/audit only.",
+  "type": "object",
+  "required": ["book_id", "as_of", "curve", "treasury"],
+  "properties": {
+    "book_id": {"type": "string", "minLength": 1},
+    "as_of": {"type": "string", "minLength": 1},
+    "tolerance": {"type": "number", "minimum": 0},
+    "curve": {
+      "type": "object",
+      "required": ["points"],
+      "properties": {
+        "points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["tenor", "rate"],
+            "properties": {
+              "tenor": {"type": "number", "exclusiveMinimum": 0},
+              "rate": {"type": "number"}
+            }
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["unit", "balance", "tenor", "customer_rate"],
+        "properties": {
+          "unit": {"type": "string", "minLength": 1},
+          "balance": {"type": "number", "minimum": 0},
+          "tenor": {"type": "number", "exclusiveMinimum": 0},
+          "customer_rate": {"type": "number"},
+          "booked_ftp_rate": {"type": "number"},
+          "treasury_absorbs_cross_subsidy": {"type": "boolean"}
+        }
+      }
+    },
+    "liabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["unit", "balance", "tenor", "customer_rate"],
+        "properties": {
+          "unit": {"type": "string", "minLength": 1},
+          "balance": {"type": "number", "minimum": 0},
+          "tenor": {"type": "number", "exclusiveMinimum": 0},
+          "customer_rate": {"type": "number"},
+          "booked_ftp_rate": {"type": "number"},
+          "treasury_absorbs_cross_subsidy": {"type": "boolean"}
+        }
+      }
+    },
+    "treasury": {
+      "type": "object",
+      "required": ["structural", "liquidity", "basis"],
+      "properties": {
+        "structural": {"type": "number"},
+        "liquidity": {"type": "number"},
+        "basis": {"type": "number"}
+      }
+    }
+  }
+}
