@@ -19,6 +19,8 @@ jobs:
         run: python -m pip install -e . pytest
       - name: Run tests
         run: python -m pytest -q
+      - name: Asset-class ladder contract (ALC-1, stdlib gate)
+        run: make ladder-receipt
       - name: Smoke policy simulation CLI
         run: |
           python -m open_ep_framework.cli --mode policy-simulation --example examples/policy_simulation_profile.json --audit policy_simulation_audit.json
@@ -138,6 +140,20 @@ jobs:
             capital_floor_audit.json
             concern_ladder_audit.json
             aggregation_method_audit.json
+      - name: Teeth - miscategorized ladder fixtures must be rejected
+        run: |
+          for f in examples/asset_class_ladder_*.invalid.json; do
+            if python -m open_ep_framework.asset_ladder --ladder "$f" >/dev/null 2>&1; then
+              echo "ERROR: $f was accepted but must be REJECTED"; exit 1
+            else
+              echo "OK: $f rejected as expected"
+            fi
+          done
+      - name: Upload asset-class ladder receipt artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-class-ladder-receipt
+          path: build/asset_class_ladder_receipt.json
           if-no-files-found: error
       - name: Upload FTP separation audit artifact
         uses: actions/upload-artifact@v4

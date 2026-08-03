@@ -243,6 +243,34 @@ adverse-selection block for the in-flight order-flow contract).
 Tests: `tests/test_crypto_valuation.py`, `tests/test_crypto_behavioral_regime.py`,
 `tests/test_crypto_manipulation.py`.
 
+## Asset-class ladder — Jacob's Ladder of Assets (ALC-1)
+
+A governed, **total and ordered** asset-class ontology that grounds the estate
+omnirisk `asset_class` axis in the real economy, from tangible extraction (rung 0)
+to pure digital services (rung 8). It **REPLACES** the thin
+`{credit, equity, market, crypto}` enum with the full value-transformation chain
+and supplies EP's **value-genesis**: extraction (rungs 1/1′) and labor-mixing
+(rung 2) are where Revenue originates before it becomes a financial claim.
+
+Every rung binds a `valuation_model` (real-option / Hotelling / sustainable-yield /
+Lockean labor-value-add / spot-futures-vol / human-capital-wage / spatiotemporal-
+arbitrage / DCF / network-memetic / Economia-Mentium) and a `risk_F_family` that
+the **RM-1** risk kernel consumes. The renewability axis is bound to a process
+regime: `depleting_stock` ↔ `monotone_absorbing` (Hotelling), `regenerating_flow`
+↔ `mean_reverting_ou`, `non_physical` ↔ `non_physical`.
+
+Teeth (`make ladder`, deterministic / stdlib): VERIFIES totality + ordering,
+farming ↔ `regenerating_flow`, mining ↔ `depleting_stock`, digital_service ↔
+`non_rival`; REJECTS a renewable tagged `depleting_stock` (or mining as
+`regenerating_flow`), a `digital_asset` priced by scarcity as if rival, a
+non-renewable with no Hotelling model, a rung missing an axis, and a non-monotone
+`value_stage` ordering.
+
+- `docs/asset_class_ladder.md`
+- `schemas/asset_class_ladder.schema.json`
+- `examples/asset_class_ladder.json` (+ `examples/asset_class_ladder_*.invalid.json` teeth fixtures)
+- `src/open_ep_framework/asset_ladder/` (ALC-1 checker), `tests/test_asset_class_ladder.py`
+
 ## Platform service boundary
 
 Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.
