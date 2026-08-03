@@ -155,6 +155,82 @@ jobs:
           name: asset-class-ladder-receipt
           path: build/asset_class_ladder_receipt.json
           if-no-files-found: error
+      - name: Smoke outcome-based pricing contract (OPX-1, with teeth)
+        run: |
+          python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_engagement.json --audit outcome_pricing_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path('outcome_pricing_audit.json').read_text())
+          out = audit['outputs']
+          d = out['decomposition']
+          assert audit['run_id'] == 'opx-engagement-synthetic-001'
+          # a verified outcome prices to a positive risk-adjusted value
+          assert d['risk_adjust']['risk_adjusted_value'] > 0
+          assert d['risk_adjust']['coherent'] is True
+          assert d['equilibrium']['joint_surplus'] > 0
+          # V is a genuine EP delta over the four IBM value drivers
+          ov = d['outcome_value']
+          assert abs(ov['value_point'] - (ov['ep_after'] - ov['ep_before'])) < 1e-9
+          assert abs(ov['value_point'] - sum(ov['per_driver'].values())) < 1e-9
+          # certified truth earns full VoI
+          assert d['value_of_information']['grade'] == 'certified'
+          assert abs(d['value_of_information']['voi_ceiling'] - d['value_of_information']['raw_voi']) < 1e-9
+          # Fisher-real separation: real rate strictly below nominal (positive inflation)
+          assert d['complexity_time_discount']['real_rate'] < 0.08
+          # the mesh split conserves: sum of allocations == the engagement price
+          alloc = sum(a['allocation'] for a in d['mesh_split']['allocations'])
+          assert abs(alloc - out['engagement_price']) < 1e-6
+          assert d['mesh_split']['conservation']['conserved'] is True
+          assert d['mesh_split']['settlement_unit']['real_asset_backed'] is True
+          assert out['receipt_id'].startswith('sha256:')
+          PY
+      - name: OPX-1 receipt gate (stdlib)
+        run: make outcome-pricing-receipt
+      - name: Teeth - a price with no verified outcome-receipt must be rejected (OPX-1)
+        run: |
+          if python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_no_receipt.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: unverified engagement (time-and-materials) was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: unverified outcome-receipt rejected as expected"
+          fi
+      - name: Teeth - truth priced above its VoI on uncertified knowledge must be rejected (OPX-1)
+        run: |
+          if python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_truth_over_voi.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: over-VoI / uncertified truth price was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: truth-over-VoI rejected as expected"
+          fi
+      - name: Teeth - a mesh split that does not sum to P must be rejected (OPX-1)
+        run: |
+          if python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_nonconserving_split.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: non-conserving mesh split was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: non-conserving split rejected as expected"
+          fi
+      - name: Teeth - a price ignoring the outcome distribution must be rejected (OPX-1)
+        run: |
+          if python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_no_risk_adjust.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: un-risk-adjusted price was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: un-risk-adjusted price rejected as expected"
+          fi
+      - name: Teeth - a false-graded outcome not clawed back must be rejected (OPX-1)
+        run: |
+          if python -m open_ep_framework.cli --mode outcome-pricing --example examples/outcome_pricing_false_not_clawed.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: false-graded outcome not clawed back was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: false-not-clawed rejected as expected"
+          fi
+      - name: Upload outcome-pricing artifacts (OPX-1)
+        uses: actions/upload-artifact@v4
+        with:
+          name: outcome-pricing
+          path: |
+            outcome_pricing_audit.json
+            build/outcome_pricing_receipt.json
+          if-no-files-found: error
       - name: Upload FTP separation audit artifact
         uses: actions/upload-artifact@v4
         with:

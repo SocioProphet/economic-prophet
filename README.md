@@ -271,6 +271,43 @@ non-renewable with no Hotelling model, a rung missing an axis, and a non-monoton
 - `examples/asset_class_ladder.json` (+ `examples/asset_class_ladder_*.invalid.json` teeth fixtures)
 - `src/open_ep_framework/asset_ladder/` (ALC-1 checker), `tests/test_asset_class_ladder.py`
 
+## Outcome-based wisdom-services pricing (OPX-1)
+
+The **commercial layer**: it prices a customer engagement as a **risk-adjusted,
+receipted value-transfer**, splits it across the provider mesh, and settles on a
+real-asset-backed token unit — consuming the whole spine (EP kernel, RM-1 risk
+measures, IC-1 conservation, TC-1 term calculus, Fisher-real, ALC-1 ladder) **by
+reference**. Grounding frame: the **3-T Framework** (Ecosystem→Value→Knowledge)
+and the **IBM Customer-Transformation value-driver tree**.
+
+The price decomposes in six stages: **V** (outcome value = EP delta over the four
+IBM value drivers) → **VoI** (Bayesian value-of-information truth price, graded by
+the-assay: certified→full, speculative→discounted, false→clawback) → **RAROC**
+(`E[V] − hurdle·EconomicCapital`, EconomicCapital = coherent-tail(F_outcome)) →
+**discount** (Fisher-real over horizon τ × 3-T boundary-complexity friction) →
+**equilibrium** (anneal to the Nash joint-surplus point between provider cost-floor
+and client value-ceiling) → **mesh split** (Euler/marginal-contribution allocation
+weighted by GKN standing, `Σ = P` proven by the IC-1 settlement, denominated in a
+Jacob's-ladder real-asset-backed token unit; reputation = liquidity = capital).
+
+Teeth (`make outcome-pricing`, deterministic / stdlib): VERIFIES a verified-outcome
+engagement prices to a positive risk-adjusted value, the mesh contributions sum to
+the price, certified truth earns full VoI; REJECTS a price not contingent on a
+verified outcome-receipt (time-and-materials), truth priced above its VoI / on
+uncertified knowledge (clawback), a split where `Σ ≠ P`, a price that ignores the
+outcome distribution, and a false-graded outcome not clawed back.
+
+**Bindings (bind-upward discipline):** the engagement value-transfer is a **value
+flow in the world-economic-twin** and its real-asset settlement grounds in the
+**Gaia carrying-capacity base**; its six new concepts route into **ontogenesis**
+as governed Systema Concept Entries. See `docs/specs/outcome-pricing-opx1.md` and
+`docs/systema/outcome_pricing_concept_entries.jsonld`.
+
+- `docs/specs/outcome-pricing-opx1.md`
+- `schemas/outcome_pricing.schema.json`
+- `examples/outcome_pricing_engagement.json` (+ `examples/outcome_pricing_*.invalid.json` teeth fixtures)
+- `src/open_ep_framework/outcome_pricing/` (OPX-1 engine), `tests/test_outcome_pricing.py`
+
 ## Platform service boundary
 
 Economic Prophet is a platform service, not an end-user application. Applications consume its measurement contracts, schemas, fixtures, CLI/API-compatible outputs, and audit packs. Platforms host it under explicit policy, authority, observability, and trust-surface boundaries.

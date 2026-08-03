@@ -16,6 +16,7 @@ from .ftp import ftp_rate
 from .heller_mesh import run_heller_mesh
 from .impact_vdt import run_impact_vdt
 from .object_graph import ObjectGraph, lineage_aware_output
+from .outcome_pricing import run_outcome_pricing
 from .policy_simulation import run_policy_simulation_profile
 from .policy_simulation_uvmc import run_policy_simulation_measured_entity
 from .ftp_curve import run_ftp_separation
@@ -175,6 +176,7 @@ def main():
             "capital-floor",
             "concern-ladder",
             "aggregation-method",
+            "outcome-pricing",
         ],
         default="instrument",
     )
@@ -291,6 +293,18 @@ def main():
         if example == "examples/synthetic_run.json":
             example = "examples/aggregation_method_copula.json"
         outputs = run_aggregation_method(example)
+        inputs = json.loads(Path(example).read_text())
+    elif args.mode == "outcome-pricing":
+        # Outcome-based wisdom-services pricing (OPX-1): prices an engagement as a
+        # risk-adjusted, receipted value-transfer (V / VoI / RAROC / discount /
+        # equilibrium / mesh-split) and settles the mesh split under IC-1
+        # conservation. Rejects a price not contingent on a verified outcome-receipt,
+        # truth priced above its VoI, a non-conserving split, an un-risk-adjusted
+        # price, and a false-graded outcome not clawed back.
+        example = args.example
+        if example == "examples/synthetic_run.json":
+            example = "examples/outcome_pricing_engagement.json"
+        outputs = run_outcome_pricing(example)
         inputs = json.loads(Path(example).read_text())
     elif args.mode == "causal-scenario":
         # The global --example default is an instrument doc, not a causal scenario;

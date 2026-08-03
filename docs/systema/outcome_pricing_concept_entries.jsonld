@@ -1,0 +1,270 @@
+{
+  "@context": "https://socioprophet.dev/ontogenesis/contexts/systema-concept.context.jsonld",
+  "_note": "Systema Concept Entries for the six new OPX-1 concepts, authored here for ROUTING INTO SocioProphet/ontogenesis (Platform/Systema/systema-concept-entry.ttl + shapes/systema_concept_entry.shacl.ttl). They are SourceAnchored (provenance-classed), versioned and receipted: the bundle receipt is recorded in docs/specs/outcome-pricing-opx1.md and reproduces via the OPX-1 receipt spine. promotionState=extracted_candidate until an ontogenesis owner promotes them; economic-prophet is the implementation-surface owner, ontogenesis is the concept-governance owner.",
+  "@graph": [
+    {
+      "@id": "systema:concept:outcome-value",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:outcome-value",
+      "skos:prefLabel": "Outcome Value (V)",
+      "skos:altLabel": ["Economic-Profit delta of an engagement", "value-driver-tree uplift"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-outcome-value",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py#outcome_value",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "A",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_definition",
+        "uncertaintyNote": "Definition is fixed by the OPX-1 contract-with-teeth; provenance class A (reproduced by tests). Grounding frame (3-T Value tier + IBM value-driver tree) is human-authored thesis."
+      }],
+      "definition": [{
+        "@id": "systema:definition:outcome-value:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "The value an engagement creates, measured as the Economic-Profit delta V = EP_after - EP_before across the four IBM Customer-Transformation value drivers (grow-revenue / manage-cost / utilize-capital / manage-risk), reconciled through the EP kernel.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "V is a genuine EP delta (uvmc.reconcile_ep_components at both endpoints), attributed per IBM value driver; the four per-driver contributions sum to V.",
+      "allowedUse": ["pricing a customer engagement outcome", "attributing value uplift to value drivers"],
+      "forbiddenUse": ["asserting outcome value with no verified outcome-receipt", "double-counting a driver across EP legs"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-outcome-value",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "src/open_ep_framework/outcome_pricing/pricing.py"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-outcome-value",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "V must equal EP_after - EP_before and equal the sum of the four IBM value-driver deltas (enforced by tests/test_outcome_pricing.py)."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:outcome-value:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    },
+    {
+      "@id": "systema:concept:value-of-information-price",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:value-of-information-price",
+      "skos:prefLabel": "Value-of-Information Price (truth price)",
+      "skos:altLabel": ["Bayesian VoI truth price", "assay-graded knowledge price"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-voi",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py#value_of_information",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "A",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_definition",
+        "uncertaintyNote": "Consumes the-assay 5-axis verdict (SourceOS-Linux/sourceos-spec PR #198/#199) and counter-test-gate (Noetica PR #570) by reference; the grading map is the OPX-1 contract."
+      }],
+      "definition": [{
+        "@id": "systema:definition:value-of-information-price:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "The price of knowledge as its Bayesian Value of Information, VoI = E[decision value | knowledge] - E[decision value | without], graded by the-assay verdict: certified earns full VoI, speculative is discounted, false triggers clawback.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "Priced VoI must not exceed the assay-graded VoI ceiling; full VoI on uncertified knowledge and any positive price on false-graded knowledge are rejected (clawback).",
+      "allowedUse": ["pricing a wisdom-service's knowledge contribution", "gating truth price on assay grade"],
+      "forbiddenUse": ["charging full VoI on speculative (uncertified) knowledge", "pricing false-graded knowledge as value without a clawback"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-voi",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "src/open_ep_framework/outcome_pricing/pricing.py"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-voi",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "A priced truth must cite an assay record, a counter-test confirmation, and an evidence receipt; priced VoI <= graded ceiling."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:value-of-information-price:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    },
+    {
+      "@id": "systema:concept:risk-adjusted-engagement-price",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:risk-adjusted-engagement-price",
+      "skos:prefLabel": "Risk-Adjusted Engagement Price",
+      "skos:altLabel": ["RAROC engagement price", "coherent-tail engagement price"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-rav",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py#risk_adjust",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "A",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_definition",
+        "uncertaintyNote": "Consumes the RM-1 risk-measure family and TC-1 term calculus + Fisher-real separation by reference."
+      }],
+      "definition": [{
+        "@id": "systema:definition:risk-adjusted-engagement-price:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "An engagement price contingent on a verified outcome-receipt, computed as RAV = E[V] - hurdle * EconomicCapital where EconomicCapital is a coherent tail measure (Expected Shortfall / spectral) over the outcome distribution F_outcome, then discounted by a Fisher-real rate over the horizon and a 3-T boundary-complexity friction.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "EconomicCapital must be a coherent tail measure; a price that ignores F_outcome or is not contingent on a verified outcome-receipt is time-and-materials and is rejected.",
+      "allowedUse": ["pricing an outcome-based engagement", "risk-adjusting value over an outcome distribution"],
+      "forbiddenUse": ["pricing without a verified outcome-receipt", "gating capital on a non-coherent measure"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-rav",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "src/open_ep_framework/outcome_pricing/pricing.py"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-rav",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "RAV = E[V] - hurdle * EconomicCapital with a coherent tail measure; E[F_outcome] == V + priced VoI within tolerance."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:risk-adjusted-engagement-price:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    },
+    {
+      "@id": "systema:concept:marginal-contribution-mesh-split",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:marginal-contribution-mesh-split",
+      "skos:prefLabel": "Marginal-Contribution Mesh Split",
+      "skos:altLabel": ["Euler allocation of the engagement price", "conserved mesh settlement"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-mesh",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py#mesh_split",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "A",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_definition",
+        "uncertaintyNote": "Conservation proven via the IC-1 settlement (economic-prophet#39); standing weights consumed from guild-knowledge-network by reference; settlement unit grounded in the ALC-1 Jacob's-ladder real-asset base."
+      }],
+      "definition": [{
+        "@id": "systema:definition:marginal-contribution-mesh-split:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "The allocation of the total engagement price P across the provider mesh in proportion to each provider's Euler marginal contribution weighted by GKN standing, with sum of allocations == P enforced by the conservation-law settlement and denominated in a real-asset-backed token unit.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "Sum of provider allocations equals P (IC-1 conservation); a split that creates or loses value is rejected; the settlement unit must be real-asset-backed (a Jacob's-ladder rung).",
+      "allowedUse": ["splitting an engagement price across providers/operators", "reputation-weighted allocation"],
+      "forbiddenUse": ["a split whose contributions do not sum to P", "settling on a unit that is not real-asset-backed"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-mesh",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "src/open_ep_framework/outcome_pricing/pricing.py"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-mesh",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "The split must settle under IC-1 conservation (residual within tolerance) and cite a Jacob's-ladder real-asset rung for the settlement unit."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:marginal-contribution-mesh-split:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    },
+    {
+      "@id": "systema:concept:wisdom-service",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:wisdom-service",
+      "skos:prefLabel": "Wisdom-Service",
+      "skos:altLabel": ["outcome-based knowledge service", "priced-truth service"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-wisdom-service",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "B",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_translation",
+        "uncertaintyNote": "The commercial noun for the estate's priced output; framed by the 3-T Knowledge-exchange tier. Human-authored thesis operationalized by the OPX-1 contract."
+      }],
+      "definition": [{
+        "@id": "systema:definition:wisdom-service:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "A customer engagement whose deliverable is graded, receipted knowledge that moves the client's value drivers, priced as a risk-adjusted, outcome-contingent value-transfer rather than time-and-materials.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "A wisdom-service is priced only when its outcome is verified and its knowledge is assay-graded; its price is the OPX-1 decomposition.",
+      "allowedUse": ["naming the estate's outcome-priced knowledge product"],
+      "forbiddenUse": ["labelling time-and-materials work a wisdom-service", "a wisdom-service with no verified outcome-receipt"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-wisdom-service",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "docs/specs/outcome-pricing-opx1.md"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-wisdom-service",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "A wisdom-service price requires a verified outcome-receipt and an assay-graded knowledge record."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:wisdom-service:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    },
+    {
+      "@id": "systema:concept:reputation-equals-liquidity",
+      "@type": "ConceptEntry",
+      "conceptId": "systema:concept:reputation-equals-liquidity",
+      "skos:prefLabel": "Reputation = Liquidity = Capital (Economia Mentium)",
+      "skos:altLabel": ["standing as capital", "epistemic capital"],
+      "sourceAnchor": [{
+        "@id": "systema:source-anchor:opx1-reputation-liquidity",
+        "@type": "SourceAnchor",
+        "sourceRef": "SocioProphet/economic-prophet:src/open_ep_framework/outcome_pricing/pricing.py#mesh_split",
+        "sourceKind": "implementation_contract",
+        "extractionConfidence": "B",
+        "reviewState": "candidate",
+        "quoteBoundary": "operational_translation",
+        "uncertaintyNote": "Economia Mentium thesis (also carried by risk_adjusted_profit.py epistemic mode); GKN standing (guild-knowledge-network) is the measured standing vector consumed as the allocation weight."
+      }],
+      "definition": [{
+        "@id": "systema:definition:reputation-equals-liquidity:v0-1",
+        "@type": "ConceptDefinition",
+        "definitionText": "The doctrine that a provider's GKN standing (reputation) functions as capital/liquidity in the mesh: it weights the provider's marginal-contribution share of the engagement price, so earned standing is deployable epistemic capital.",
+        "claimLevel": "operational_definition"
+      }],
+      "operationalDefinition": "GKN standing enters the mesh split as a non-negative weight; it modulates but never manufactures value (the split still conserves to P).",
+      "allowedUse": ["weighting mesh allocation by earned standing", "expressing epistemic capital in the price"],
+      "forbiddenUse": ["using reputation to break conservation (allocate more than P)", "self-reported standing without a GKN standing record"],
+      "implementationSurface": [{
+        "@id": "systema:surface:opx1-reputation-liquidity",
+        "@type": "ImplementationSurface",
+        "ownerRepo": "SocioProphet/economic-prophet",
+        "surfacePath": "src/open_ep_framework/outcome_pricing/pricing.py"
+      }],
+      "evidenceRequirement": [{
+        "@id": "systema:evidence-requirement:opx1-reputation-liquidity",
+        "@type": "EvidenceRequirement",
+        "evidenceRequirementText": "Standing weights are non-negative and reference a GKN standing vector; the weighted split conserves to P."
+      }],
+      "promotionState": "extracted_candidate",
+      "revision": [{
+        "@id": "systema:revision:reputation-equals-liquidity:v0-1",
+        "@type": "ConceptRevision",
+        "revisionNote": "Initial OPX-1 concept entry.",
+        "revisionDate": "2026-08-03"
+      }]
+    }
+  ]
+}

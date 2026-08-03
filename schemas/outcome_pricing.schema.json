@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/outcome_pricing.schema.json",
+  "title": "Outcome-Based Wisdom-Services Pricing Contract (OPX-1)",
+  "description": "Prices a customer engagement as a risk-adjusted, receipted value-transfer and splits it across the provider mesh, settled on a real-asset-backed token unit. Consumes the economic-prophet spine (EP kernel, RM-1 risk measures, IC-1 conservation settlement, TC-1 term calculus, Fisher-real separation, ALC-1 Jacob's ladder) by reference, and the-assay / counter-test-gate / GKN standing as graded provenance. Measurement, simulation and audit only: no live money movement, token issuance, redemption rights, or settlement rails. NOTE: the pricing engine is the authority on the controlled vocabularies (IBM value drivers, assay grades, coherent risk kernels); this schema documents the shape.",
+  "type": "object",
+  "required": ["contract_id", "as_of", "outcome_receipt", "value_drivers", "knowledge", "risk", "hurdle_rate", "discount", "equilibrium", "mesh"],
+  "properties": {
+    "contract_id": {"type": "string", "minLength": 1},
+    "as_of": {"type": "string", "minLength": 1},
+    "engagement": {"type": "string"},
+    "outcome_receipt": {
+      "type": "object",
+      "description": "The teeth-gate: a price MUST be contingent on a verified outcome-receipt. Without verified==true and a receipt_id, this is time-and-materials, not outcome-based, and is REJECTED.",
+      "required": ["verified", "receipt_id"],
+      "properties": {
+        "verified": {"type": "boolean"},
+        "receipt_id": {"type": "string"},
+        "outcome_ref": {"type": "string"}
+      }
+    },
+    "value_drivers": {
+      "type": "object",
+      "description": "IBM Customer-Transformation value-driver tree branches. Each present driver moves its EP-kernel component from baseline to post; V = Delta(EP) via uvmc.reconcile_ep_components.",
+      "properties": {
+        "grow_revenue": {"$ref": "#/$defs/driver_move"},
+        "manage_cost": {"$ref": "#/$defs/driver_move"},
+        "utilize_capital": {"$ref": "#/$defs/driver_move"},
+        "manage_risk": {"$ref": "#/$defs/driver_move"}
+      }
+    },
+    "knowledge": {
+      "type": "object",
+      "description": "Value-of-Information (truth price), graded by the-assay 5-axis verdict.",
+      "required": ["assay_grade", "assay_ref", "counter_test_ref", "evidence_receipt_ref", "decision_value_with", "decision_value_without", "priced_voi"],
+      "properties": {
+        "assay_grade": {"type": "string", "enum": ["certified", "speculative", "false"], "description": "Projected the-assay grade: certified->full VoI, speculative->discounted, false->clawback."},
+        "assay_ref": {"type": "string", "description": "Reference to the-assay record (ReasoningAssay / ClaimAssay)."},
+        "counter_test_ref": {"type": "string", "description": "Reference to the counter-test-gate confirmation."},
+        "evidence_receipt_ref": {"type": "string", "description": "Reference to the evidence-intake-kernel receipt."},
+        "decision_value_with": {"type": "number"},
+        "decision_value_without": {"type": "number"},
+        "priced_voi": {"type": "number", "description": "The truth price actually charged; must be <= the graded VoI ceiling."},
+        "speculative_discount": {"type": "number", "minimum": 0, "maximum": 1, "description": "Required for speculative grade; fraction of raw VoI withheld (in [0,1))."},
+        "clawback": {"type": "boolean", "description": "Required true for a false grade; books the reversal."}
+      }
+    },
+    "risk": {
+      "type": "object",
+      "description": "RAROC over the outcome distribution F_outcome. EconomicCapital = coherent-tail(F).",
+      "required": ["kernel", "outcome_samples"],
+      "properties": {
+        "kernel": {"type": "string", "enum": ["expected_shortfall", "spectral"], "description": "Must be a COHERENT tail kernel; non-coherent measures cannot gate capital."},
+        "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+        "outcome_samples": {"type": "array", "minItems": 1, "items": {"type": "number"}, "description": "Realised-outcome value samples; E[V] = mean, EconomicCapital = ES/spectral over the loss side."},
+        "value_tolerance": {"type": "number", "minimum": 0}
+      }
+    },
+    "hurdle_rate": {"type": "number", "minimum": 0, "description": "RAROC hurdle; price ~ E[V] - hurdle * EconomicCapital."},
+    "discount": {
+      "type": "object",
+      "description": "Fisher-real discount over horizon tau plus a 3-T boundary-complexity friction.",
+      "required": ["nominal_rate", "inflation", "horizon_years"],
+      "properties": {
+        "nominal_rate": {"type": "number"},
+        "inflation": {"type": "number"},
+        "horizon_years": {"type": "number", "minimum": 0},
+        "complexity_kappa": {"type": "number", "minimum": 0},
+        "boundary_complexity": {"type": "number", "minimum": 0}
+      }
+    },
+    "equilibrium": {
+      "type": "object",
+      "description": "Nash / Pareto bargaining split between the provider cost-floor and client value-ceiling (welfare-annealing at transaction scale).",
+      "required": ["provider_cost_floor"],
+      "properties": {
+        "provider_cost_floor": {"type": "number"},
+        "provider_bargaining_weight": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "mesh": {
+      "type": "object",
+      "description": "Euler / marginal-contribution allocation of P across providers (Sum == P via IC-1 settlement), settled on a real-asset-backed token unit.",
+      "required": ["providers", "settlement_unit"],
+      "properties": {
+        "settlement_id": {"type": "string"},
+        "tolerance": {"type": "number", "minimum": 0},
+        "explicit_allocations": {"type": "boolean", "description": "If true, each provider's 'allocation' is settled verbatim (not normalised); a split whose shares do not sum to P is REJECTED by the IC-1 conservation settlement."},
+        "settlement_unit": {
+          "type": "object",
+          "required": ["real_asset_backed", "asset_ladder_rung"],
+          "properties": {
+            "real_asset_backed": {"type": "boolean"},
+            "asset_ladder_rung": {"type": "string", "description": "The Jacob's-ladder (ALC-1) real-asset rung grounding the token unit."},
+            "unit": {"type": "string"}
+          }
+        },
+        "providers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["provider", "marginal_contribution", "standing_weight"],
+            "properties": {
+              "provider": {"type": "string"},
+              "marginal_contribution": {"type": "number", "minimum": 0, "description": "Euler share of the value the provider helped create."},
+              "standing_weight": {"type": "number", "minimum": 0, "description": "GKN standing weight (reputation == liquidity == capital)."},
+              "allocation": {"type": "number", "description": "Only for explicit_allocations mode: this provider's share of P, settled verbatim."}
+            }
+          }
+        }
+      }
+    },
+    "measurement_boundary": {
+      "type": "object",
+      "properties": {
+        "mode": {"type": "string"},
+        "non_goals": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "driver_move": {
+      "type": "object",
+      "required": ["baseline", "post"],
+      "properties": {
+        "baseline": {"type": "number"},
+        "post": {"type": "number"}
+      }
+    }
+  }
+}

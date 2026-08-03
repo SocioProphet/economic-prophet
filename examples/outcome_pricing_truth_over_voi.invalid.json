@@ -1,0 +1,132 @@
+{
+  "contract_id": "opx-truth-over-voi",
+  "as_of": "2026-08-03",
+  "engagement": "wisdom-services outcome engagement (synthetic, audit-only)",
+  "outcome_receipt": {
+    "verified": true,
+    "receipt_id": "sha256:VERIFIED-OUTCOME-RECEIPT-synthetic-001",
+    "outcome_ref": "evidence-intake-kernel:receipt:engagement-001"
+  },
+  "value_drivers": {
+    "grow_revenue": {
+      "baseline": 0.0,
+      "post": 100.0
+    },
+    "manage_cost": {
+      "baseline": 80.0,
+      "post": 50.0
+    },
+    "utilize_capital": {
+      "baseline": 40.0,
+      "post": 30.0
+    },
+    "manage_risk": {
+      "baseline": 20.0,
+      "post": 5.0
+    }
+  },
+  "knowledge": {
+    "assay_grade": "speculative",
+    "assay_ref": "the-assay:ReasoningAssay:engagement-001",
+    "counter_test_ref": "counter-test-gate:CTEST.CONFIRMED:engagement-001",
+    "evidence_receipt_ref": "evidence-intake-kernel:receipt:knowledge-001",
+    "decision_value_with": 60.0,
+    "decision_value_without": 20.0,
+    "priced_voi": 40.0,
+    "speculative_discount": 0.5
+  },
+  "risk": {
+    "kernel": "expected_shortfall",
+    "alpha": 0.95,
+    "outcome_samples": [
+      -60.0,
+      -40.0,
+      -25.0,
+      -10.0,
+      5.0,
+      20.0,
+      35.0,
+      50.0,
+      160.0,
+      170.0,
+      180.0,
+      190.0,
+      200.0,
+      210.0,
+      220.0,
+      230.0,
+      240.0,
+      250.0,
+      160.0,
+      170.0,
+      180.0,
+      190.0,
+      200.0,
+      210.0,
+      220.0,
+      230.0,
+      240.0,
+      250.0,
+      160.0,
+      170.0,
+      180.0,
+      190.0,
+      200.0,
+      210.0,
+      220.0,
+      230.0,
+      240.0,
+      250.0,
+      837.5,
+      837.5
+    ],
+    "value_tolerance": 1e-06
+  },
+  "hurdle_rate": 0.12,
+  "discount": {
+    "nominal_rate": 0.08,
+    "inflation": 0.03,
+    "horizon_years": 2.0,
+    "complexity_kappa": 0.1,
+    "boundary_complexity": 1.5
+  },
+  "equilibrium": {
+    "provider_cost_floor": 40.0,
+    "provider_bargaining_weight": 0.5
+  },
+  "mesh": {
+    "settlement_id": "opx-mesh-engagement-001",
+    "tolerance": 1e-06,
+    "settlement_unit": {
+      "real_asset_backed": true,
+      "asset_ladder_rung": "ALC-1:rung-2:labor-mixing-value-add",
+      "unit": "real-asset-backed-token"
+    },
+    "providers": [
+      {
+        "provider": "agent:sherlock-scout",
+        "marginal_contribution": 40.0,
+        "standing_weight": 0.8
+      },
+      {
+        "provider": "agent:holmes-reasoner",
+        "marginal_contribution": 35.0,
+        "standing_weight": 0.9
+      },
+      {
+        "provider": "operator:mesh-steward",
+        "marginal_contribution": 25.0,
+        "standing_weight": 0.6
+      }
+    ]
+  },
+  "measurement_boundary": {
+    "mode": "doctrine_measurement_simulation_audit_only",
+    "non_goals": [
+      "live_money_movement",
+      "external_token_issuance",
+      "settlement_rails",
+      "investment_advice"
+    ]
+  }
+}
