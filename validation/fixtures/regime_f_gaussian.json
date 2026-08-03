@@ -1,0 +1,16 @@
+{
+  "characterizationId": "mrc-memoryless-iid",
+  "regime": "memoryless",
+  "tail_class": "gaussian",
+  "risk_distribution_F": {
+    "family": "gaussian",
+    "params": {
+      "hurst_H": 0.5344,
+      "sigma": 1.0
+    },
+    "tail_class": "gaussian",
+    "kernel": "delta",
+    "raroc_interface": "risk(F, reference, kernel, horizon)"
+  },
+  "_source": "memory-mesh#50 examples/memory-regime/memoryless.iid-gaussian.valid.json"
+}

@@ -1,0 +1,30 @@
+{
+  "characterizationId": "mrc-multifractal-mmar",
+  "regime": "long_memory",
+  "tail_class": "multifractal",
+  "risk_distribution_F": {
+    "family": "multifractal_mmar",
+    "params": {
+      "hurst_H": 0.62,
+      "multifractal_spectrum": [
+        [
+          0.4,
+          0.55
+        ],
+        [
+          0.62,
+          1.0
+        ],
+        [
+          0.95,
+          0.3
+        ]
+      ]
+    },
+    "tail_class": "multifractal",
+    "kernel": "power_law",
+    "horizon_unit": "step",
+    "raroc_interface": "risk(F, reference, kernel, horizon)"
+  },
+  "_source": "memory-mesh#50 examples/memory-regime/long-memory.multifractal-mmar.valid.json"
+}
