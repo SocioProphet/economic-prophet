@@ -19,21 +19,29 @@ Four constituent contracts-with-teeth, each consuming an existing estate contrac
   * ``discount`` -- Fisher real rate (reuses ``inflation``), the Fisher-ideal index, MV=PQ, and
                     the social discount rate (Ramsey; Stern vs Nordhaus) as the MASTER parameter
                     with a reconciling sensitivity sweep.
+  * ``gaia_binding`` -- emits the two GAIA value-flow manifests (value_flow_binding.v1 +
+                    twin_scale_transfer.v1) that bind this spine UPWARD into the gaia-world-model
+                    world model, enforcing the gaia teeth (T1-CONST/T4-REGEN/T3-QOL/T2-CONSERVE,
+                    T1-RESERVE admit-with-flag) on real EP runs.
   * ``contract`` -- the WEA-1 orchestrator: runs a record, applies the teeth, emits a receipt.
 
 Measurement / simulation / audit only. Deterministic and stdlib-only for hermetic CI.
 """
-from . import anneal, contract, discount, energy, qol  # noqa: F401
+from . import anneal, contract, discount, energy, gaia_binding, qol  # noqa: F401
 from .contract import CONTRACT, WelfareAnnealingError, emit_receipt, run_record
+from .gaia_binding import GaiaBindingError, emit_manifests
 
 __all__ = [
     "qol",
     "energy",
     "anneal",
     "discount",
+    "gaia_binding",
     "contract",
     "CONTRACT",
     "WelfareAnnealingError",
+    "GaiaBindingError",
     "run_record",
     "emit_receipt",
+    "emit_manifests",
 ]

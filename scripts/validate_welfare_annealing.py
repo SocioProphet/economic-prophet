@@ -44,6 +44,8 @@ from open_ep_framework.welfare_annealing.contract import run_record  # noqa: E40
 
 SCHEMA = ROOT / "schemas" / "welfare_annealing.schema.json"
 EXAMPLES = ROOT / "examples" / "welfare_annealing"
+# Vendored gaia-owned economy schemas (consume-by-reference; see the fixtures PROVENANCE).
+GAIA_SCHEMAS = ROOT / "tests" / "fixtures" / "gaia"
 
 _passes = 0
 
@@ -126,6 +128,28 @@ def verify_valid(path: Path, schema: Draft202012Validator) -> None:
                f"high-rate PV {recon['highest_rate']['present_value']:.3f})")
         else:
             ok(f"{path.name}: discount checks pass")
+
+    elif kind == "gaia_binding":
+        binding = out["value_flow_binding"]
+        transfer = out["twin_scale_transfer"]
+        # CONFORMANCE: the emitted manifests must validate against the gaia-owned schemas.
+        vfb_schema = Draft202012Validator(load(GAIA_SCHEMAS / "value_flow_binding.v1.schema.json"))
+        tsvt_schema = Draft202012Validator(load(GAIA_SCHEMAS / "twin_scale_transfer.v1.schema.json"))
+        berrs = sorted(vfb_schema.iter_errors(binding), key=lambda e: str(e.path))
+        if berrs:
+            fail(f"{path.name}: emitted ValueFlowSubsystemBinding is NOT gaia-conformant: "
+                 f"{berrs[0].message}")
+        terrs = sorted(tsvt_schema.iter_errors(transfer), key=lambda e: str(e.path))
+        if terrs:
+            fail(f"{path.name}: emitted TwinScaleValueTransfer is NOT gaia-conformant: "
+                 f"{terrs[0].message}")
+        # the world-model reads that satisfy T1-CONST / T4-REGEN
+        if binding["carrying_capacity"]["source"]["kind"] != "world_model_read":
+            fail(f"{path.name}: carrying-capacity source is not a world-model read (T1-CONST)")
+        ok(f"{path.name}: emitted VFB + TSVT are gaia-conformant "
+           f"(qol_value={binding['qol_index']['value']:.3f}, "
+           f"twin-scale conserved @tol={transfer['conservation']['tolerance']}, "
+           f"reserve_flags={len(out['reserve_flags'])})")
     else:
         fail(f"{path.name}: unknown record_kind {kind}")
 

@@ -37,6 +37,7 @@ from .discount import (
     discount_sensitivity, fisher_ideal_index,
 )
 from .energy import assert_exchange_conserves, assert_sustainable
+from .gaia_binding import emit_manifests
 from .qol import groups_from_records, qol_index
 
 CONTRACT = "WEA-1"
@@ -156,11 +157,28 @@ def _eval_discount(record: dict) -> dict:
     return out
 
 
+def _eval_gaia_binding(record: dict) -> dict:
+    """Emit the two GAIA value-flow manifests from this welfare run and enforce the gaia
+    teeth (T1-CONST, T4-REGEN, T3-QOL, T2-CONSERVE) on the EP side; T1-RESERVE breaches are
+    admitted-with-flag. The emitted manifests conform to value_flow_binding.v1 /
+    twin_scale_transfer.v1 so gaia's contract enforces on REAL EP runs, not just fixtures."""
+    gaia = dict(record["gaia"])
+    gaia.setdefault("as_of", record.get("as_of", ""))
+    manifests = emit_manifests(gaia)
+    return {
+        "value_flow_binding": manifests["value_flow_binding"],
+        "twin_scale_transfer": manifests["twin_scale_transfer"],
+        "reserve_flags": manifests["reserve_flags"],
+        "verdict": "verified",
+    }
+
+
 _EVALUATORS = {
     "exchange": _eval_exchange,
     "anneal": _eval_anneal,
     "growth_path": _eval_growth_path,
     "discount": _eval_discount,
+    "gaia_binding": _eval_gaia_binding,
 }
 
 

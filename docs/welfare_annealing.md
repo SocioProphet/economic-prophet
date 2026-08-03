@@ -45,6 +45,33 @@ that kind are applied and a receipt-spine-hashed receipt is emitted.
   (wrong direction);
 - a QoL index missing a required dimension (population / life-length / health / education).
 
+## Upward binding into the GAIA world model
+
+`record_kind: gaia_binding` emits the two manifests that make this spine admissible as the
+**value-flow subsystem** of `gaia-world-model` (branch `feat/value-flow-subsystem`), binding the
+economic spine *upward* by reference (`gaia_binding.py`):
+
+- **`ValueFlowSubsystemBinding`** (`value_flow_binding.v1`) — the carrying-capacity discount, the
+  Jacob's-ladder natural-capital / renewable base, and the QoL objective.
+- **`TwinScaleValueTransfer`** (`twin_scale_transfer.v1`) — a value flow across an adjacent
+  boundary of the twin hierarchy `galactic_space_twin ↔ world_economic_twin ↔ human_digital_twin`.
+
+The gaia teeth are enforced on the **EP side** so the free-parameter smell fails on real EP runs,
+not only in gaia fixtures:
+
+| Tooth | Enforcement |
+|-------|-------------|
+| **T1-CONST** | carrying-capacity discount source must be a world-model read (`gaia://…`), never a constant → REJECTED |
+| **T4-REGEN** | a `renewable_harvest` regeneration rate must be a world-model read → REJECTED if constant/none |
+| **T3-QOL** | every QoL dimension must carry its `from_twin_dimension` (twin-derived, not exogenous) → REJECTED |
+| **T2-CONSERVE** | `parent == Σchildren + Σsinks − Σsources` within tolerance → REJECTED |
+| **T1-RESERVE** | a non-renewable draw below the world-model reserve floor is **admitted with a flag** (planetary-boundary breach) — surfaced in provenance, not silently accepted |
+
+The emitted manifests are validated against the gaia-owned schemas (vendored under
+`tests/fixtures/gaia/`, consume-by-reference; see the fixtures `PROVENANCE.md`). The gaia contract
+(`gaia#41`) forward-refs this branch and re-pins `economic_spine_ref` / `welfare_annealing_ref` to
+the merged SHAs post-merge.
+
 ## Run
 
 ```bash

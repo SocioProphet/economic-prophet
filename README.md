@@ -380,10 +380,13 @@ social-discount-rate (Stern) weights future QoL more than a high one (Nordhaus),
 reconciling. It **rejects / flags** value created in pure exchange, growth funded by
 non-renewable drawdown reported as sustainable (false-growth flag), a growth claim not
 Fisher-real-adjusted, a wrong-direction (free-energy-increasing / turbulent) anneal, and a QoL
-index missing a required dimension (population / life-length / health / education). Deterministic,
-stdlib-only, measurement/simulation/audit only. See `docs/welfare_annealing.md`,
-`scripts/validate_welfare_annealing.py`, `examples/welfare_annealing/`, and
-`.github/workflows/welfare-annealing.yml`.
+index missing a required dimension (population / life-length / health / education). A
+`gaia_binding` record additionally emits the two GAIA value-flow manifests (`value_flow_binding.v1`
++ `twin_scale_transfer.v1`) that bind this spine upward into `gaia-world-model` as its value-flow
+subsystem, enforcing the gaia teeth (T1-CONST / T4-REGEN / T3-QOL / T2-CONSERVE; T1-RESERVE
+admit-with-flag) on real EP runs. Deterministic, stdlib-only, measurement/simulation/audit only.
+See `docs/welfare_annealing.md`, `scripts/validate_welfare_annealing.py`,
+`examples/welfare_annealing/`, and `.github/workflows/welfare-annealing.yml`.
 
 ## Canonical object model
 
