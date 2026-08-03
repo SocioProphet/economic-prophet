@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://socioprophet.ai/schemas/concern_ladder.schema.json",
+  "title": "ConcernLadder",
+  "description": "Going-concern / gone-concern confidence ladder mapped onto the capital waterfall (CLD-1). An ordered set of scenarios (Early-Warning 80% -> Severe-Stress 95% -> Liquidation 99.98%/100%), each absorbed by a capital layer in subordination order (loss hits equity -> ... -> debt). Alphas must strictly increase; a loss booked out of subordination order, or a gone-concern scenario mapped to a going-concern soft layer, is REJECTED.",
+  "type": "object",
+  "required": ["contract_id", "capital_stack", "scenarios"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "going_gone_boundary_alpha": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1,
+      "description": "The alpha at which a firm passes from going-concern (survive) to gone-concern (liquidation/creditor protection). CoCos convert here."
+    },
+    "coco_conversion": {
+      "type": "object",
+      "properties": {
+        "layer": {"type": "string"},
+        "alpha": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "capital_stack": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Layers in subordination order, most-junior (first-loss) FIRST. Cumulative attach/detach points are derived from the amounts.",
+      "items": {
+        "type": "object",
+        "required": ["layer", "concern", "amount"],
+        "properties": {
+          "layer": {"type": "string"},
+          "concern": {"type": "string", "enum": ["going", "gone"]},
+          "amount": {"type": "number", "minimum": 0},
+          "kind": {"type": "string"}
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The confidence ladder, ordered from lowest to highest alpha.",
+      "items": {
+        "type": "object",
+        "required": ["name", "confidence_alpha", "absorbing_capital_layer", "concern", "loss_at_alpha"],
+        "properties": {
+          "name": {"type": "string"},
+          "confidence_alpha": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+          "horizon_days": {"type": "integer", "minimum": 1},
+          "trigger": {"type": "string"},
+          "absorbing_capital_layer": {"type": "string"},
+          "concern": {"type": "string", "enum": ["going", "gone"]},
+          "loss_at_alpha": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "loss_pool_samples": {
+      "type": "array",
+      "items": {"type": "number"},
+      "description": "Optional pool loss samples; each layer's absorbed loss is computed via the kernel's structural_transform waterfall for the receipt."
+    }
+  }
+}

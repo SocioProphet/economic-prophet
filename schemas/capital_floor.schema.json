@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://socioprophet.ai/schemas/capital_floor.schema.json",
+  "title": "RegulatoryCapitalFloor",
+  "description": "R-Cap vs E-Cap per node with the Basel regulatory floor (RFL-1). Regulatory capital (Basel 8% x RWA) sits in parallel with the kernel's diversified economic-capital contribution; allocated_capital = max(economic, regulatory_floor). A node allocated at a diversified E-Cap that sits BELOW its regulatory minimum is REJECTED (McKinsey #38: you cannot diversify under the reg minimum silently).",
+  "type": "object",
+  "required": ["contract_id", "assumptions", "nodes"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "approach": {"type": "string", "enum": ["IRB-Advanced", "standardized"]},
+    "assumptions": {
+      "type": "object",
+      "required": ["target_capital_ratio"],
+      "properties": {
+        "target_capital_ratio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "description": "The asserted Basel capital ratio (8% == 0.08). Recorded on the receipt; R-Cap = target_capital_ratio x RWA."
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["node_id", "economic_capital_contribution", "regulatory"],
+        "properties": {
+          "node_id": {"type": "string"},
+          "economic_capital_contribution": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Diversified Euler/marginal economic-capital contribution produced upstream by the kernel's euler_allocation over a coherent tail measure."
+          },
+          "declared_allocated_capital": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Optional: the capital the caller claims to allocate to this node. If below the regulatory floor it is REJECTED (silent sub-floor diversification)."
+          },
+          "regulatory": {
+            "type": "object",
+            "description": "Basel regulatory-capital inputs. Either IRB (pd/lgd/ead[/maturity]) or standardized (rwa).",
+            "properties": {
+              "pd": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+              "lgd": {"type": "number", "minimum": 0, "maximum": 1},
+              "ead": {"type": "number", "minimum": 0},
+              "maturity": {"type": "number", "minimum": 1, "maximum": 5},
+              "rwa": {"type": "number", "minimum": 0}
+            }
+          }
+        }
+      }
+    }
+  }
+}

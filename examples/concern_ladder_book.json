@@ -1,0 +1,20 @@
+{
+  "contract_id": "cld-synthetic-001",
+  "as_of": "2026-08-03",
+  "going_gone_boundary_alpha": 0.999,
+  "coco_conversion": {"layer": "additional_tier1_cocos", "alpha": 0.999},
+  "capital_stack": [
+    {"layer": "hidden_reserves", "concern": "going", "amount": 50.0, "kind": "hidden_reserves"},
+    {"layer": "cet1_retained_earnings", "concern": "going", "amount": 200.0, "kind": "cet1"},
+    {"layer": "additional_tier1_cocos", "concern": "going", "amount": 100.0, "kind": "at1_coco"},
+    {"layer": "tier2_subordinated", "concern": "gone", "amount": 150.0, "kind": "tier2"},
+    {"layer": "senior_debt", "concern": "gone", "amount": 300.0, "kind": "senior_debt"}
+  ],
+  "scenarios": [
+    {"name": "early_warning", "confidence_alpha": 0.80, "horizon_days": 30, "trigger": "kpi_breach", "absorbing_capital_layer": "hidden_reserves", "concern": "going", "loss_at_alpha": 40.0},
+    {"name": "severe_stress", "confidence_alpha": 0.95, "horizon_days": 250, "trigger": "supervisory_stress_test", "absorbing_capital_layer": "cet1_retained_earnings", "concern": "going", "loss_at_alpha": 180.0},
+    {"name": "resolution_onset", "confidence_alpha": 0.9998, "horizon_days": 250, "trigger": "point_of_non_viability", "absorbing_capital_layer": "tier2_subordinated", "concern": "gone", "loss_at_alpha": 420.0},
+    {"name": "liquidation", "confidence_alpha": 1.0, "horizon_days": 250, "trigger": "wind_down", "absorbing_capital_layer": "senior_debt", "concern": "gone", "loss_at_alpha": 650.0}
+  ],
+  "loss_pool_samples": [10.0, 45.0, 120.0, 210.0, 360.0, 480.0, 640.0, 30.0, 90.0, 300.0]
+}

@@ -67,6 +67,78 @@ jobs:
           else
             echo "OK: cross-subsidy fixture rejected as expected"
           fi
+      - name: Smoke capital-adequacy contracts (RFL-1 / CLD-1 / AGG-1, with teeth)
+        run: |
+          python -m open_ep_framework.cli --mode capital-floor --example examples/capital_floor_book.json --audit capital_floor_audit.json
+          python -m open_ep_framework.cli --mode concern-ladder --example examples/concern_ladder_book.json --audit concern_ladder_audit.json
+          python -m open_ep_framework.cli --mode aggregation-method --example examples/aggregation_method_copula.json --audit aggregation_method_audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          # RFL-1: the regulatory floor binds on the over-diversified node.
+          rfl = json.loads(Path('capital_floor_audit.json').read_text())['outputs']
+          nodes = {n['node_id']: n for n in rfl['nodes']}
+          assert nodes['corporate-book']['binding_constraint'] == 'economic'
+          assert nodes['retail-book']['binding_constraint'] == 'regulatory'
+          assert nodes['retail-book']['allocated_capital'] == nodes['retail-book']['regulatory_capital']
+          assert rfl['portfolio']['sum_allocated_capital'] >= rfl['portfolio']['sum_regulatory_capital']
+
+          # CLD-1: monotone ladder, subordination-correct bookings, waterfall conserves.
+          cld = json.loads(Path('concern_ladder_audit.json').read_text())['outputs']
+          assert [s['verdict'] for s in cld['scenarios']] == ['verified'] * 4
+          assert cld['waterfall']['conserved'] is True
+
+          # AGG-1: summation is the upper bound; tail dependence lifts the copula above var-covar.
+          agg = json.loads(Path('aggregation_method_audit.json').read_text())['outputs']
+          s = agg['method_comparison']['summation']
+          assert all(v <= s + 1e-6 for v in agg['method_comparison'].values())
+          assert agg['method_comparison']['copula'] > agg['method_comparison']['variance_covariance']
+          PY
+      - name: Teeth - sub-floor allocation must be rejected (RFL-1)
+        run: |
+          if python -m open_ep_framework.cli --mode capital-floor --example examples/capital_floor_subfloor.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: sub-floor allocation was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: sub-floor allocation rejected as expected"
+          fi
+      - name: Teeth - gone-concern on a going soft layer must be rejected (CLD-1)
+        run: |
+          if python -m open_ep_framework.cli --mode concern-ladder --example examples/concern_ladder_gone_to_soft.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: gone-concern on hidden reserves was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: gone-concern soft-layer mapping rejected as expected"
+          fi
+      - name: Teeth - non-monotone ladder must be rejected (CLD-1)
+        run: |
+          if python -m open_ep_framework.cli --mode concern-ladder --example examples/concern_ladder_nonmonotone.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: non-monotone ladder was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: non-monotone ladder rejected as expected"
+          fi
+      - name: Teeth - super-additive aggregation must be rejected (AGG-1)
+        run: |
+          if python -m open_ep_framework.cli --mode aggregation-method --example examples/aggregation_method_superadditive.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: super-additive aggregate was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: super-additive aggregation rejected as expected"
+          fi
+      - name: Teeth - aggregation with no declared assumption must be rejected (AGG-1)
+        run: |
+          if python -m open_ep_framework.cli --mode aggregation-method --example examples/aggregation_method_no_assumption.invalid.json --audit /tmp/should_fail.json; then
+            echo "ERROR: silent-diversification aggregate was accepted but must be REJECTED"; exit 1
+          else
+            echo "OK: no-assumption aggregation rejected as expected"
+          fi
+      - name: Upload capital-adequacy audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: capital-adequacy-audits
+          path: |
+            capital_floor_audit.json
+            concern_ladder_audit.json
+            aggregation_method_audit.json
+          if-no-files-found: error
       - name: Upload FTP separation audit artifact
         uses: actions/upload-artifact@v4
         with:

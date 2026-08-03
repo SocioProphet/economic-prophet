@@ -1,0 +1,16 @@
+{
+  "contract_id": "agg-copula-001",
+  "as_of": "2026-08-03",
+  "chosen_method": "copula",
+  "confidence": 0.999,
+  "risk_inputs": {"credit": 1000.0, "market": 600.0, "operational": 400.0},
+  "assumption": {
+    "correlation": {"credit_market": 0.3, "credit_operational": 0.15, "market_operational": 0.2},
+    "copula_family": "student_t",
+    "tail_dependence": 0.4,
+    "df": 4,
+    "seed": 7,
+    "sims": 20000
+  },
+  "limitation": "hard to validate; the tail-dependence parameter carries material model risk"
+}

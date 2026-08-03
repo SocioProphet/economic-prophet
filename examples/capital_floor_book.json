@@ -1,0 +1,25 @@
+{
+  "contract_id": "rfl-synthetic-001",
+  "as_of": "2026-08-03",
+  "approach": "IRB-Advanced",
+  "assumptions": {
+    "target_capital_ratio": 0.08
+  },
+  "nodes": [
+    {
+      "node_id": "corporate-book",
+      "economic_capital_contribution": 110000.0,
+      "regulatory": {"pd": 0.02, "lgd": 0.45, "ead": 1000000.0, "maturity": 2.5}
+    },
+    {
+      "node_id": "retail-book",
+      "economic_capital_contribution": 30000.0,
+      "regulatory": {"pd": 0.05, "lgd": 0.30, "ead": 500000.0, "maturity": 2.5}
+    },
+    {
+      "node_id": "market-desk-standardized",
+      "economic_capital_contribution": 70000.0,
+      "regulatory": {"rwa": 800000.0}
+    }
+  ]
+}

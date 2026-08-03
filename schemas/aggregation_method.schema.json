@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://socioprophet.ai/schemas/aggregation_method.schema.json",
+  "title": "AggregationMethod",
+  "description": "Aggregation-methodology taxonomy for cross-risk-type economic capital (AGG-1). The chosen method {summation, constant_diversification, variance_covariance, copula, full_simulation} is an EXPLICIT receipted governed choice carrying its stated trade-off and limitation. Summation is the conservative super-additive upper bound: a method returning MORE than summation is REJECTED. A variance_covariance aggregate claiming more diversification than a tail-dependent copula/simulation is FLAGGED (diversification vanishes in the tail).",
+  "type": "object",
+  "required": ["contract_id", "chosen_method", "risk_inputs", "assumption", "limitation"],
+  "properties": {
+    "contract_id": {"type": "string"},
+    "as_of": {"type": "string"},
+    "chosen_method": {
+      "type": "string",
+      "enum": ["summation", "constant_diversification", "variance_covariance", "copula", "full_simulation"]
+    },
+    "confidence": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+    "risk_inputs": {
+      "type": "object",
+      "description": "Per-risk-type standalone economic capital (the marginal quantile at `confidence`).",
+      "required": ["credit", "market", "operational"],
+      "properties": {
+        "credit": {"type": "number", "minimum": 0},
+        "market": {"type": "number", "minimum": 0},
+        "operational": {"type": "number", "minimum": 0}
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "description": "The declared correlation/copula/diversification assumption. A diversifying method with none is REJECTED (no silent diversification).",
+      "properties": {
+        "diversification_factor": {"type": "number"},
+        "correlation": {
+          "type": "object",
+          "properties": {
+            "credit_market": {"type": "number", "minimum": -1, "maximum": 1},
+            "credit_operational": {"type": "number", "minimum": -1, "maximum": 1},
+            "market_operational": {"type": "number", "minimum": -1, "maximum": 1}
+          }
+        },
+        "copula_family": {"type": "string", "enum": ["gaussian", "student_t"]},
+        "tail_dependence": {"type": "number", "minimum": 0, "maximum": 1},
+        "df": {"type": "number", "exclusiveMinimum": 0},
+        "marginal_sigma": {"type": "number", "exclusiveMinimum": 0},
+        "seed": {"type": "integer"},
+        "sims": {"type": "integer", "minimum": 100}
+      }
+    },
+    "limitation": {"type": "string", "description": "The stated limitation of the chosen method (recorded on the receipt)."}
+  }
+}
