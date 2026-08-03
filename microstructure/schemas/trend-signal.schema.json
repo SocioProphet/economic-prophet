@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/economic-prophet/microstructure/trend-signal.schema.json",
+  "title": "TrendSignal",
+  "description": "A technical-analysis signal REFRAMED as a LEARNED, receipted signal whose EVIDENCE is the order-flow mechanism -- never a static chart-pattern match (estate disciplines: metaphor->mechanism, learn-don't-match). Three schools are grounded, not matched: Dow theory (trend + accumulation/distribution -> inventory-cycle evidence), Edwards-Magee (support/resistance -> LOB-depth evidence), and Elliott Wave (a wave_count -> MEASURED self-similarity across scale). Elliott's 'degrees' are scales; its self-similar recursion is Mandelbrot multifractal structure. The structural vocabulary is Buckminster Fuller's Synergetics cycle grammar: a cycle is a convergence to a frequency magnitude, tunable at a vertex, with a FINITE alphabet of fundamental closures {tetra_3, octa_4, icosa_5}. 'frequency' = scale/degree (same axis as the memory-regime multifractal spectrum, reused BY REFERENCE, not renamed); 'tunability' = the resolution/vertex the cycle is read at. This makes wave-counting a finite, testable structural vocabulary rather than a subjective count.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "recordType", "signalId", "signal_type", "school", "provenance", "evidence", "receipt"],
+  "properties": {
+    "schemaVersion": {"const": "microstructure.trend-signal.v0.1"},
+    "recordType": {"const": "TrendSignal"},
+    "signalId": {"type": "string", "minLength": 1},
+    "signal_type": {"enum": ["trend", "support_resistance", "volume_confirmation", "wave_count"]},
+    "school": {"enum": ["dow", "edwards_magee", "elliott"],
+      "description": "Which TA school's metaphor is being grounded in mechanism."},
+    "provenance": {"enum": ["learned", "human_authored", "imported"],
+      "description": "KE-contract provenance class. A 'learned' signal MUST carry mechanism evidence."},
+    "direction": {"enum": ["up", "down", "neutral"]},
+
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Mechanism-grounded evidence. Which block is REQUIRED depends on signal_type (enforced by the validator): trend->order_flow_persistence; support_resistance->lob_depth; volume_confirmation->arrival_intensity; wave_count->self_similarity + cycle_closure.",
+      "properties": {
+        "order_flow_persistence": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Signed-order-flow persistence: Hurst H>0.5 OR a Hawkes branching ratio n>0. The mechanism a 'trend' must carry.",
+          "required": ["present"],
+          "properties": {
+            "present": {"type": "boolean"},
+            "signed_flow_hurst": {"type": "number", "minimum": 0, "maximum": 2},
+            "branching_ratio_n": {"type": "number", "minimum": 0}
+          }
+        },
+        "lob_depth": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Limit-order-book depth at a level. The mechanism a 'support/resistance' must carry.",
+          "required": ["present"],
+          "properties": {
+            "present": {"type": "boolean"},
+            "level_price": {"type": "number"},
+            "bid_depth": {"type": "number", "minimum": 0},
+            "ask_depth": {"type": "number", "minimum": 0}
+          }
+        },
+        "arrival_intensity": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Arrival-intensity elevation. The mechanism a 'volume-confirms' must carry.",
+          "required": ["present"],
+          "properties": {
+            "present": {"type": "boolean"},
+            "intensity_ratio": {"type": "number", "minimum": 0}
+          }
+        },
+        "inventory_cycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Dow-theory accumulation/distribution as inventory-cycle evidence.",
+          "properties": {
+            "phase": {"enum": ["accumulation", "markup", "distribution", "markdown"]},
+            "net_inventory": {"type": "number"}
+          }
+        },
+        "self_similarity": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "MEASURED scale-invariance for an Elliott wave_count: multifractal-spectrum width and/or cross-scale Hurst consistency. spectrum_ref binds to the memory-mesh MemoryRegimeCharacterization multifractal spectrum BY REFERENCE (not reimplemented).",
+          "required": ["present"],
+          "properties": {
+            "present": {"type": "boolean"},
+            "multifractal_spectrum_width": {"type": "number", "minimum": 0},
+            "cross_scale_hurst": {"type": "number", "minimum": 0, "maximum": 2},
+            "spectrum_ref": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "cycle_closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Buckminster Fuller Synergetics cycle grammar. A cycle converges to a frequency magnitude at a tunable vertex; the fundamental closures are FINITE {tetra_3 (3 events), octa_4 (4), icosa_5 (5)} -- Fuller's three omni-triangulated stable closures, 'no other fundamental cycles'. Elliott alignment: 3-wave correction = tetra_3, 5-wave impulse = icosa_5, full 8 = tetra+icosa (Fibonacci 3,5,8,13 falls out). event_count MUST match the closure and lie in {3,4,5}.",
+      "required": ["fundamental_closure", "frequency", "tunability", "event_count"],
+      "properties": {
+        "fundamental_closure": {"enum": ["tetra_3", "octa_4", "icosa_5"]},
+        "frequency": {"type": "number", "exclusiveMinimum": 0,
+          "description": "= scale/degree; binds to the memory-regime multifractal-spectrum scale axis BY REFERENCE."},
+        "tunability": {"type": "number", "exclusiveMinimum": 0,
+          "description": "= the resolution/vertex the cycle is read at."},
+        "event_count": {"type": "integer", "minimum": 1}
+      }
+    },
+
+    "fibonacci_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A Fibonacci retracement/extension ratio treated as a FALSIFIABLE scaling hypothesis (0.382 / 0.618 / 1.618), tested against the measured retracement -- NOT assumed. |claimed - measured| > tolerance is flagged.",
+      "required": ["ratio_claimed", "ratio_measured", "tolerance"],
+      "properties": {
+        "ratio_claimed": {"type": "number", "exclusiveMinimum": 0},
+        "ratio_measured": {"type": "number", "exclusiveMinimum": 0},
+        "tolerance": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+
+    "dow_phase": {"enum": ["accumulation", "markup", "distribution", "markdown"]},
+
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Proof-artifact-spine SHA-256 hash-chain link (FIPS-180-4 algorithm; NOT a FIPS-140 module claim).",
+      "required": ["algo", "hashAlgorithmStandard", "fipsModuleValidated", "prevReceiptHash", "contentHash", "issuedAt"],
+      "properties": {
+        "algo": {"const": "sha256"},
+        "hashAlgorithmStandard": {"const": "FIPS-180-4"},
+        "fipsModuleValidated": {"const": false},
+        "prevReceiptHash": {"oneOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"const": "GENESIS"}]},
+        "contentHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "issuedAt": {"type": "string", "format": "date-time"},
+        "note": {"type": "string"}
+      }
+    }
+  },
+
+  "allOf": [
+    {
+      "if": {"properties": {"signal_type": {"const": "wave_count"}}, "required": ["signal_type"]},
+      "then": {"required": ["cycle_closure"]}
+    }
+  ]
+}

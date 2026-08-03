@@ -1,0 +1,22 @@
+{
+  "evidence": {
+    "arrival_intensity": {
+      "intensity_ratio": 2.3,
+      "present": true
+    }
+  },
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "556bb58e7cea5956bcc80e0a7fb969443b1cb6ae0a5952791dcd21f2ac8be3d1",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "dow",
+  "signalId": "ts-vol-001",
+  "signal_type": "volume_confirmation"
+}

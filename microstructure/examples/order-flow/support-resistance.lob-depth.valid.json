@@ -1,0 +1,24 @@
+{
+  "evidence": {
+    "lob_depth": {
+      "ask_depth": 300.0,
+      "bid_depth": 8400.0,
+      "level_price": 101.5,
+      "present": true
+    }
+  },
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "f0a2dd0fafefdf32a20f00eacfbe07d631f3e8913ed4d3f1c2756c814b060cdb",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "edwards_magee",
+  "signalId": "ts-sr-001",
+  "signal_type": "support_resistance"
+}

@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.socioprophet.org/economic-prophet/microstructure/order-flow-process.schema.json",
+  "title": "OrderFlowProcess",
+  "description": "Market-microstructure order flow as a MARKED POINT PROCESS in event time: events ARRIVE (arrival-intensity family), rest and are CANCELLED (decay / competing hazard), and are FILLED (execution / thinning conditional on queue position), each carrying a MARK (signed size). The record binds the arrival family onto the estate memory-regime taxonomy in event time and exposes two consumables BY REFERENCE: a risk_distribution_F (marks) for the economic-prophet RAROC risk kernel risk(F, kernel, reference, horizon), and LOB micro-signals (Kyle-lambda / OFI / effective volume / signed-flow Hurst) for market_instruments.liquidity_premium(volume, regime_hurst, base_bps). Consume-not-fork: the regime labels, the risk_distribution_F shape, and the SHA-256 receipt are the memory-mesh MemoryRegimeCharacterization contract's, reused not redefined.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "recordType",
+    "processId",
+    "inputDescriptor",
+    "arrival",
+    "decay",
+    "execution",
+    "marks",
+    "lob_signals",
+    "regime",
+    "autocorr_kernel",
+    "confidence",
+    "risk_distribution_F",
+    "receipt"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "microstructure.order-flow-process.v0.1"},
+    "recordType": {"const": "OrderFlowProcess"},
+    "processId": {"type": "string", "minLength": 1},
+
+    "inputDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "What was characterized: an observed event stream (referenced) or a seeded generator (deterministic CI teeth).",
+      "required": ["source", "n_events"],
+      "properties": {
+        "source": {"enum": ["observed_stream", "seeded_generator"]},
+        "n_events": {"type": "integer", "minimum": 1,
+          "description": "Number of events. Below the estate min-n (30) the characterization may only be 'provisional'."},
+        "streamRef": {"type": "string", "minLength": 1},
+        "generator": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "seed"],
+          "properties": {
+            "family": {"enum": ["poisson", "hawkes_exponential", "hawkes_powerlaw", "acd", "bivariate_hawkes"]},
+            "seed": {"type": "integer"},
+            "params": {"type": "object"}
+          }
+        }
+      }
+    },
+
+    "arrival": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Arrival-intensity family and its estimated attributes. branching_ratio_n = int phi is the self-excitation strength; n>=1 is non-stationary (the flash-crash edge). index_of_dispersion (Fano factor) drives the Poisson-vs-Hawkes discrimination; counting_hurst discriminates the exponential (short) from the power-law (long-memory) kernel.",
+      "required": ["family", "branching_ratio_n", "index_of_dispersion", "poisson_vs_hawkes", "stable", "kernel"],
+      "properties": {
+        "family": {"enum": ["poisson", "hawkes_exponential", "hawkes_powerlaw", "hawkes_near_critical", "acd", "bivariate_hawkes"]},
+        "base_intensity_mu": {"type": "number", "minimum": 0,
+          "description": "Immigrant/base intensity mu. A negative intensity is refused (schema minimum)."},
+        "branching_ratio_n": {"type": "number", "minimum": 0,
+          "description": "Branching ratio n = int phi. n<1 stationary; n>=1 explosive/non-stationary."},
+        "index_of_dispersion": {"type": "number", "minimum": 0,
+          "description": "Var(N)/E(N) over count windows. ~1 for Poisson; >1 under self-excitation."},
+        "counting_hurst": {"type": "number", "minimum": 0, "maximum": 2},
+        "duration_autocorr": {"type": "number",
+          "description": "Lag-1 autocorrelation of interarrival durations. ~0 for Poisson; strongly positive under ACD memory a Poisson fit misses."},
+        "poisson_vs_hawkes": {"enum": ["poisson", "hawkes"],
+          "description": "Discrimination verdict: 'hawkes' when the index of dispersion shows significant excitation (a Poisson fit is refused)."},
+        "stable": {"type": "boolean",
+          "description": "n<1. When false (n>=1) the process is non-stationary and requires explicit unstable_override."},
+        "unstable_override": {"type": "boolean",
+          "description": "Explicit acknowledgement required to accept an n>=1 (non-stationary) spec. Absent/false with n>=1 => refused (flash-crash guard)."},
+        "kernel": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {"enum": ["none", "exponential", "power_law"]},
+            "beta": {"type": "number", "exclusiveMinimum": 0},
+            "c": {"type": "number", "exclusiveMinimum": 0},
+            "gamma": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      }
+    },
+
+    "decay": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cancellation as a COMPETING HAZARD against fill. A resting limit order's lifetime is Exp(fill_hazard + cancel_hazard); its fill probability is fill_hazard/(fill_hazard+cancel_hazard). kernel_decay is the Hawkes excitation decay (beta for exponential, gamma for power-law).",
+      "required": ["cancel_hazard", "fill_hazard", "mean_lifetime"],
+      "properties": {
+        "cancel_hazard": {"type": "number", "minimum": 0},
+        "fill_hazard": {"type": "number", "minimum": 0},
+        "mean_lifetime": {"type": "number", "exclusiveMinimum": 0},
+        "competing_fill_probability": {"type": "number", "minimum": 0, "maximum": 1},
+        "kernel_decay": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {"enum": ["exponential", "power_law"]},
+            "beta": {"type": "number", "exclusiveMinimum": 0},
+            "gamma": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      }
+    },
+
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Fills as a THINNING of the arrival stream conditional on queue position. fill_probability is a function of the size queued ahead and the market-order depletion rate; it MUST lie in [0,1].",
+      "required": ["fill_probability", "queue_position_model"],
+      "properties": {
+        "fill_probability": {"type": "number", "minimum": 0, "maximum": 1},
+        "queue_position_model": {"type": "string", "minLength": 1},
+        "queue_ahead": {"type": "number", "minimum": 0},
+        "depletion_rate": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+
+    "marks": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Event sizes as a heavy-tailed (power-law) distribution. A distribution DECLARED gaussian while the sizes are heavy-tailed is refused (it would feed the wrong F to the risk kernel).",
+      "required": ["distribution", "heavy_tailed"],
+      "properties": {
+        "distribution": {"enum": ["gaussian", "power_law", "empirical"]},
+        "tail_index_hill": {"type": "number",
+          "description": "Hill estimator of the Pareto tail index alpha. Small alpha (< ~4) is a genuinely heavy tail."},
+        "excess_kurtosis": {"type": "number"},
+        "heavy_tailed": {"type": "boolean"}
+      }
+    },
+
+    "lob_signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "LOB micro-signals shaped as the LIQUIDITY input the vol-surface / FTP layer consumes. kyle_lambda is the price impact per unit signed volume (>=0 for an adverse-selection book); effective_volume and signed_flow_hurst feed market_instruments.liquidity_premium(volume, regime_hurst, base_bps) BY REFERENCE.",
+      "required": ["order_flow_imbalance", "kyle_lambda", "effective_volume", "signed_flow_hurst"],
+      "properties": {
+        "order_flow_imbalance": {"type": "number"},
+        "kyle_lambda": {"type": "number", "minimum": 0},
+        "effective_volume": {"type": "number", "minimum": 0},
+        "signed_flow_hurst": {"type": "number", "minimum": 0, "maximum": 2},
+        "consumes_interface": {"type": "string",
+          "description": "Signature hint for the consumer, e.g. 'market_instruments.liquidity_premium(volume, regime_hurst, base_bps)'."}
+      }
+    },
+
+    "regime": {"enum": ["memoryless", "short_decaying", "associative", "long_memory", "chaotic"]},
+    "autocorr_kernel": {"enum": ["delta", "exponential", "power_law", "topic_proximity"]},
+    "confidence": {"enum": ["provisional", "established"]},
+
+    "risk_distribution_F": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The marks distribution F exposed for the RAROC risk(F, kernel, reference, horizon) interface (economic-prophet risk_measures). A heavy-tailed marks F feeds the LPM/ES lenses; family 'empirical' carries loss-side samples for LossDistribution. Same shape as the memory-mesh MemoryRegimeCharacterization risk_distribution_F, reused BY REFERENCE.",
+      "required": ["family", "params", "tail_class", "kernel"],
+      "properties": {
+        "family": {"enum": ["gaussian", "fractional_brownian_motion", "multifractal_mmar", "empirical"]},
+        "params": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "hurst_H": {"type": "number"},
+            "sigma": {"type": "number"},
+            "tail_index": {"type": "number"},
+            "samples": {"type": "array", "items": {"type": "number"}}
+          }
+        },
+        "tail_class": {"enum": ["gaussian", "fat_tailed", "multifractal"]},
+        "kernel": {"enum": ["delta", "exponential", "power_law", "topic_proximity"]},
+        "horizon_unit": {"type": "string"},
+        "raroc_interface": {"type": "string"}
+      }
+    },
+
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Proof-artifact-spine receipt: a SHA-256 hash-chain link. Scope note: SHA-256 is the FIPS-180-4 algorithm; this is NOT a claim of FIPS-140 cryptographic-module validation.",
+      "required": ["algo", "hashAlgorithmStandard", "fipsModuleValidated", "prevReceiptHash", "contentHash", "issuedAt"],
+      "properties": {
+        "algo": {"const": "sha256"},
+        "hashAlgorithmStandard": {"const": "FIPS-180-4"},
+        "fipsModuleValidated": {"const": false},
+        "prevReceiptHash": {"oneOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"const": "GENESIS"}]},
+        "contentHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "issuedAt": {"type": "string", "format": "date-time"},
+        "note": {"type": "string"}
+      }
+    }
+  },
+
+  "allOf": [
+    {
+      "if": {"properties": {"regime": {"const": "memoryless"}}, "required": ["regime"]},
+      "then": {"properties": {"autocorr_kernel": {"const": "delta"}}}
+    },
+    {
+      "if": {"properties": {"arrival": {"properties": {"branching_ratio_n": {"minimum": 1}}, "required": ["branching_ratio_n"]}}, "required": ["arrival"]},
+      "then": {"properties": {"arrival": {"properties": {"stable": {"const": false}, "unstable_override": {"const": true}}, "required": ["unstable_override"]}}}
+    },
+    {
+      "if": {"properties": {"inputDescriptor": {"properties": {"n_events": {"maximum": 29}}, "required": ["n_events"]}}, "required": ["inputDescriptor"]},
+      "then": {"properties": {"confidence": {"const": "provisional"}}}
+    }
+  ]
+}

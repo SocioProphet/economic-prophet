@@ -1,0 +1,79 @@
+{
+  "arrival": {
+    "base_intensity_mu": -2.0,
+    "branching_ratio_n": 0.0,
+    "counting_hurst": 0.4931,
+    "duration_autocorr": 0.0217,
+    "family": "poisson",
+    "index_of_dispersion": 0.8855,
+    "kernel": {
+      "type": "none"
+    },
+    "poisson_vs_hawkes": "poisson",
+    "stable": true
+  },
+  "autocorr_kernel": "delta",
+  "confidence": "established",
+  "decay": {
+    "cancel_hazard": 1.2,
+    "competing_fill_probability": 0.4,
+    "fill_hazard": 0.8,
+    "kernel_decay": {
+      "beta": 1.0,
+      "type": "exponential"
+    },
+    "mean_lifetime": 0.5
+  },
+  "execution": {
+    "depletion_rate": 5.0,
+    "fill_probability": 0.5488,
+    "queue_ahead": 3.0,
+    "queue_position_model": "exp(-queue_ahead/depletion_rate)"
+  },
+  "inputDescriptor": {
+    "generator": {
+      "family": "poisson",
+      "params": {
+        "rate": 5.0
+      },
+      "seed": 7
+    },
+    "n_events": 2884,
+    "source": "seeded_generator"
+  },
+  "lob_signals": {
+    "consumes_interface": "market_instruments.liquidity_premium(volume, regime_hurst, base_bps)",
+    "effective_volume": 2884.0,
+    "kyle_lambda": 0.2187,
+    "order_flow_imbalance": 0.0,
+    "signed_flow_hurst": 0.4931
+  },
+  "marks": {
+    "distribution": "empirical",
+    "excess_kurtosis": 0.0,
+    "heavy_tailed": false,
+    "tail_index_hill": 999.0
+  },
+  "processId": "ofp-negintensity-001",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "51ba270eb21adba4b3189d19be338b47b12321bde7139ccc17b7e911467895f1",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "OrderFlowProcess",
+  "regime": "memoryless",
+  "risk_distribution_F": {
+    "family": "gaussian",
+    "horizon_unit": "event",
+    "kernel": "delta",
+    "params": {
+      "sigma": 0.0
+    },
+    "raroc_interface": "risk(F, kernel, reference, horizon)",
+    "tail_class": "gaussian"
+  },
+  "schemaVersion": "microstructure.order-flow-process.v0.1"
+}

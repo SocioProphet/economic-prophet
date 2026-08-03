@@ -1,0 +1,21 @@
+{
+  "evidence": {
+    "lob_depth": {
+      "present": false
+    }
+  },
+  "provenance": "learned",
+  "receipt": {
+    "algo": "sha256",
+    "contentHash": "46a984c722fdd421d19d3c3f690a127cc109144077bf537762bc68a66abf87a9",
+    "fipsModuleValidated": false,
+    "hashAlgorithmStandard": "FIPS-180-4",
+    "issuedAt": "2026-08-03T12:00:00Z",
+    "prevReceiptHash": "GENESIS"
+  },
+  "recordType": "TrendSignal",
+  "schemaVersion": "microstructure.trend-signal.v0.1",
+  "school": "edwards_magee",
+  "signalId": "ts-sr-nodepth-001",
+  "signal_type": "support_resistance"
+}
