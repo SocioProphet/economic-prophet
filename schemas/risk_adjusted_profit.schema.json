@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://economic-prophet.dev/schemas/risk_adjusted_profit.schema.json",
+  "title": "Risk-Adjusted Profit / RAROC Contract",
+  "description": "Economic-profit (EP) and RAROC computation grounded on Economic Prophet's residual-value + conservation engine, with a pluggable unified risk-measure family, an EconomicCapital component stack, org/entity decomposition reconciled under the IC-1 conservation law, and dual economic/epistemic (Economia Mentium) scoring. Each computation is receipted (FIPS SHA-256). Measurement, simulation and audit only: no live money movement, token issuance, redemption rights, or settlement rails.",
+  "type": "object",
+  "required": ["contract_id", "as_of", "scoring_mode", "arm"],
+  "properties": {
+    "contract_id": {"type": "string", "minLength": 1},
+    "as_of": {"type": "string", "minLength": 1},
+    "scoring_mode": {"type": "string", "enum": ["economic", "epistemic"]},
+    "provenance": {
+      "type": "object",
+      "description": "Economic mode: portfolio_ref. Epistemic mode requires gkn_standing_ref and counter_test_ref.",
+      "properties": {
+        "portfolio_ref": {"type": "string"},
+        "gkn_standing_ref": {"type": "string"},
+        "counter_test_ref": {"type": "string"}
+      }
+    },
+    "arm": {
+      "type": "object",
+      "required": ["hurdle_rate", "return_components", "economic_capital", "risk_measure"],
+      "properties": {
+        "arm_id": {"type": "string"},
+        "hurdle_rate": {"type": "number", "minimum": 0},
+        "return_components": {
+          "type": "object",
+          "required": ["revenue", "expected_loss"],
+          "properties": {
+            "revenue": {"type": "number"},
+            "expected_loss": {"type": "number", "minimum": 0},
+            "expense": {"type": "number"},
+            "funding_costs": {"type": "number"},
+            "funding_credits": {"type": "number"},
+            "taxes": {"type": "number"}
+          }
+        },
+        "economic_capital": {
+          "type": "object",
+          "required": ["components"],
+          "properties": {
+            "components": {
+              "type": "object",
+              "properties": {
+                "credit": {"type": "number", "minimum": 0},
+                "market": {"type": "number", "minimum": 0},
+                "operating": {"type": "number", "minimum": 0},
+                "business": {"type": "number", "minimum": 0},
+                "other": {"type": "number", "minimum": 0}
+              }
+            }
+          }
+        },
+        "risk_measure": {
+          "type": "object",
+          "required": ["kernel", "distribution"],
+          "properties": {
+            "kernel": {"type": "string", "enum": ["stddev", "sharpe", "sortino", "kappa", "var", "expected_shortfall", "spectral"]},
+            "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+            "horizon": {"type": "number", "minimum": 0},
+            "order": {"type": "integer", "minimum": 0},
+            "reference": {"type": "number"},
+            "phi": {"type": "array", "items": {"type": "number"}},
+            "capital_from_measure": {"type": "boolean"},
+            "allow_noncoherent_capital": {"type": "boolean"},
+            "distribution": {
+              "type": "object",
+              "properties": {
+                "samples": {"type": "array", "items": {"type": "number"}},
+                "horizon_days": {"type": "integer", "minimum": 1},
+                "credit": {
+                  "type": "object",
+                  "required": ["pd_long", "lgd", "ead", "w_systematic", "w_idiosyncratic"],
+                  "properties": {
+                    "pd_long": {"type": "number", "minimum": 0, "maximum": 1},
+                    "lgd": {"type": "number", "minimum": 0, "maximum": 1},
+                    "ead": {"type": "number", "minimum": 0},
+                    "w_systematic": {"type": "number", "minimum": 0},
+                    "w_idiosyncratic": {"type": "number", "minimum": 0},
+                    "horizon_days": {"type": "integer", "minimum": 1},
+                    "n_scenarios": {"type": "integer", "minimum": 1},
+                    "seed": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "decomposition": {
+      "type": "object",
+      "required": ["cut", "children"],
+      "properties": {
+        "cut": {"type": "string", "enum": ["business_unit", "product", "client_segment", "geography", "obligor", "subportfolio", "transaction"]},
+        "tolerance": {"type": "number", "minimum": 0},
+        "children": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["hurdle_rate", "return_components", "economic_capital", "risk_measure"],
+            "properties": {
+              "arm_id": {"type": "string"},
+              "hurdle_rate": {"type": "number", "minimum": 0},
+              "return_components": {
+                "type": "object",
+                "required": ["revenue", "expected_loss"],
+                "properties": {
+                  "revenue": {"type": "number"},
+                  "expected_loss": {"type": "number", "minimum": 0},
+                  "expense": {"type": "number"},
+                  "funding_costs": {"type": "number"},
+                  "funding_credits": {"type": "number"},
+                  "taxes": {"type": "number"}
+                }
+              },
+              "economic_capital": {
+                "type": "object",
+                "required": ["components"],
+                "properties": {
+                  "components": {"type": "object"}
+                }
+              },
+              "risk_measure": {
+                "type": "object",
+                "required": ["kernel", "distribution"],
+                "properties": {
+                  "kernel": {"type": "string", "enum": ["stddev", "sharpe", "sortino", "kappa", "var", "expected_shortfall", "spectral"]},
+                  "distribution": {"type": "object"}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
